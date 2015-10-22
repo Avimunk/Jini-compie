@@ -1,0 +1,77 @@
+<div nf-if="0">
+    <div ng-if="parentID == 0">
+        <a ng-href="{{ siteUrl }}">
+            Go Home
+        </a>
+    </div>
+    <div ng-if="parentID != 0 && parentID != null">
+        <a ng-href="{{ siteUrl }}/category/{{ parentID }}">
+            Back to parent Category
+        </a>
+    </div>
+    <div ng-repeat="(k, v) in currentCategories">
+        <a ng-if="v.items_count" ng-href="{{ siteUrl }}category/{{ v.id }}">
+            {{ v.id }} => {{ v.title }}
+        </a>
+        <div ng-if="!v.items_count">
+            {{ v.id }} => {{ v.title }}
+        </div>
+    </div>
+</div>
+<div id="demo">
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-2 -2 504 504" id="menu">
+        <style>
+            #menu {
+                display: block;
+                margin: 0 auto;
+                /*overflow: visible;*/ /* uncomment this if you are using bouncing animations*/
+            }
+
+            a {
+                cursor: pointer; /* SVG &lt;a&gt; elements don't get this by default, so you need to explicitly set it */
+                outline: none;
+                font-weight: bold;
+                font-size: 17px;
+            }
+
+            /* You can change these default styles any way you want */
+
+            .item .sector {
+                transition: all .1s linear;
+                fill: #fff;
+                stroke: transparent;
+                opacity: 0.8;
+            }
+
+
+            .item:hover .sector, .item:focus .sector {
+                fill: #fff;
+                opacity: 0.6;
+            }
+
+            .menu-trigger {
+                fill: #fff;
+                stroke: transparent;
+                opacity: 1;
+                pointer-events: auto; /* KEEP THIS to make sure it stays clickable even when SVG's pointer events is disabled */
+            }
+
+            .menu-trigger:hover, .menu-trigger:focus {
+                cursor: pointer;
+            }
+            symbol {
+                overflow: visible; /* KEEP THIS so that text will not get cut off it it is wider than the icon width */
+            }
+        </style>
+        <g id="trigger" class="trigger menu-trigger" role="button">
+            <circle cx="250" cy="250" r="110" />
+            <!-- menu button label or icon goes here -->
+        </g>
+        <g id="itemsContainer">
+            <!-- the menu items -->
+        </g>
+        <g id="symbolsContainer">
+            <!-- replace the contents of these symbols with the contents of your icons -->
+        </g>
+    </svg>
+</div>
