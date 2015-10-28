@@ -39,4 +39,5 @@ Thumbs.db
 /site2
 /site/node_modules
 /public/uploads
+/site/.sass-cache
 

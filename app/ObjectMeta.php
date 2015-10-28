@@ -23,6 +23,16 @@ class ObjectMeta extends Model
             ->where('meta_key', $metaKey)->first();
     }
 
+    public static function getAllMeta($objectId, $metaKey, $valueWhere = false) {
+        $obj = ObjectMeta::where('object_id', $objectId)
+                    ->where('meta_key', $metaKey);
+
+        if($valueWhere)
+            $obj->where('meta_value', $valueWhere);
+
+        return $obj;
+    }
+
     public static function getValue($objectId, $metaKey) {
         if ($objectMeta = ObjectMeta::getMeta($objectId, $metaKey)) {
             return $objectMeta->meta_value;

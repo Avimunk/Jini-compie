@@ -148,6 +148,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth', 'namespace' => 'Admin
     Route::post('object-types/{id}/categories', 'ObjectTypesController@postCategory');
     Route::get('object-types/{id}/delete', 'ObjectTypesController@getDelete');
     Route::post('object-types/{id}/delete', 'ObjectTypesController@postDelete');
+    Route::get('object-types/{id}/deleteCategory/{id2}', 'ObjectTypesController@getCategoryDelete');
     Route::get('object-types/data', 'ObjectTypesController@data');
     Route::get('object-types/{id}/export', 'ObjectTypesController@getExport');
 

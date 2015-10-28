@@ -123,6 +123,7 @@ class CategoryController extends Controller {
             }
         }
     }
+    /*
     public function getParents($id = null)
     {
         if(!$id)
@@ -132,6 +133,7 @@ class CategoryController extends Controller {
         $this->parents[] = intval($id);
         return $this->parents;
     }
+    */
 
     public function getCategories($id = null) {
         //Config::set('laravel-debugbar::config.enabled', false);
@@ -167,10 +169,28 @@ class CategoryController extends Controller {
         }
 
         $this->itemsParents[0] = [];
+        $categories = $this->itemArray();
+
+        $breadCrumbs = [];
+        $breadCrumbs[0] = [];
+        foreach($this->itemsParents as $itemID => $arr)
+        {
+            foreach($arr as $subK)
+            {
+                $subItem = $this->items->getDictionary()[$subK];
+                $breadCrumbs[$itemID][] = [
+                    'id'        => $subK,
+                    'title'     => $subItem->title,
+                    'url'       => $subItem->name,
+                    'hasItems'  => (boolean) $subItem->items_count,
+                ];
+            }
+        }
+
         return response()->json( [
-            'categories' => $this->itemArray(),
-//            'parents' => $this->getParents($id),
-            'parents' => $this->itemsParents,
+            'categories'  => $categories,
+            'parents'     => $this->itemsParents,
+            'breadcrumbs' => $breadCrumbs,
         ] );
     }
 

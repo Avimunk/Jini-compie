@@ -8,6 +8,7 @@ use App\Language;
 use App\Http\Controllers\AdminController;
 use App\Http\Requests\Admin\ObjectTypeRequest;
 use App\Http\Requests\Admin\DeleteRequest;
+use App\Http\Requests\Admin\DeleteCategoryRequest;
 use App\Http\Requests\Admin\ReorderRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -133,12 +134,31 @@ class ObjectTypesController extends AdminController {
      * @param $id
      * @return Response
      */
+
+    public function getCategoryDelete($id, $id2)
+    {
+        $objects = ObjectMeta::getAllMeta($id, '_category_id', $id2);
+
+        if($objects)
+            $objects->delete();
+//        if()
+//        $objecttype = ObjectType::find($request->get('id'));
+        // Show the page
+        return redirect('admin/object-types/'.$id.'/edit#tab-categories')->with('message', 'Category deleted successfully');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param $id
+     * @return Response
+     */
     public function postDelete(DeleteRequest $request,$id)
     {
         $ObjectType = ObjectType::find($id);
         $ObjectType->delete();
 
-        return redirect('admin/object-types')->with('message', 'Type deleted successfully');
+        return redirect('admin/object-types/'.$id.'/edit#tab-categories')->with('message', 'Type deleted successfully');
     }
 
     /**
@@ -191,7 +211,7 @@ class ObjectTypesController extends AdminController {
                 ->get();
 
             return Datatables::of($categories)
-                ->add_column('actions', '<a href="{{{ URL::to(\'admin/object-types/\' . $id . \'/delete\' ) }}}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-trash"></span> {{ trans("admin/modal.delete") }}</a>')
+                ->add_column('actions', '<a href="{{{ URL::to(\'admin/object-types/'.$id.'/deleteCategory/\' . $id ) }}}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-trash"></span> {{ trans("admin/modal.delete") }}</a>')
                 ->remove_column('id')
                 ->make();
 
@@ -244,7 +264,6 @@ class ObjectTypesController extends AdminController {
 //            ->addColumn('Name', 'Last Login', 'View')
 //            ->setUrl(route('api.users'))
 //            ->noScript();
-
 
         return Datatables::of($fields)
             ->add_column('actions', '@if ($id>"4")<a href="{{{ URL::to(\'admin/object-types/\' . $id . \'/edit\' ) }}}" class="btn btn-success btn-sm" ><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modal.edit") }}</a>

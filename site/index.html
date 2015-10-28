@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="he" ng-strict-di="">
+<html lang="he">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
@@ -7,8 +7,116 @@
         <link href="css/extensions.min.css" rel="stylesheet">
         <link href="css/app.min.css" rel="stylesheet">
         <script src="js/extensions.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.16.0/TweenMax.min.js"></script>
         <script src="js/app.min.js"></script>
+        <style>
+            #breadcrumbs{
+                position: absolute;
+                top: 0;
+                right: 0;
+                background: #F1F6FC;
+            }
+            body {
+                font-family: 'Roboto';
+                background: #fff url(/Jini3/public/img/bg.jpg) no-repeat;
+                background-position: 0 0;
+                background-size: cover;
+                font-size: 16px;
+                overflow-x: hidden;
+            }
+            * {
+                box-sizing: border-box;
+            }
+            #demo-wrapper{
+                width: 643px;
+                height: 715px;
+                position: relative;
+                margin: 0 auto;
+                overflow: hidden;
+            }
+            .back-button {
+                cursor: pointer;
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: 10;
+                width: 83px;
+                height: 83px;
+                background-color: #fff;
+                background-image: url('/Jini3/public/img/icons/back.png');
+                background-repeat: no-repeat;
+                background-position: center;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                border-radius: 50%;
+            }
+            @media all and (max-width: 645px) {
+                #demo-wrapper{
+                    width: auto !important;
+                    height: auto !important;
+                }
+                .back-button {
+                    zoom: 0.5 !important;
+                }
+            }
+
+            #menu {
+                display: block;
+                margin: 0 auto;
+            }
+
+            #menu a {
+                cursor: pointer;
+                outline: none;
+                font-weight: bold;
+                font-size: 17px;
+            }
+
+            #menu .item .sector {
+                transition: all .5s linear;
+                fill: #fff;
+                stroke: transparent;
+            }
+
+            #menu .item .sector.opacity
+            {
+                opacity: 0.8;
+                transition: all 0s linear !important;
+            }
+
+            #menu .item.current
+            {
+                opacity: 0.6;
+            }
+
+
+            #menu .item:hover .sector, .item:focus .sector {
+                fill: #fff;
+                transition: all .2s linear !important;
+                opacity: 0.6;
+            }
+
+            #menu .item:hover .sector.opacity, .item:focus .sector.opacity {
+                fill: #fff;
+                transition: all .2s linear !important;
+                opacity: 0.6 ;
+            }
+
+            #menu .menu-trigger {
+                fill: #fff;
+                stroke: transparent;
+                opacity: 1;
+                pointer-events: auto; /* KEEP THIS to make sure it stays clickable even when SVG's pointer events is disabled */
+            }
+
+            #menu .menu-trigger:hover, .menu-trigger:focus {
+                cursor: pointer;
+            }
+            #menu symbol {
+                overflow: visible; /* KEEP THIS so that text will not get cut off it it is wider than the icon width */
+            }
+        </style>
     </head>
     <body ng-app="JINI" ng-controller="MainController">
         <div ui-view></div>
