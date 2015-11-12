@@ -2,17 +2,17 @@
     <div ng-show="showCategorySearchBlock" class="filterResault">
         <span class="slogen">MAKING YOU <span>FEEL</span> LOCAL</span>
         <div class="frButtons">
-            <a href="#" class="filter-i"></a>
-            <a ng-click="showCategoriesSearchList()" ng-class="showCategoriesSearchBlockList ? 'active' : ''"class="filter-i-hover"></a>
-            <a ng-click="showCategoriesSearchMap();" ng-class="showCategoriesSearchBlockMap ? 'active' : ''" class="mapNav-i-hover"></a>
-            <a href="#" class="mapNav-i"></a>
+            <a ng-click="showCategoriesSearchList()" ng-class="showCategoriesSearchBlockList ? 'active' : ''" class="filter-i"></a>
+            <a class="filter-i-hover"></a>
+            <a class="mapNav-i-hover"></a>
+            <a ng-click="showCategoriesSearchMap();" ng-class="showCategoriesSearchBlockMap ? 'active' : ''" class="mapNav-i"></a>
         </div>
     </div>
 
-    <div ng-show="showCategorySearchBlock" class="filter_search_result imgNtext">
+    <div ng-show="showCategoriesSearchBlockList" class="filter_search_result">
         <a href="back()" class="back-btn"></a>
         <span class="ts-title">Search by categorie {{currentItem.title}}</span>
-        <div class="results-list">
+        <div class="results-list" scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 429px">
             <div ng-repeat="(k, v) in category_search_result" class="text-separator">
                 <div class="sm-imgText">
                     <img ng-src="{{content_image ? content_image : mediaUrl + v.featured_image}}" />
@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <div ng-show="showCategoriesSearchBlockMap" class="filter_search_result imgNtext" style="width: 1178px;min-height: 955px;">
+    <div ng-show="showCategoriesSearchBlockMap" class="filter_search_result" style="width: 1178px;min-height: 955px;">
         <a href="back()" class="back-btn"></a>
         <div id="mapFrame">
             <my-map ng-if="showCategorySearchBlock"></my-map>

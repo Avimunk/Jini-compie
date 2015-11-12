@@ -32,12 +32,18 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         if(resizeTimeout)
             clearTimeout(resizeTimeout);
 
-        resizeTimeout = setTimeout(function(){
-            $rootScope.$broadcast('rebuild:me');
-            console.log('rebuild:me from resize');
-        }, 200);
-    });
+        //resizeTimeout = setTimeout(function(){
+            console.log('window.innerWidth', window.innerWidth);
+            var width = window.innerWidth;
+            if(width < 1627 && width > 980)
+            {
+                $rootScope.set_map_width = width - 10 - 365 - 80 - 70;
+                $rootScope.$digest();
+            }
+            //$rootScope.set_map_width = elem[0].offsetHeight;
 
+        //}, 200);
+    });
 
     $rootScope.centerImage = '../img/no_selector.png';
 
@@ -220,7 +226,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
     }
 
     $rootScope.a = [];
-    $rootScope.a.length = 20;
+    $rootScope.a.length = 50;
 
 
     $rootScope.showHomePageBlock = function() {
@@ -324,6 +330,8 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                         searches.page[$scope.keywords] = $rootScope.top_search_result = resp.data;
                     });
                 }
+                $rootScope.$broadcast('rebuild:search');
+                console.log('rebuild:search');
             }
             interval = false;
         }, 500);

@@ -1,7 +1,7 @@
 <search-block></search-block>
 <categories-search-block></categories-search-block>
 
-<div id="svgContainer" ng-attr-class="{{ showCategoriesBlock || showObjectBlock ? 'closed' : ''}}" ng-mouseover="closeOnMouseover()">
+<div id="svgContainer" ng-attr-class="{{ showCategoriesBlock || showObjectBlock || showCategorySearchBlock ? 'closed' : ''}}" ng-mouseover="closeOnMouseover()">
 
     <a title="Go Home" ng-if="parentID == 0" ng-href="#/" class="back-button"></a>
     <a title="Back to parent Category" ng-if="parentID != 0 && parentID != null" ng-href="#/{{ parentID }}/" class="back-button"></a>

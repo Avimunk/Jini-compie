@@ -1,16 +1,16 @@
 module.exports = function(grunt) {
 	grunt.initConfig({
-		sass: {
-            options: {
-                sourcemap: 'none'
-            },
-			app: {
-				files: {
-                    'css/app.css': 'scss/app.scss',
-                    'css/rtl-fix.css': 'scss/rtl-fix.scss',
-				}
-			},
-		},
+		//sass: {
+        //    options: {
+        //        sourcemap: 'none'
+        //    },
+		//	app: {
+		//		files: {
+        //            'css/app.css': 'scss/app.scss',
+        //            'css/rtl-fix.css': 'scss/rtl-fix.scss',
+		//		}
+		//	},
+		//},
 		cssmin: {
 			app: {
 				files: [{
@@ -54,6 +54,7 @@ module.exports = function(grunt) {
 						'lib/angular-ui-router/release/angular-ui-router.min.js',
 						'lib/ngstorage/ngStorage.min.js',
 						'lib/ng-scrollbar/ng-scrollbar.min.js',
+						'lib/ng-tiny-scrollbar/ng-tiny-scrollbar.min.js',
 						//'js/old.script.js',
 					]
 				}
@@ -74,10 +75,10 @@ module.exports = function(grunt) {
 			}
 		},
         watch: {
-			'app-sass': {
-				files: 'scss/*.scss',
-				tasks: ['sass:app', 'cssmin:app']
-			},
+			//'app-sass': {
+			//	files: 'scss/*.scss',
+			//	tasks: ['sass:app', 'cssmin:app']
+			//},
 			'app-css': {
 				options: {
 					livereload: true,
@@ -108,16 +109,15 @@ module.exports = function(grunt) {
 			},
             'gruntfile': {
                 files: ['Gruntfile.js'],
-                tasks: ['sass', 'cssmin', 'uglify', 'ngtemplates', 'watch']
+                tasks: ['cssmin', 'uglify', 'ngtemplates', 'watch']
             }
 		}
 	});
 
-	grunt.loadNpmTasks('grunt-contrib-sass');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-angular-templates');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 
-	grunt.registerTask('default', ['sass', 'cssmin', 'ngtemplates', 'uglify', 'watch']);
+	grunt.registerTask('default', ['cssmin', 'ngtemplates', 'uglify', 'watch']);
 };

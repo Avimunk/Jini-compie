@@ -20,7 +20,6 @@
     <script src="js/extensions.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.16.0/TweenMax.min.js"></script>
     <script src="js/app.min.js"></script>
-
 </head>
     <body ng-app="JINI" ng-controller="MainController">
         <div class="site-bg">
@@ -34,14 +33,15 @@
                 <form>
                     <input enter-submit ng-keyup="changeUrl()" ng-model="keywords" type="search" />
                     <input type="submit" ng-click="changeUrl()"  value="" />
-
-                    <div ng-show="top_search_result.length > 0" class="search_autoComplete ">
-                        <ul class="sa-list">
-                            <li ng-repeat="v in top_search_result" ng-click="clearSearch()">
-                                <a ng-bind-html="v.title | highlight:keywords" ng-href="{{ v.type == 'category' ? ('#/' + v.id + '/' + v.name) : ('#/' + v.category['id'] + '-' + v.id + '/' + v.category['name'] + '/' + v.name)}}">
-                                </a>
-                             </li>
-                        </ul>
+                    <div style="overflow-y: initial;height: 250px;max-height: 250px;" ng-show="top_search_result.length > 0" class="search_autoComplete ">
+                        <div style="max-height:100%;height:250px" scrollbar="{autoUpdate: true,wheelSpeed : 20}">
+                            <ul class="sa-list">
+                                <li ng-repeat="v in top_search_result" ng-click="clearSearch()">
+                                    <a ng-bind-html="v.title | highlight:keywords" ng-href="{{ v.type == 'category' ? ('#/' + v.id + '/' + v.name) : ('#/' + v.category['id'] + '-' + v.id + '/' + v.category['name'] + '/' + v.name)}}">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </form>
                 <div class="breadcrumbs">
@@ -91,7 +91,23 @@
             </ul>
         </nav>
 
-        <div class="inner-page">
+        <div class="inner-page" fix-inside-size>
+            <style ng-if="item_info_width">
+                .item_info .scroll-viewport, .filterResault, .filter_search_result {
+                    height: {{item_info_width - 100}}px !important;
+                }
+                .inner_sr .scroll-viewport{
+                    height: {{item_info_width - 147}}px !important;
+                }
+                .filter_search_result .results-list{
+                    height: {{item_info_width - 210}}px !important;
+                }
+            </style>
+            <style ng-if="set_map_width">
+                .filter_search_result, #gmaps{
+                    width: {{set_map_width}}px !important;
+                }
+            </style>
 
             <div class="openDiv imgNtext visionDiv">
                 <a href="#" class="back-btn"></a>
@@ -466,8 +482,8 @@
             </div>
 -->
             <objectblock></objectblock>
-            <categoryhover></categoryhover>
             <categoriesblock></categoriesblock>
+            <categoryhover></categoryhover>
 
             <div class="banner">
                 <span class="b-title">Dr. David Schwarz</span>

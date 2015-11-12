@@ -8,7 +8,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "\r" +
     "\n" +
-    "<div id=\"svgContainer\" ng-attr-class=\"{{ showCategoriesBlock || showObjectBlock ? 'closed' : ''}}\" ng-mouseover=\"closeOnMouseover()\">\r" +
+    "<div id=\"svgContainer\" ng-attr-class=\"{{ showCategoriesBlock || showObjectBlock || showCategorySearchBlock ? 'closed' : ''}}\" ng-mouseover=\"closeOnMouseover()\">\r" +
     "\n" +
     "\r" +
     "\n" +
@@ -65,105 +65,73 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
   $templateCache.put('templates/directives/categoriesBlock.html',
     "<div>\r" +
     "\n" +
-    "    <div class=\"search-criteria-pane-wrapper pane-wrapper{{showCategoriesBlock ? ' collapsed' : ''}}\">\r" +
+    "    <div ng-show=\"showCategoriesBlock\" class=\"filterResault\">\r" +
     "\n" +
-    "        <div class=\"search-criteria-pane pane\">\r" +
+    "        <span class=\"slogen\">MAKING YOU <span>FEEL</span> LOCAL</span>\r" +
     "\n" +
-    "            <h2 class=\"title\">Filter results in <span class=\"criteria\">{{currentItem.title}}</span></h2>\r" +
+    "        <div class=\"frButtons\">\r" +
     "\n" +
-    "            <button class=\"close-button\">&nbsp;</button>\r" +
+    "            <a ng-click=\"showCategoriesList()\" class=\"filter-i\"></a>\r" +
     "\n" +
-    "            <ul class=\"view-mode\">\r" +
+    "            <a ng-class=\"showCategoriesBlockList ? 'active' : ''\"class=\"filter-i-hover\"></a>\r" +
     "\n" +
-    "                <li>\r" +
+    "            <a ng-class=\"showCategoriesBlockMap ? 'active' : ''\" class=\"mapNav-i-hover\"></a>\r" +
     "\n" +
-    "                    <button ng-class=\"showCategoriesBlockMap ? 'active' : ''\" class=\"map-view-button\" ng-click=\"showCategoriesMap();\"></button>\r" +
-    "\n" +
-    "                </li>\r" +
-    "\n" +
-    "                <li>\r" +
-    "\n" +
-    "                    <button ng-class=\"showCategoriesBlockList ? 'active' : ''\" class=\"list-view-button \" ng-click=\"showCategoriesList()\">&nbsp;</button>\r" +
-    "\n" +
-    "                </li>\r" +
-    "\n" +
-    "            </ul>\r" +
+    "            <a ng-click=\"showCategoriesMap();\" class=\"mapNav-i\"></a>\r" +
     "\n" +
     "        </div>\r" +
     "\n" +
     "    </div>\r" +
     "\n" +
-    "    <div class=\"search-results-pane-wrapper pane-wrapper{{showCategoriesBlock && showCategoriesBlockList ? ' collapsed' : ''}}\">\r" +
-    "\n" +
-    "        <div class=\"search-results-pane pane\">\r" +
-    "\n" +
-    "            <h2 class=\"title\"><span class=\"criteria\">{{currentItem.title}} ({{sideCategories.data.length}})</span></h2>\r" +
-    "\n" +
-    "            <div class=\"info-content\">\r" +
-    "\n" +
-    "                <div class=\"content\">\r" +
-    "\n" +
-    "                    <ul>\r" +
-    "\n" +
-    "                        <li ng-repeat=\"(k, v) in sideCategories.data\">\r" +
-    "\n" +
-    "                            <div class=\"row\">\r" +
-    "\n" +
-    "                                <div class=\"col-md-5\">\r" +
-    "\n" +
-    "                                    <img src=\"{{mediaUrl + v.featured_image}}\" class=\"thumb\">\r" +
-    "\n" +
-    "                                </div>\r" +
-    "\n" +
-    "                                <div class=\"col-md-7 no-padding\">\r" +
-    "\n" +
-    "                                    <div class=\"content\">\r" +
-    "\n" +
-    "                                        <h3>{{v.title}}</h3>\r" +
-    "\n" +
     "\r" +
     "\n" +
-    "                                        <p class=\"excerpt\" ng-if=\"v.content\" ng-bind-html=\"v.content | rawHtml\"></p>\r" +
+    "    <div ng-show=\"showCategoryBlockList\" class=\"filter_search_result\">\r" +
     "\n" +
-    "                                        <a ng-click=\"closeCategories()\" ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/' + currentItem.title + '/' + v.name}}\" class=\"more-button{{v.promoted ? ' promoted' : ''}}\"><span>More Info</span></a>\r" +
+    "        <a href=\"back()\" class=\"back-btn\"></a>\r" +
     "\n" +
-    "                                    </div>\r" +
+    "        <span class=\"ts-title\">Search by categorie {{currentItem.title}}</span>\r" +
     "\n" +
-    "                                </div>\r" +
+    "        <div class=\"results-list\">\r" +
     "\n" +
-    "                            </div>\r" +
+    "            <div ng-repeat=\"(k, v) in sideCategories.data\" class=\"text-separator\">\r" +
     "\n" +
-    "                            <div class=\"row actions\">\r" +
+    "                <div class=\"sm-imgText\">\r" +
     "\n" +
-    "                                <div class=\"col-md-4\">\r" +
+    "                    <img ng-src=\"{{mediaUrl + v.featured_image}}\" />\r" +
     "\n" +
-    "                                    <button class=\"map-button\">View on map</button>\r" +
+    "                    <div class=\"inner-smi\">\r" +
     "\n" +
-    "                                </div>\r" +
+    "                        <span class=\"smi-title\">{{v.title}}</span>\r" +
     "\n" +
-    "                                <div class=\"col-md-4 no-padding\">\r" +
+    "                        <p  ng-if=\"v.content\" ng-bind-html=\"v.content | rawHtml\" class=\"smi-text\"></p>\r" +
     "\n" +
-    "                                    <button class=\"wishlist-button\">Add to wishlist</button>\r" +
+    "                        <div class=\"more-info-div\">\r" +
     "\n" +
-    "                                </div>\r" +
+    "                            <a class=\"more-info\" ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/' + currentItem.title + '/' + v.name}}\" ng-click=\"closeCategories()\">\r" +
     "\n" +
-    "                                <div class=\"col-md-4\">\r" +
+    "                                <img class=\"crown-i\" ng-if=\"v.promoted\" src=\"images/icons/crown.png\" />\r" +
     "\n" +
-    "                                    <button class=\"book-button\">Book now</button>\r" +
+    "                                More Info\r" +
     "\n" +
-    "                                </div>\r" +
+    "                            </a>\r" +
     "\n" +
-    "                            </div>\r" +
+    "                        </div>\r" +
     "\n" +
-    "                        </li>\r" +
+    "                    </div>\r" +
     "\n" +
-    "                    </ul>\r" +
+    "                    <div class=\"clearfix\"></div>\r" +
     "\n" +
     "                </div>\r" +
     "\n" +
-    "            </div>\r" +
+    "                <a href=\"#\" class=\"view-map\">\r" +
     "\n" +
-    "            <button class=\"close-button\">&nbsp;</button>\r" +
+    "                    <img src=\"images/icons/g-nav.png\" />\r" +
+    "\n" +
+    "                    <span>View on map</span>\r" +
+    "\n" +
+    "                </a>\r" +
+    "\n" +
+    "            </div>\r" +
     "\n" +
     "        </div>\r" +
     "\n" +
@@ -171,17 +139,13 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "\r" +
     "\n" +
-    "    <div class=\"search-results-pane-wrapper-1 pane-wrapper{{showCategoriesBlock && showCategoriesBlockMap ? ' collapsed' : ''}}\">\r" +
+    "    <div ng-show=\"showCategoriesBlockMap\" class=\"filter_search_result\" style=\"width: 1178px;min-height: 955px;\">\r" +
     "\n" +
-    "        <div class=\"search-results-pane-1 pane\">\r" +
+    "        <a href=\"back()\" class=\"back-btn\"></a>\r" +
     "\n" +
-    "            <div id=\"mapFrame\">\r" +
+    "        <div id=\"mapFrame\">\r" +
     "\n" +
-    "                <my-map ng-if=\"showCategoriesBlock\"></my-map>\r" +
-    "\n" +
-    "            </div>\r" +
-    "\n" +
-    "            <button class=\"close-button\">&nbsp;</button>\r" +
+    "            <my-map ng-if=\"showCategoriesBlock\"></my-map>\r" +
     "\n" +
     "        </div>\r" +
     "\n" +
@@ -200,13 +164,13 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "        <div class=\"frButtons\">\r" +
     "\n" +
-    "            <a href=\"#\" class=\"filter-i\"></a>\r" +
+    "            <a ng-click=\"showCategoriesSearchList()\" ng-class=\"showCategoriesSearchBlockList ? 'active' : ''\" class=\"filter-i\"></a>\r" +
     "\n" +
-    "            <a ng-click=\"showCategoriesSearchList()\" ng-class=\"showCategoriesSearchBlockList ? 'active' : ''\"class=\"filter-i-hover\"></a>\r" +
+    "            <a class=\"filter-i-hover\"></a>\r" +
     "\n" +
-    "            <a ng-click=\"showCategoriesSearchMap();\" ng-class=\"showCategoriesSearchBlockMap ? 'active' : ''\" class=\"mapNav-i-hover\"></a>\r" +
+    "            <a class=\"mapNav-i-hover\"></a>\r" +
     "\n" +
-    "            <a href=\"#\" class=\"mapNav-i\"></a>\r" +
+    "            <a ng-click=\"showCategoriesSearchMap();\" ng-class=\"showCategoriesSearchBlockMap ? 'active' : ''\" class=\"mapNav-i\"></a>\r" +
     "\n" +
     "        </div>\r" +
     "\n" +
@@ -214,13 +178,13 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "\r" +
     "\n" +
-    "    <div ng-show=\"showCategorySearchBlock\" class=\"filter_search_result imgNtext\">\r" +
+    "    <div ng-show=\"showCategoriesSearchBlockList\" class=\"filter_search_result\">\r" +
     "\n" +
     "        <a href=\"back()\" class=\"back-btn\"></a>\r" +
     "\n" +
     "        <span class=\"ts-title\">Search by categorie {{currentItem.title}}</span>\r" +
     "\n" +
-    "        <div class=\"results-list\">\r" +
+    "        <div class=\"results-list\" scrollbar=\"{autoUpdate: true,wheelSpeed : 20}\" style=\"max-height: 100%;width: 429px\">\r" +
     "\n" +
     "            <div ng-repeat=\"(k, v) in category_search_result\" class=\"text-separator\">\r" +
     "\n" +
@@ -268,7 +232,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "\r" +
     "\n" +
-    "    <div ng-show=\"showCategoriesSearchBlockMap\" class=\"filter_search_result imgNtext\" style=\"width: 1178px;min-height: 955px;\">\r" +
+    "    <div ng-show=\"showCategoriesSearchBlockMap\" class=\"filter_search_result\" style=\"width: 1178px;min-height: 955px;\">\r" +
     "\n" +
     "        <a href=\"back()\" class=\"back-btn\"></a>\r" +
     "\n" +
@@ -328,241 +292,151 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('templates/directives/objectBlock.html',
-    "<div class=\"item_info\" ng-class=\"sideObject.content_image ? 'item_info_img' : ''\" ng-show=\"showObjectBlock\" style=\"overflow-y: initial;\">\r" +
+    "<div class=\"item_info\" style=\"padding: 0 !important;overflow-y: initial;\" ng-class=\"sideObject.content_image ? 'item_info_img' : ''\" ng-if=\"showObjectBlock\">\r" +
     "\n" +
-    "    <div ng-scrollbar style=\"max-height: 100%;\" rebuild-on=\"rebuild:me\" >\r" +
+    "    <div scrollbar=\"{autoUpdate: true,wheelSpeed : 20}\" style=\"max-height: 100%;width: 542px\" >\r" +
     "\n" +
-    "        <a ng-click=\"back()\" class=\"back-t\">Back to list view</a>\r" +
+    "        <div class=\"in-scroller-content\">\r" +
     "\n" +
-    "        <a href=\"#\" class=\"close-btn\"></a>\r" +
+    "            <a ng-click=\"back()\" class=\"back-t\">Back to list view</a>\r" +
     "\n" +
-    "        <div class=\"ii-top\" ng-attr-style=\"{{ sideObject.content_image ? 'background-image: url(' + sideObject.content_image + ');' : ''}}\">\r" +
+    "            <a href=\"#\" class=\"close-btn\"></a>\r" +
     "\n" +
-    "            <div class=\"img-top-titles\">\r" +
+    "            <div class=\"ii-top\" ng-attr-style=\"{{ sideObject.content_image ? 'background-image: url(' + sideObject.content_image + ');' : ''}}\">\r" +
     "\n" +
-    "                <span class=\"inner-title\">{{ sideObject.title }}</span>\r" +
+    "                <div class=\"img-top-titles\">\r" +
     "\n" +
-    "                <span class=\"profession\">{{ sideObject.occupation }}</span>\r" +
+    "                    <span class=\"inner-title\">{{ sideObject.title }}</span>\r" +
     "\n" +
-    "            </div>\r" +
-    "\n" +
-    "        </div>\r" +
-    "\n" +
-    "        <style>\r" +
-    "\n" +
-    "            .ngsb-wrap {\r" +
-    "\n" +
-    "                -ms-touch-action: none\r" +
-    "\n" +
-    "            }\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "            .ngsb-wrap .ngsb-container {\r" +
-    "\n" +
-    "                width: auto;\r" +
-    "\n" +
-    "                overflow: hidden;\r" +
-    "\n" +
-    "                transition: .5s all\r" +
-    "\n" +
-    "            }\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "            .ngsb-wrap:hover .ngsb-scrollbar {\r" +
-    "\n" +
-    "                opacity: 1;\r" +
-    "\n" +
-    "                filter: \"alpha(opacity=100)\";\r" +
-    "\n" +
-    "                -ms-filter: \"alpha(opacity=100)\"\r" +
-    "\n" +
-    "            }\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "            .ngsb-wrap .ngsb-scrollbar {\r" +
-    "\n" +
-    "                width: 7px;\r" +
-    "\n" +
-    "                height: 100%;\r" +
-    "\n" +
-    "                top: 0;\r" +
-    "\n" +
-    "                left: 0;\r" +
-    "\n" +
-    "                opacity: .75;\r" +
-    "\n" +
-    "                filter: \"alpha(opacity=75)\";\r" +
-    "\n" +
-    "                -ms-filter: \"alpha(opacity=75)\"\r" +
-    "\n" +
-    "            }\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "            .ngsb-wrap .ngsb-scrollbar .ngsb-thumb-container {\r" +
-    "\n" +
-    "                position: absolute;\r" +
-    "\n" +
-    "                top: 0;\r" +
-    "\n" +
-    "                left: 0;\r" +
-    "\n" +
-    "                bottom: 0;\r" +
-    "\n" +
-    "                right: 0;\r" +
-    "\n" +
-    "                height: auto\r" +
-    "\n" +
-    "            }\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "            .ngsb-wrap .ngsb-scrollbar a.ngsb-thumb-container {\r" +
-    "\n" +
-    "                margin: 20px 0\r" +
-    "\n" +
-    "            }\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "            .ngsb-wrap .ngsb-scrollbar .ngsb-track {\r" +
-    "\n" +
-    "                height: 100%;\r" +
-    "\n" +
-    "                margin: 0 auto;\r" +
-    "\n" +
-    "                width: 7px;\r" +
-    "\n" +
-    "                background: transparent;\r" +
-    "\n" +
-    "                filter: \"alpha(opacity=40)\";\r" +
-    "\n" +
-    "                -ms-filter: \"alpha(opacity=40)\";\r" +
-    "\n" +
-    "                box-shadow: 1px 1px 1px rgba(255, 255, 255, .1)\r" +
-    "\n" +
-    "            }\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "            .ngsb-wrap .ngsb-scrollbar .ngsb-thumb-pos {\r" +
-    "\n" +
-    "                cursor: pointer;\r" +
-    "\n" +
-    "                width: 100%;\r" +
-    "\n" +
-    "                height: 30px\r" +
-    "\n" +
-    "            }\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "            .ngsb-wrap .ngsb-scrollbar .ngsb-thumb-pos .ngsb-thumb {\r" +
-    "\n" +
-    "                transition: .5s all;\r" +
-    "\n" +
-    "                width: 7px;\r" +
-    "\n" +
-    "                height: 100%;\r" +
-    "\n" +
-    "                margin: 0 auto;\r" +
-    "\n" +
-    "                text-align: center;\r" +
-    "\n" +
-    "                background: rgba(128, 128, 128, 0.45);\r" +
-    "\n" +
-    "            }\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "            .ngsb-wrap .ngsb-scrollbar .ngsb-thumb-pos:hover .ngsb-thumb {\r" +
-    "\n" +
-    "                background: rgba(128, 128, 128, 0.6);\r" +
-    "\n" +
-    "                filter: \"alpha(opacity=50)\";\r" +
-    "\n" +
-    "                -ms-filter: \"alpha(opacity=50)\"\r" +
-    "\n" +
-    "            }\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "            .ngsb-wrap .ngsb-scrollbar .ngsb-thumb-pos:active {\r" +
-    "\n" +
-    "                background: rgba(128, 128, 128, 0.6);\r" +
-    "\n" +
-    "                filter: \"alpha(opacity=60)\";\r" +
-    "\n" +
-    "                -ms-filter: \"alpha(opacity=60)\"\r" +
-    "\n" +
-    "            }\r" +
-    "\n" +
-    "        </style>\r" +
-    "\n" +
-    "        <div class=\"ii-content\">\r" +
-    "\n" +
-    "            <div class=\"text-separator first\">\r" +
-    "\n" +
-    "                <a class=\"map-btn\" href=\"#\"><img src=\"images/icons/big-gold-map-nav.png\" /></a>\r" +
-    "\n" +
-    "                <div class=\"clearfix\"></div>\r" +
-    "\n" +
-    "                <div class=\"i-contact-info\">\r" +
-    "\n" +
-    "                    <div class=\"info-title\"></div>\r" +
-    "\n" +
-    "                    <table>\r" +
-    "\n" +
-    "                        <tr>\r" +
-    "\n" +
-    "                            <td class=\"ii-text first\">{{ sideObject.phone }}</td>\r" +
-    "\n" +
-    "                            <td class=\"ii-text second\">{{ sideObject.address_street + ' ' + sideObject.address_city }}</td>\r" +
-    "\n" +
-    "                        </tr>\r" +
-    "\n" +
-    "                        <tr>\r" +
-    "\n" +
-    "                            <td class=\"ii-text first\">{{ sideObject.email }}</td>\r" +
-    "\n" +
-    "                            <td class=\"ii-text second\">{{ sideObject.french_speakers }}</td>\r" +
-    "\n" +
-    "                        </tr>\r" +
-    "\n" +
-    "                    </table>\r" +
+    "                    <span class=\"profession\">{{ sideObject.occupation }}</span>\r" +
     "\n" +
     "                </div>\r" +
     "\n" +
-    "                <div class=\"i-more-info\">\r" +
+    "            </div>\r" +
     "\n" +
-    "                    <!--\r" +
+    "            <div class=\"ii-content\">\r" +
     "\n" +
-    "                    <div class=\"info-title more\"></div>\r" +
+    "                <div class=\"text-separator first\">\r" +
     "\n" +
-    "                    <div class=\"row\">\r" +
+    "                    <a class=\"map-btn\" href=\"#\"><img src=\"images/icons/big-gold-map-nav.png\" /></a>\r" +
     "\n" +
-    "                        <span class=\"ii-text\">$$$</span>\r" +
+    "                    <div class=\"clearfix\"></div>\r" +
+    "\n" +
+    "                    <div class=\"i-contact-info\">\r" +
+    "\n" +
+    "                        <div class=\"info-title\"></div>\r" +
+    "\n" +
+    "                        <table>\r" +
+    "\n" +
+    "                            <tr>\r" +
+    "\n" +
+    "                                <td class=\"ii-text first\">{{ sideObject.phone }}</td>\r" +
+    "\n" +
+    "                                <td class=\"ii-text second\">{{ sideObject.address_street + ' ' + sideObject.address_city }}</td>\r" +
+    "\n" +
+    "                            </tr>\r" +
+    "\n" +
+    "                            <tr>\r" +
+    "\n" +
+    "                                <td class=\"ii-text first\">{{ sideObject.email }}</td>\r" +
+    "\n" +
+    "                                <td class=\"ii-text second\">{{ sideObject.french_speakers }}</td>\r" +
+    "\n" +
+    "                            </tr>\r" +
+    "\n" +
+    "                        </table>\r" +
     "\n" +
     "                    </div>\r" +
     "\n" +
-    "                    <table>\r" +
+    "                    <div class=\"i-more-info\">\r" +
+    "\n" +
+    "                        <!--\r" +
+    "\n" +
+    "                        <div class=\"info-title more\"></div>\r" +
+    "\n" +
+    "                        <div class=\"row\">\r" +
+    "\n" +
+    "                            <span class=\"ii-text\">$$$</span>\r" +
+    "\n" +
+    "                        </div>\r" +
+    "\n" +
+    "                        <table>\r" +
+    "\n" +
+    "                            <tr>\r" +
+    "\n" +
+    "                                <td class=\"ii-text\">Mon-Thu</td>\r" +
+    "\n" +
+    "                                <td class=\"ii-text second\">10:00-19:00</td>\r" +
+    "\n" +
+    "                            </tr>\r" +
+    "\n" +
+    "                            <tr>\r" +
+    "\n" +
+    "                                <td class=\"ii-text\">Fri</td>\r" +
+    "\n" +
+    "                                <td class=\"ii-text second\">10:30-13:00</td>\r" +
+    "\n" +
+    "                            </tr>\r" +
+    "\n" +
+    "                        </table>\r" +
+    "\n" +
+    "                        -->\r" +
+    "\n" +
+    "                    </div>\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
+    "                <div class=\"text-separator\">\r" +
+    "\n" +
+    "                    <!--\r" +
+    "\n" +
+    "                    <table class=\"item-services\">\r" +
     "\n" +
     "                        <tr>\r" +
     "\n" +
-    "                            <td class=\"ii-text\">Mon-Thu</td>\r" +
+    "                            <th class=\"first-col\"></th>\r" +
     "\n" +
-    "                            <td class=\"ii-text second\">10:00-19:00</td>\r" +
+    "                            <th class=\"middle-col\">Title A</th>\r" +
+    "\n" +
+    "                            <th class=\"middle-col\">Title B</th>\r" +
+    "\n" +
+    "                            <th></th>\r" +
     "\n" +
     "                        </tr>\r" +
     "\n" +
     "                        <tr>\r" +
     "\n" +
-    "                            <td class=\"ii-text\">Fri</td>\r" +
+    "                            <td>parking</td>\r" +
     "\n" +
-    "                            <td class=\"ii-text second\">10:30-13:00</td>\r" +
+    "                            <td><span class=\"bullet\"></span></td>\r" +
+    "\n" +
+    "                            <td></td>\r" +
+    "\n" +
+    "                            <td></td>\r" +
+    "\n" +
+    "                        </tr>\r" +
+    "\n" +
+    "                        <tr>\r" +
+    "\n" +
+    "                            <td>livraison</td>\r" +
+    "\n" +
+    "                            <td></td>\r" +
+    "\n" +
+    "                            <td><span class=\"bullet\"></span></td>\r" +
+    "\n" +
+    "                            <td></td>\r" +
+    "\n" +
+    "                        </tr>\r" +
+    "\n" +
+    "                        <tr>\r" +
+    "\n" +
+    "                            <td>Koupat Holim</td>\r" +
+    "\n" +
+    "                            <td><span class=\"bullet\"></span></td>\r" +
+    "\n" +
+    "                            <td><span class=\"bullet\"></span></td>\r" +
+    "\n" +
+    "                            <td></td>\r" +
     "\n" +
     "                        </tr>\r" +
     "\n" +
@@ -570,75 +444,15 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                    -->\r" +
     "\n" +
+    "                    <p ng-bind-html=\"sideObject.content | rawHtml\"></p>\r" +
+    "\n" +
+    "                    <p ng-repeat=\"(k,v) in a track by $index\">\r" +
+    "\n" +
+    "                        asda-{{k}}<br>\r" +
+    "\n" +
+    "                    </p>\r" +
+    "\n" +
     "                </div>\r" +
-    "\n" +
-    "            </div>\r" +
-    "\n" +
-    "            <div class=\"text-separator\">\r" +
-    "\n" +
-    "                <!--\r" +
-    "\n" +
-    "                <table class=\"item-services\">\r" +
-    "\n" +
-    "                    <tr>\r" +
-    "\n" +
-    "                        <th class=\"first-col\"></th>\r" +
-    "\n" +
-    "                        <th class=\"middle-col\">Title A</th>\r" +
-    "\n" +
-    "                        <th class=\"middle-col\">Title B</th>\r" +
-    "\n" +
-    "                        <th></th>\r" +
-    "\n" +
-    "                    </tr>\r" +
-    "\n" +
-    "                    <tr>\r" +
-    "\n" +
-    "                        <td>parking</td>\r" +
-    "\n" +
-    "                        <td><span class=\"bullet\"></span></td>\r" +
-    "\n" +
-    "                        <td></td>\r" +
-    "\n" +
-    "                        <td></td>\r" +
-    "\n" +
-    "                    </tr>\r" +
-    "\n" +
-    "                    <tr>\r" +
-    "\n" +
-    "                        <td>livraison</td>\r" +
-    "\n" +
-    "                        <td></td>\r" +
-    "\n" +
-    "                        <td><span class=\"bullet\"></span></td>\r" +
-    "\n" +
-    "                        <td></td>\r" +
-    "\n" +
-    "                    </tr>\r" +
-    "\n" +
-    "                    <tr>\r" +
-    "\n" +
-    "                        <td>Koupat Holim</td>\r" +
-    "\n" +
-    "                        <td><span class=\"bullet\"></span></td>\r" +
-    "\n" +
-    "                        <td><span class=\"bullet\"></span></td>\r" +
-    "\n" +
-    "                        <td></td>\r" +
-    "\n" +
-    "                    </tr>\r" +
-    "\n" +
-    "                </table>\r" +
-    "\n" +
-    "                -->\r" +
-    "\n" +
-    "                <p ng-bind-html=\"sideObject.content | rawHtml\"></p>\r" +
-    "\n" +
-    "                <p ng-repeat=\"(k,v) in a track by $index\">\r" +
-    "\n" +
-    "                    asda-{{k}}<br>\r" +
-    "\n" +
-    "                </p>\r" +
     "\n" +
     "            </div>\r" +
     "\n" +
@@ -665,55 +479,11 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "    </div>\r" +
     "\n" +
-    "    <div class=\"inner_sr\">\r" +
-    "\n" +
-    "        <div ng-repeat=\"(catID, catData) in center_search_result.data\" class=\"category\">\r" +
-    "\n" +
-    "            <a ng-href=\"{{'#/' + catID + '/' + catData.name + '/search/' + keywords}}\">\r" +
-    "\n" +
-    "                <h3>{{catData.title}}</h3>\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "                <div class=\"count\">\r" +
-    "\n" +
-    "                    {{catData.itemsCount}} results\r" +
-    "\n" +
-    "                </div>\r" +
-    "\n" +
-    "            </a>\r" +
-    "\n" +
-    "            <div class=\"items\">\r" +
-    "\n" +
-    "                <ul>\r" +
-    "\n" +
-    "                    <li ng-repeat=\"item in catData.items\">\r" +
-    "\n" +
-    "                        <div class=\"content\">\r" +
-    "\n" +
-    "                            <a ng-href=\"{{'#/' + catID + '-' + item.id + '/' + catData.name + '/' + item.name}}\">\r" +
-    "\n" +
-    "                                <h4>{{item.title | cut:true:35:' ...'}}</h4>\r" +
-    "\n" +
-    "                            </a>\r" +
-    "\n" +
-    "                            <p class=\"excerpt\" ng-if=\"item.excerpt\" ng-bind-html=\"item.excerpt | cut:true:150:' ...' | rawHtml\"></p>\r" +
-    "\n" +
-    "                        </div>\r" +
-    "\n" +
-    "                    </li>\r" +
-    "\n" +
-    "                </ul>\r" +
-    "\n" +
-    "            </div>\r" +
-    "\n" +
-    "        </div>\r" +
-    "\n" +
-    "\r" +
+    "    <div class=\"inner_sr\" scrollbar=\"{autoUpdate: true,wheelSpeed : 20}\" style=\"max-height: 100%;width: 435px\">\r" +
     "\n" +
     "        <div ng-repeat=\"(catID, catData) in center_search_result.data\" class=\"search_word_sec\">\r" +
     "\n" +
-    "            <a ng-href=\"{{'#/' + catID + '/' + catData.name + '/search/' + keywords}}\" class=\"sws-title\">Cars</a>\r" +
+    "            <a ng-href=\"{{'#/' + catID + '/' + catData.name + '/search/' + keywords}}\" class=\"sws-title\">{{catData.title}}</a>\r" +
     "\n" +
     "            <span class=\"numOfRes\">{{catData.itemsCount}} results</span>\r" +
     "\n" +
@@ -721,16 +491,17 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                <a ng-href=\"{{'#/' + catID + '-' + item.id + '/' + catData.name + '/' + item.name}}\" class=\"smi-title\">{{item.title | cut:true:35:' ...'}}</a>\r" +
     "\n" +
-    "                <p class=\"smi-text\" ng-if=\"item.excerpt\" ng-bind-html=\"item.excerpt | cut:true:150:' ...' | rawHtml\"></p>\r" +
+    "                <p class=\"smi-text\" ng-if=\"item.excerpt\" ng-bind-html=\"item.excerpt | cut:true:150:' ...' | rawHtml\">Apartment description by the owner or advertiser Apartment description by the owner or advertiser...</p>\r" +
     "\n" +
     "            </div>\r" +
+    "\n" +
+    "\r" +
     "\n" +
     "        </div>\r" +
     "\n" +
     "    </div>\r" +
     "\n" +
-    "</div>\r" +
-    "\n"
+    "</div>"
   );
 
 }]);

@@ -180,5 +180,14 @@ angular.module('JINI.directives', [])
             templateUrl: 'templates/directives/searchBlock.html',
         }
     })
+    .directive('fixInsideSize', ['$window', '$rootScope', function($window, $rootScope) {
+        return function(scope, elem, attrs) {
+            $rootScope.item_info_width = elem[0].offsetHeight;
+            angular.element($window).bind('resize', function() {
+                $rootScope.item_info_width = elem[0].offsetHeight;
+                $rootScope.$digest();
+            });
+        }
+    }])
 ;
 
