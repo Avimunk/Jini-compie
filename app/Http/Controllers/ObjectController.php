@@ -40,7 +40,7 @@ class ObjectController extends Controller {
     }
     
     public function get($id) {
-        if ( $object = Object::select( array( 'objects.id', 'objects.name', 'objects.title', 'objects.excerpt' ) )
+        if ( $object = Object::select( array( 'objects.id', 'objects.name', 'objects.title', 'objects.excerpt', 'objects.content' ) )
             ->where('id', $id)
             ->first() ) {
             $this->processObject($object);
@@ -57,6 +57,37 @@ class ObjectController extends Controller {
         $objects = null;
 
         if ( $categoryId ) {
+            // Category Image
+            $featuredImageUrl = '';
+            if ($categoryFeaturedImageId = ObjectMeta::getValue($categoryId, '_featured_image')) {
+                $featuredImageUrl = getImageSrc($categoryFeaturedImageId, 'thumbnail');
+            }
+
+            $objects = Object::whereNotIn('objects.type', ['object_type', 'image','category'])
+                ->where(function( $query ) use ( $search ) {
+                    $query->where('objects.title', 'LIKE', '%' . $search . '%')
+                        ->orWhere('objects.name', 'LIKE', '%' . $search . '%');
+                })
+                ->join('objects as obj', function ($join){
+                    $join->on('obj.name', '=', DB::raw("concat( '_object_type_', objects.type )"));
+                })
+                ->join('object_meta', function ($join){
+                    $join->on('object_meta.object_id', '=', 'obj.id')
+                        ->where('object_meta.meta_key', '=', '_category_id');
+                })
+                ->join('objects as cat', function ($join){
+                    $join->on('cat.id', '=', 'object_meta.meta_value');
+                })
+                ->where('object_meta.meta_value', $categoryId)
+                ->select(DB::raw("'$featuredImageUrl' AS featured_image"),'cat.id AS catID', 'cat.title AS catTitle', 'cat.name AS catName','obj.id AS objID', 'obj.name AS objName', 'objects.id', 'objects.excerpt', 'objects.parent_id', 'objects.name', 'objects.type', 'objects.title')
+                ->orderBy('objects.score','DESC')
+            ;
+            $objects = $objects->get();
+            foreach ($objects as $object) {
+                $this->processObject($object);
+            }
+            return $objects;
+            /*
             // Category Image
             $featuredImageUrl = '';
             if ($categoryFeaturedImageId = ObjectMeta::getValue($categoryId, '_featured_image')) {
@@ -82,11 +113,11 @@ class ObjectController extends Controller {
 
             $objects = DB::table('objects')
                 ->whereIn('type', $types)
-                ->select( array( 'objects.id', DB::raw( '"/uploads/'. $featuredImageUrl . '"' . ' as featured_image'), 'objects.name', 'objects.title', 'objects.excerpt' ) );
+                ->select( array( 'objects.id', DB::raw( '"'. $featuredImageUrl . '"' . ' as featured_image'), 'objects.name', 'objects.title', 'objects.excerpt', 'objects.content' ) );
 
             $objects = DB::table('objects')
                 ->whereIn('type', $types)
-                ->select( array( 'objects.id', DB::raw( '"/uploads/'. $featuredImageUrl . '"' . ' as featured_image'), 'objects.name', 'objects.title', 'objects.excerpt' ) )
+                ->select( array( 'objects.id', DB::raw( '"'. $featuredImageUrl . '"' . ' as featured_image'), 'objects.name', 'objects.title', 'objects.excerpt', 'objects.content' ) )
                 ->whereExists(function ( $query ) {
                     $query->select(DB::raw(1))
                         ->from('object_meta')
@@ -95,7 +126,7 @@ class ObjectController extends Controller {
                         ->where('meta_value', '1');
                 })->
                 union($objects);
-
+                */
         } else {
             if ( $search ) {
                 $objects = Object::whereNotIn('type', ['object_type', 'image'])
@@ -103,13 +134,40 @@ class ObjectController extends Controller {
                         $query->where('title', 'LIKE', '%' . $search . '%')
                             ->orWhere('name', 'LIKE', '%' . $search . '%');
                     })
-                    ->select('id', 'type', 'title')
+                    ->select('id', 'parent_id', 'name', 'type', 'title')
+                    ->orderBy('score','DESC')
+                    ->take(50)
                     ->get();
+                $objects->each(function($v){
+                    if($v->type != 'category')
+                    {
+                        $parentObject = Object::where('type','object_type')->where('name', '_object_type_'.$v->type)->first();
+                        if($parentObject)
+                        {
+                            $parentCategories = Object::where('type','category')
+                                ->whereExists(function ( $query ) use ( $parentObject ) {
+                                    $query->select(DB::raw(1))
+                                        ->from('object_meta')
+                                        ->whereRaw(DB::getTablePrefix() . 'object_meta.meta_value = ' . DB::getTablePrefix() . 'objects.id')
+                                        ->where('meta_key', '_category_id')
+                                        ->where('object_id', $parentObject->id);
+                                })
+                                ->first();
+                            $v->category = array(
+                                'id' => $parentCategories ? $parentCategories->id : '0',
+                                'name' => $parentCategories ? $parentCategories->name : 'Home',
+                            );
+                        }
 
+                    }
+                    return $v;
+                });
+//                dd($objects);
                 return response( $objects );
             }
         }
-
+//        dd($objects);
+//dd($objects->toSql());
 
         if ( $objects ) {
             $objects = $objects
@@ -125,8 +183,192 @@ class ObjectController extends Controller {
         return $objects;
     }
 
+    public function getSearchPage() {
+
+        $categoryId = Input::get('categoryid');
+        $index = Input::get('index') ?: 0;
+        $search = Input::get('query');
+
+        $objects = null;
+
+        if ( $categoryId ) {
+
+            // Category Image
+            $featuredImageUrl = '';
+            if ($categoryFeaturedImageId = ObjectMeta::getValue($categoryId, '_featured_image')) {
+                $featuredImageUrl = getImageSrc($categoryFeaturedImageId, 'thumbnail');
+            }
+
+            $objects = Object::whereNotIn('objects.type', ['object_type', 'image','category'])
+                    ->where(function( $query ) use ( $search ) {
+                        $query->where('objects.title', 'LIKE', '%' . $search . '%')
+                            ->orWhere('objects.name', 'LIKE', '%' . $search . '%');
+                    })
+                    ->join('objects as obj', function ($join){
+                        $join->on('obj.name', '=', DB::raw("concat( '_object_type_', objects.type )"));
+                    })
+                    ->join('object_meta', function ($join){
+                        $join->on('object_meta.object_id', '=', 'obj.id')
+                            ->where('object_meta.meta_key', '=', '_category_id');
+                    })
+                    ->join('objects as cat', function ($join){
+                        $join->on('cat.id', '=', 'object_meta.meta_value');
+                    })
+                    ->where('object_meta.meta_value', $categoryId)
+                    ->select(DB::raw("'$featuredImageUrl' AS featured_image"),'cat.id AS catID', 'cat.title AS catTitle', 'cat.name AS catName','obj.id AS objID', 'obj.name AS objName', 'objects.id', 'objects.excerpt', 'objects.parent_id', 'objects.name', 'objects.type', 'objects.title')
+                    ->orderBy('objects.score','DESC')
+                ;
+            $objects = $objects->get();
+            foreach ($objects as $object) {
+                $this->processObject($object);
+            }
+            return $objects;
+
+            /*
+            dd($objects->toArray());
+
+            // Category Image
+            $featuredImageUrl = '';
+            if ($categoryFeaturedImageId = ObjectMeta::getValue($categoryId, '_featured_image')) {
+                $featuredImageUrl = getImageSrc($categoryFeaturedImageId, 'thumbnail');
+            }
+
+
+            // Get objects where in category
+            $objects = Object::Where('type', 'object_type')
+                ->whereExists(function ( $query ) use ( $categoryId ) {
+                    $query->select(DB::raw(1))
+                    ->from('object_meta')
+                    ->whereRaw(DB::getTablePrefix() . 'object_meta.object_id = ' . DB::getTablePrefix() . 'objects.id')
+                    ->where('meta_key', '_category_id')
+                    ->where('meta_value', $categoryId);
+                })
+                ->select(DB::raw('substr(name, 14) as field_name'))
+                ->get()
+                ->toArray();
+
+
+            $types = array_map(function($v) {
+                return $v['field_name'];
+            }, $objects);
+
+            $objects = DB::table('objects')
+                ->whereIn('type', $types)
+                ->select( array( 'objects.id', DB::raw( '"'. $featuredImageUrl . '"' . ' as featured_image'), 'objects.name', 'objects.title', 'objects.excerpt', 'objects.content' ) );
+//            dd($objects->get());
+            $objects = DB::table('objects')
+                ->whereIn('type', $types)
+                ->where(function( $query ) use ( $search ) {
+                    $query->where('title', 'LIKE', '%' . $search . '%')
+                        ->orWhere('name', 'LIKE', '%' . $search . '%');
+                })
+                ->orderBy('score','DESC')
+                ->select( array( 'objects.id', DB::raw( '"'. $featuredImageUrl . '"' . ' as featured_image'), 'objects.name', 'objects.title', 'objects.excerpt', 'objects.content' ) )
+                ->whereExists(function ( $query ) {
+                    $query->select(DB::raw(1))
+                        ->from('object_meta')
+                        ->whereRaw(DB::getTablePrefix() . 'object_meta.object_id = ' . DB::getTablePrefix() . 'objects.id')
+                        ->where('meta_key', '_field_promoted')
+                        ->where('meta_value', '1');
+                })->
+                union($objects);
+            dd($objects->toSql());
+            */
+
+        } else {
+            if ( $search ) {
+                $objects = Object::whereNotIn('objects.type', ['object_type', 'image','category'])
+                    ->where(function( $query ) use ( $search ) {
+                        $query->where('objects.title', 'LIKE', '%' . $search . '%')
+                            ->orWhere('objects.name', 'LIKE', '%' . $search . '%');
+                    })
+                    ->join('objects as obj', function ($join){
+                        $join->on('obj.name', '=', DB::raw("concat( '_object_type_', objects.type )"));
+                    })
+                    ->select('obj.id AS objID', 'obj.name AS objName', 'objects.id', 'objects.excerpt', 'objects.parent_id', 'objects.name', 'objects.type', 'objects.title')
+                    ->orderBy('objects.score','DESC')
+//                    ->take(10)
+                    ->get();
+
+
+                $parentObjects = array_unique($objects->map(function($v){return $v->objID;})->toArray());
+                if($parentObjects)
+                {
+                    $_categories = ObjectMeta::whereIn('object_meta.object_id', $parentObjects)
+                        ->where('object_meta.meta_key', '_category_id')
+                        ->join('objects as cat', function ($join){
+                            $join->on('cat.id', '=', 'object_meta.meta_value');
+                        })
+                        ->orderBy('cat.score','DESC')
+                        ->orderBy('cat.title','ASC')
+                        ->select('cat.id', 'cat.title', 'cat.name', 'object_meta.object_id')
+                        ->get();
+
+                    if($_categories)
+                    {
+                        $categories = [];
+                        foreach($_categories->toArray() as $item)
+                        {
+                            if(isset($categories[$item['id']]))
+                            {
+                                $categories[$item['id']]['parents'][] = $item['object_id'];
+                            }
+                            else
+                            {
+                                $categories[$item['id']] = array(
+                                    'id'    => $item['id'],
+                                    'title' => $item['title'],
+                                    'name'  => $item['name'],
+                                    'parents' => array(
+                                        $item['object_id'],
+                                    ),
+                                );
+                            }
+                        }
+
+                        $objects = $objects->toArray();
+                        foreach($categories as $k => $item)
+                        {
+                            foreach($objects as $v)
+                            {
+                                if(in_array($v['objID'], $item['parents']))
+                                {
+                                    $categories[$k]['items'][] = $v;
+                                }
+                            }
+
+                            $categories[$k]['itemsCount'] = count($categories[$k]['items']);
+                            $categories[$k]['items'] = array_slice($categories[$k]['items'], 0, 3);
+
+                        }
+                        return [
+                            'data' => $categories,
+                            'count' => count($objects),
+                        ];
+                    }
+                }
+                return [];
+            }
+        }
+//        dd($objects);
+//dd($objects->toSql());
+
+        if ( $objects ) {
+            $objects = $objects
+//            ->skip($index)
+//            ->take(50)
+            ->get();
+dd($objects);
+            foreach ($objects as $object) {
+                $this->processObject($object);
+            }
+        }
+
+        return $objects;
+    }
+
     public function getLocations() {
-        $results = $this->getSearch();
+        $results = $this->getSearchPage();
 
         $data = array();
         $locations = array(
@@ -139,6 +381,7 @@ class ObjectController extends Controller {
                 if ( $lat = ObjectMeta::getValue($result->id, '_field_address-location-g') ) {
                     if ( $long = ObjectMeta::getValue($result->id, '_field_address-location-k' ) )  {
                         $location = array(
+                            'id' => $result->id,
                             'geo_latitude' => $lat,
                             'geo_longitude' => $long,
                             'location' => '',
@@ -166,7 +409,6 @@ class ObjectController extends Controller {
         }
 
         $locations['data'] = $data;
-
         return $locations;
         //return view('partials.map', compact( 'locations' ));
     }

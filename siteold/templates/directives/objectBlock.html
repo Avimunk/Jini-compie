@@ -1,0 +1,55 @@
+<div class="info-pane-wrapper-1 pane-wrapper{{showObjectBlock ? ' collapsed' : ''}}">
+    <div class="info-pane-1 pane">
+        <div class="top-pane" ng-if="sideObject.content_image" ng-attr-style="background-image: url({{ sideObject.content_image }});"></div>
+        <div class="main-pane" ng-attr-style="{{ sideObject.content_image ? 'margin-top: -70px;position: relative' : 'margin-top: 50px;' }}">
+            <div class="row heading">
+                <div class="col-md-12">
+                    <h2 ng-attr-style="{{ sideObject.content_image ? '' : 'color:black !important' }}" class="title">{{ sideObject.title }}</h2>
+                    <h3 ng-attr-style="{{ sideObject.content_image ? '' : 'color:black !important' }}" class="occupation">{{ sideObject.occupation }}</h3>
+                </div>
+            </div>
+            <hr />
+            <div class="row actions actions-pane">
+                <div class="col-md-4"><button class="wishlist-button">Add to wishlist</button></div>
+                <div class="col-md-4"><button class="book-button">Book</button></div>
+                <div class="col-md-4"><button class="map-button"></button></div>
+            </div>
+            <hr />
+            <div class="row content-pane">
+                <div class="col-md-12">
+                    <div class="content" ng-show="sideObject.content" ng-bind-html="sideObject.content | rawHtml"></div>
+                </div>
+            </div>
+            <hr />
+            <div class="row sub-heading">
+                <div class="col-md-12">
+                    <h3>Contact Info</h3><hr />
+                </div>
+            </div>
+
+            <div class="row contact">
+                <div class="col-md-5">
+                    <span class="phone">{{ sideObject.phone }}</span><br />
+                    <span class="email">{{ sideObject.email }}</span>
+                </div>
+                <div class="col-md-7">
+                    <span class="address">{{ sideObject.address_street + ' ' + sideObject.address_city }}</span><br />
+                    <span class="french_speakers">{{ sideObject.french_speakers }}</span>
+                </div>
+            </div>
+            <div class="row sub-heading">
+                <div class="col-md-12">
+                    <h3>More Info</h3><hr />
+                </div>
+            </div>
+            <div class="row contact">
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+        </div>
+        <button ng-click="back()" class="back-button" ng-attr-style="{{ sideObject.content_image ? '' : 'color:black'}}">Back to list view</button>
+        <button ng-click="closeObject()" class="close-button" style="cursor: pointer">&nbsp;</button>
+    </div>
+</div>

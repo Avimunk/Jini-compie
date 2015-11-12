@@ -248,6 +248,8 @@ class ObjectController extends AdminController {
         $object -> title = $request->title;
         $object -> status = 'published';
         $object -> guid = Hash::getUniqueId();
+        if($request->get('score'))
+            $object->score = $request->get('score');
         $object -> save();
 
 
@@ -499,7 +501,6 @@ class ObjectController extends AdminController {
     public function postEdit(ObjectRequest $request, $id)
     {
 
-
         $object = Object::find($id);
         //$object->name = $request->name;
         $object->title = $request->title;
@@ -509,6 +510,8 @@ class ObjectController extends AdminController {
         $excerpt = preg_replace('/\s+/', ' ', $excerpt);
 
         $object->excerpt = $excerpt;
+        if($request->get('score'))
+            $object->score = $request->get('score');
         $object->save();
 
 //        if ($objecttype = Object::where('type', 'object_type')

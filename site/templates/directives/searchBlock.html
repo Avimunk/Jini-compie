@@ -1,0 +1,40 @@
+<div ng-show="showSearchBlock" class="search_results">
+    <div class="top_strip">
+        <span ng-show="center_search_result.count" class="numOfRes"><span class="bold">{{center_search_result.count}}</span> Results for {{search}}</span>
+        <span ng-show="!center_search_result.count && keywords.length" class="numOfRes">No results for {{search}}</span>
+        <span ng-show="!center_search_result.count && !keywords.length" class="numOfRes">Please type something to start</span>
+        <div class="clearfix"></div>
+    </div>
+    <div class="inner_sr">
+        <div ng-repeat="(catID, catData) in center_search_result.data" class="category">
+            <a ng-href="{{'#/' + catID + '/' + catData.name + '/search/' + keywords}}">
+                <h3>{{catData.title}}</h3>
+
+                <div class="count">
+                    {{catData.itemsCount}} results
+                </div>
+            </a>
+            <div class="items">
+                <ul>
+                    <li ng-repeat="item in catData.items">
+                        <div class="content">
+                            <a ng-href="{{'#/' + catID + '-' + item.id + '/' + catData.name + '/' + item.name}}">
+                                <h4>{{item.title | cut:true:35:' ...'}}</h4>
+                            </a>
+                            <p class="excerpt" ng-if="item.excerpt" ng-bind-html="item.excerpt | cut:true:150:' ...' | rawHtml"></p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div ng-repeat="(catID, catData) in center_search_result.data" class="search_word_sec">
+            <a ng-href="{{'#/' + catID + '/' + catData.name + '/search/' + keywords}}" class="sws-title">Cars</a>
+            <span class="numOfRes">{{catData.itemsCount}} results</span>
+            <div ng-repeat="item in catData.items" class="text-separator">
+                <a ng-href="{{'#/' + catID + '-' + item.id + '/' + catData.name + '/' + item.name}}" class="smi-title">{{item.title | cut:true:35:' ...'}}</a>
+                <p class="smi-text" ng-if="item.excerpt" ng-bind-html="item.excerpt | cut:true:150:' ...' | rawHtml"></p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="he">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <title></title>
+        <link href="css/extensions.min.css" rel="stylesheet">
+        <link href="css/app.min.css" rel="stylesheet">
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=visualization"></script>
+        <script src="js/extensions.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.16.0/TweenMax.min.js"></script>
+        <script src="js/app.min.js"></script>
+        <style>
+
+            /* Sticky footer styles
+            -------------------------------------------------- */
+            html {
+                position: relative;
+                min-height: 100%;
+            }
+
+            body {
+                /* Margin bottom by footer height */
+                margin-bottom: 60px !important;
+            }
+
+            #footer {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                /* Set the fixed height of the footer here */
+                height: 60px;
+                background-color: #f5f5f5; }
+
+            /* Custom page CSS
+            -------------------------------------------------- */
+            body > .container {
+                padding: 0;
+                direction: rtl;
+            }
+
+            .container .text-muted {
+                margin: 20px 0;
+            }
+
+            #footer > .container {
+                padding-right: 15px;
+                padding-left: 15px;
+            }
+
+            #breadcrumbs{
+                position: absolute;
+                top: 0;
+                right: 0;
+                background: #F1F6FC;
+            }
+            body {
+                font-family: 'Roboto';
+                background: #fff url(/Jini3/public/img/bg.jpg) no-repeat;
+                background-position: 0 0;
+                background-size: cover;
+                font-size: 16px;
+                overflow-x: hidden;
+            }
+            body * {
+                font-family: 'Roboto' !important;
+            }
+            * {
+                box-sizing: border-box;
+            }
+            #demo-wrapper{
+                width: 680px;
+                height: 715px;
+                position: relative;
+                /*margin: 0 auto;*/
+                overflow: hidden;
+                padding: 0 30px;
+                -webkit-transition: all .3s;
+            }
+            #demo-wrapper.closed {
+                margin-right: -700px;
+            }
+            .back-button {
+                cursor: pointer;
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: 10;
+                width: 83px;
+                height: 83px;
+                background-color: #fff;
+                background-image: url('/Jini3/public/img/icons/back.png');
+                background-repeat: no-repeat;
+                background-position: center;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                border-radius: 50%;
+            }
+            @media all and (max-width: 645px) {
+                #demo-wrapper{
+                    width: auto !important;
+                    height: auto !important;
+                }
+                .back-button {
+                    zoom: 0.5 !important;
+                }
+            }
+
+            #menu {
+                display: block;
+                margin: 0 auto;
+            }
+
+            #menu a {
+                cursor: pointer;
+                outline: none;
+                font-weight: bold;
+                font-size: 17px;
+            }
+
+            #menu .item .sector {
+                transition: all .5s linear;
+                fill: #fff;
+                stroke: transparent;
+            }
+
+            #menu .item .sector.opacity
+            {
+                opacity: 0.8;
+                transition: all 0s linear !important;
+            }
+
+            #menu .item.current
+            {
+                opacity: 0.6;
+            }
+
+
+            #menu .item:hover .sector, .item:focus .sector {
+                fill: #fff;
+                transition: all .2s linear !important;
+                opacity: 0.6;
+            }
+
+            #menu .item:hover .sector.opacity, .item:focus .sector.opacity {
+                fill: #fff;
+                transition: all .2s linear !important;
+                opacity: 0.6 ;
+            }
+
+            #menu .menu-trigger {
+                fill: #fff;
+                stroke: transparent;
+                opacity: 1;
+                pointer-events: auto; /* KEEP THIS to make sure it stays clickable even when SVG's pointer events is disabled */
+            }
+
+            #menu .menu-trigger:hover, .menu-trigger:focus {
+                cursor: pointer;
+            }
+            #menu symbol {
+                overflow: visible; /* KEEP THIS so that text will not get cut off it it is wider than the icon width */
+            }
+
+            input[type="text"] {
+                width: 276px;
+                height: 37px;
+                background: transparent;
+                border: none;
+                line-height: 37px;
+                font-size: 26px;
+                color: white;
+                font-weight: 100;
+                padding: 0 0 0 5px;
+            }
+            .search-results-pane .info-content {
+                height: 90%;
+                overflow-x: hidden;
+                overflow-y: auto;
+            }
+
+
+            /* Search block */
+            .input-group {
+                width: 350px;
+            }
+            .resultBlock {
+                width: 350px;
+                background: rgba(255,255,255,0.9);
+                z-index: 10000;
+                position: absolute;
+                height: 140px;
+                overflow-x: auto;
+                border-right: 2px solid white;
+                border-left: 2px solid white;
+                border-bottom: 2px solid white;
+            }
+
+            .resultBlock a {
+                font-size: 20px;
+                padding: 0 10px;
+                margin: 2px 0;
+                cursor: pointer;
+                text-decoration: none;
+                color: #000;
+                display: block;
+                max-width: 327px;
+                overflow: hidden;
+                background: rgba(169, 169, 169, 0.2);
+            }
+
+            .resultBlock a:hover {
+                background-color: #C5AB68;
+                color: white;
+            }
+
+
+            /* Search block */
+                .searchBlock {
+                    display: none;
+                    direction: ltr;
+                }
+                .searchBlock.display {
+                    z-index: 9999;
+                    background: white;
+                    display: block;
+                    width: 350px;
+                    height: 90%;
+                    position: absolute;
+                    left: 15px;
+                    top: 94px;
+                    padding: 17px;
+                    border: 1px solid #EAEAEA;
+                    overflow-x: hidden;
+                    overflow-y: auto;
+                }
+                .searchBlock h2.title {
+                    text-align: left;
+                    padding: 0 0 6px;
+                    font-size: 19px;
+                    border-bottom: 1px solid #C4AB68;
+                    color: #C4AB68;
+                    margin: 8px 0;
+                }
+
+                .searchBlock .view-mode {
+                    text-align: left;
+                    padding: 0 15px;
+                }
+                    .searchBlock .category {
+                        border-bottom: 2px solid #C4AB68;
+                        font-size: 16px;
+                    }
+
+                    .searchBlock .category h3 {
+                        color: black;
+                        text-decoration: underline !important;
+                        font-size: 24px;
+                        font-weight: bold;
+                        margin-right: 10px;
+                        display: inline-block;
+                    }
+
+                    .searchBlock .category a {
+                        text-decoration: none !important;
+                    }
+
+                    .searchBlock .category .count {
+                        display: inline-block;
+                        font-size: 21px;
+                        text-decoration: underline;
+                        color: #C4AB68;
+                        font-weight: 100;
+                    }
+
+                    .searchBlock .category > a {
+                        display: inline-block;
+                    }
+
+                    .searchBlock .category .items ul {
+                        list-style: none;
+                    }
+
+                    .searchBlock .category .items ul li a {
+                        display: block;
+                        color: black;
+                    }
+
+                    .searchBlock .category .items ul li a h4 {
+                        font-size: 17px;
+                        font-weight: bold;
+                    }
+
+                    .searchBlock .category .items ul li p.excerpt {
+                        margin-bottom: 25px;
+                        margin-top: -9px;
+                        font-size: 18px;
+                        color: #ADADAD;
+                    }
+
+
+            .categoriesBlock .search-results-pane.pane {
+                direction: ltr;
+            }
+
+            .categoriesBlock .info-content {
+                overflow-x: hidden;
+                overflow-y: auto;
+                height: 90%;
+            }
+        </style>
+    </head>
+    <body ng-app="JINI" ng-controller="MainController">
+        <header>
+            <div>
+                <div class="input-group">
+                    <div>
+                        <input enter-submit ng-keyup="changeUrl()" ng-model="keywords" type="text" />
+                    </div>
+                    <div class="input-group-btn">
+                        <
+                        <button class="btn btn-default" type="button" ng-click="changeUrl()">
+                            Submit
+                        </button>
+                    </div>
+                </div>
+                <div ng-show="top_search_result.length > 0" class="resultBlock">
+                    <a ng-repeat="v in top_search_result" ng-click="clearSearch()" ng-href="{{ v.type == 'category' ? ('#/' + v.id + '/' + v.name) : ('#/' + v.category['id'] + '-' + v.id + '/' + v.category['name'] + '/' + v.name)}}">
+                        {{v.title}}
+                    </a>
+                </div>
+            </div>
+        </header>
+        <div id="sideBar1" class="side-bar side-bar-1">
+            <nav>
+                <ul>
+                    <li class="recommended">
+                        <a href="#">&nbsp;</a>
+                    </li>
+                    <li class="info">
+                        <a href="#">&nbsp;</a>
+                    </li>
+                    <li class="contact">
+                        <a href="#">&nbsp;</a>
+                    </li>
+                </ul>
+            </nav>
+            <categoryhover></categoryhover>
+            <objectblock></objectblock>
+            <categoriesblock></categoriesblock>
+
+        </div>
+        <div class="container">
+            <div ui-view></div>
+        </div>
+    </body>
+</html>

@@ -2,39 +2,13 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
   'use strict';
 
   $templateCache.put('templates/categories/8.html',
-    "<div id=\"breadcrumbs\">\r" +
+    "<search-block></search-block>\r" +
     "\n" +
-    "    <ul>\r" +
+    "<categories-search-block></categories-search-block>\r" +
     "\n" +
-    "        <li ng-class=\"{{!currentBreadCrumbs.length ? 'current' : ''}}\">\r" +
+    "\r" +
     "\n" +
-    "           <a ng-if=\"currentBreadCrumbs.length\" href=\"#/\">\r" +
-    "\n" +
-    "               Home\r" +
-    "\n" +
-    "           </a>\r" +
-    "\n" +
-    "            <span ng-if=\"!currentBreadCrumbs.length\">\r" +
-    "\n" +
-    "                Home\r" +
-    "\n" +
-    "            </span>\r" +
-    "\n" +
-    "        </li>\r" +
-    "\n" +
-    "        <li ng-repeat=\"(k, v) in currentBreadCrumbs\">\r" +
-    "\n" +
-    "            <a ng-if=\"!$last\" ng-href=\"{{'#/' + v.id + '/' + v.name}}\">{{v.title}}</a>\r" +
-    "\n" +
-    "            <span ng-if=\"$last\">{{v.title}}</span>\r" +
-    "\n" +
-    "        </li>\r" +
-    "\n" +
-    "    </ul>\r" +
-    "\n" +
-    "</div>\r" +
-    "\n" +
-    "<div id=\"demo-wrapper\" style=\"\">\r" +
+    "<div id=\"svgContainer\" ng-attr-class=\"{{ showCategoriesBlock || showObjectBlock ? 'closed' : ''}}\" ng-mouseover=\"closeOnMouseover()\">\r" +
     "\n" +
     "\r" +
     "\n" +
@@ -54,13 +28,13 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "        <g id=\"symbolsContainer\">\r" +
     "\n" +
-    "            <symbol ng-repeat=\"(k, v) in currentCategories\"  class=\"icon icon-\" id=\"icon-{{k+1}}\" viewBox=\"0 0 40 40\">\r" +
+    "            <symbol ng-init=\"currentItem && $first ? openItem(currentItem) : ''\" ng-repeat=\"(k, v) in currentCategories\"  class=\"icon icon-\" id=\"icon-{{$index+1}}\" viewBox=\"0 0 40 40\">\r" +
     "\n" +
-    "                <text ng-if=\"currentCategories.length == 2\" fill=\"#222\" dx=\"-30\" y=\"0\" dy=\"-115px\" text-anchor=\"middle\" font-size=\"22px\">{{v.title}}</text>\r" +
+    "                <text ng-if=\"currentCategoriesLength == 2\" fill=\"#222\" dx=\"-30\" y=\"0\" dy=\"-115px\" text-anchor=\"middle\" font-size=\"22px\">{{v.title}}</text>\r" +
     "\n" +
-    "                <text ng-if=\"currentCategories.length != 2\" fill=\"#222\" x=\"50%\" dx=\"0\" y=\"50%\" dy=\"0px\" text-anchor=\"middle\" font-size=\"16px\">{{v.newTitle ? v.newTitle[0] : v.title}}</text>\r" +
+    "                <text ng-if=\"currentCategoriesLength != 2\" fill=\"#222\" x=\"50%\" dx=\"0\" y=\"50%\" dy=\"0px\" text-anchor=\"middle\" font-size=\"16px\">{{v.newTitle ? v.newTitle[0] : v.title}}</text>\r" +
     "\n" +
-    "                <text ng-if=\"currentCategories.length != 2 && v.newTitle\" fill=\"#222\" x=\"50%\" dx=\"0\" y=\"50%\" dy=\"20px\" text-anchor=\"middle\" font-size=\"16px\">{{v.newTitle[1]}}</text>\r" +
+    "                <text ng-if=\"currentCategoriesLength != 2 && v.newTitle\" fill=\"#222\" x=\"50%\" dx=\"0\" y=\"50%\" dy=\"20px\" text-anchor=\"middle\" font-size=\"16px\">{{v.newTitle[1]}}</text>\r" +
     "\n" +
     "            </symbol>\r" +
     "\n" +
@@ -70,11 +44,11 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "        <g id=\"itemsContainer\">\r" +
     "\n" +
-    "            <a ng-class=\"{{ currentID == v.id ? 'current' : ''}}\" ng-attr-data-category-id=\"{{v.id}}\" ng-init=\"$last ? fixPie() : ''\" ng-href=\"{{v.items_count ? '#/' + v.id + '/' + v.name: 'javascript:void(0)'}}\" ng-mouseover=\"imageOn(v)\" ng-repeat=\"(k, v) in currentCategories\" class=\"item\" id=\"item-{{k+1}}\" data-title=\"{{v.title}}\" data-featured-image=\"{{v.featuredImageUrl}}\" data-content-image=\"{{v.contentImageUrl}}\" role=\"link\" tabindex=\"0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\" \" xlink:title=\"{{v.title}}\" ng-attr-transform=\"{{pie[currentCategories.length].transform_a[k]}}\" data-svg-origin=\"{{pie[currentCategories.length].global.svgOrigin}}\" ng-attr-style=\"{{ isFirst ? 'transform: matrix(0, 0, 0, 0, 250, 250);' : ''}}\">\r" +
+    "            <a ng-repeat=\"(k, v) in currentCategories\" ng-class=\"{{ currentID == k ? 'current' : ''}}\" ng-attr-data-category-id=\"{{k}}\" ng-init=\"$last ? fixPie() : ''\" ng-click=\"currentItem && currentItem.id == v.id ? openItem(currentItem) : ''\" ng-href=\"{{'#/' + k + '/' + v.name}}\" ng-mouseover=\"imageOn(v);leftBlocksHandler.categoryHover(v)\" class=\"item\" id=\"item-{{$index+1}}\" data-title=\"{{v.title}}\" data-featured-image=\"{{v.featuredImageUrl}}\" data-content-image=\"{{v.contentImageUrl}}\" role=\"link\" tabindex=\"0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\" \" xlink:title=\"{{v.title}}\" ng-attr-transform=\"{{pie[currentCategoriesLength].transform_a[$index]}}\" data-svg-origin=\"{{pie[currentCategoriesLength].global.svgOrigin}}\" ng-attr-style=\"{{ isFirst ? 'transform: matrix(0, 0, 0, 0, 250, 250);' : ''}}\">\r" +
     "\n" +
-    "                <path fill=\"none\" stroke=\"#111\" ng-attr-d=\"{{pie[currentCategories.length].global.d}}\" class=\"sector {{!isFirst ? 'opacity' : ''}}\"></path>\r" +
+    "                <path fill=\"none\" stroke=\"#111\" ng-attr-d=\"{{pie[currentCategoriesLength].global.d}}\" class=\"sector {{!isFirst ? 'opacity' : ''}}\"></path>\r" +
     "\n" +
-    "                <use xlink:href=\"\" ng-href=\"#icon-{{k+1}}\" width=\"40\" height=\"40\" ng-attr-x=\"{{pie[currentCategories.length].global.x}}\" ng-attr-y=\"{{pie[currentCategories.length].global.y}}\" ng-attr-transform=\"{{pie[currentCategories.length].transform_b[k]}}\"></use>\r" +
+    "                <use xlink:href=\"\" ng-href=\"#icon-{{$index+1}}\" width=\"40\" height=\"40\" ng-attr-x=\"{{pie[currentCategoriesLength].global.x}}\" ng-attr-y=\"{{pie[currentCategoriesLength].global.y}}\" ng-attr-transform=\"{{pie[currentCategoriesLength].transform_b[$index]}}\"></use>\r" +
     "\n" +
     "            </a>\r" +
     "\n" +
@@ -88,84 +62,675 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
   );
 
 
-  $templateCache.put('templates/home/index.html',
-    "<div nf-if=\"0\">\n" +
-    "    <div ng-if=\"parentID == 0\">\n" +
-    "        <a ng-href=\"{{ siteUrl }}\">\n" +
-    "            Go Home\n" +
-    "        </a>\n" +
-    "    </div>\n" +
-    "    <div ng-if=\"parentID != 0 && parentID != null\">\n" +
-    "        <a ng-href=\"{{ siteUrl }}/category/{{ parentID }}\">\n" +
-    "            Back to parent Category\n" +
-    "        </a>\n" +
-    "    </div>\n" +
-    "    <div ng-repeat=\"(k, v) in currentCategories\">\n" +
-    "        <a ng-if=\"v.items_count\" ng-href=\"{{ siteUrl }}category/{{ v.id }}\">\n" +
-    "            {{ v.id }} => {{ v.title }}\n" +
-    "        </a>\n" +
-    "        <div ng-if=\"!v.items_count\">\n" +
-    "            {{ v.id }} => {{ v.title }}\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "</div>\n" +
-    "<div id=\"demo\">\n" +
-    "    <svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"-2 -2 504 504\" id=\"menu\">\n" +
-    "        <style>\n" +
-    "            #menu {\n" +
-    "                display: block;\n" +
-    "                margin: 0 auto;\n" +
-    "                /*overflow: visible;*/ /* uncomment this if you are using bouncing animations*/\n" +
-    "            }\n" +
+  $templateCache.put('templates/directives/categoriesBlock.html',
+    "<div>\r" +
     "\n" +
-    "            a {\n" +
-    "                cursor: pointer; /* SVG &lt;a&gt; elements don't get this by default, so you need to explicitly set it */\n" +
-    "                outline: none;\n" +
-    "                font-weight: bold;\n" +
-    "                font-size: 17px;\n" +
-    "            }\n" +
+    "    <div class=\"search-criteria-pane-wrapper pane-wrapper{{showCategoriesBlock ? ' collapsed' : ''}}\">\r" +
     "\n" +
-    "            /* You can change these default styles any way you want */\n" +
+    "        <div class=\"search-criteria-pane pane\">\r" +
     "\n" +
-    "            .item .sector {\n" +
-    "                transition: all .1s linear;\n" +
-    "                fill: #fff;\n" +
-    "                stroke: transparent;\n" +
-    "                opacity: 0.8;\n" +
-    "            }\n" +
+    "            <h2 class=\"title\">Filter results in <span class=\"criteria\">{{currentItem.title}}</span></h2>\r" +
     "\n" +
+    "            <button class=\"close-button\">&nbsp;</button>\r" +
     "\n" +
-    "            .item:hover .sector, .item:focus .sector {\n" +
-    "                fill: #fff;\n" +
-    "                opacity: 0.6;\n" +
-    "            }\n" +
+    "            <ul class=\"view-mode\">\r" +
     "\n" +
-    "            .menu-trigger {\n" +
-    "                fill: #fff;\n" +
-    "                stroke: transparent;\n" +
-    "                opacity: 1;\n" +
-    "                pointer-events: auto; /* KEEP THIS to make sure it stays clickable even when SVG's pointer events is disabled */\n" +
-    "            }\n" +
+    "                <li>\r" +
     "\n" +
-    "            .menu-trigger:hover, .menu-trigger:focus {\n" +
-    "                cursor: pointer;\n" +
-    "            }\n" +
-    "            symbol {\n" +
-    "                overflow: visible; /* KEEP THIS so that text will not get cut off it it is wider than the icon width */\n" +
-    "            }\n" +
-    "        </style>\n" +
-    "        <g id=\"trigger\" class=\"trigger menu-trigger\" role=\"button\">\n" +
-    "            <circle cx=\"250\" cy=\"250\" r=\"110\" />\n" +
-    "            <!-- menu button label or icon goes here -->\n" +
-    "        </g>\n" +
-    "        <g id=\"itemsContainer\">\n" +
-    "            <!-- the menu items -->\n" +
-    "        </g>\n" +
-    "        <g id=\"symbolsContainer\">\n" +
-    "            <!-- replace the contents of these symbols with the contents of your icons -->\n" +
-    "        </g>\n" +
-    "    </svg>\n" +
+    "                    <button ng-class=\"showCategoriesBlockMap ? 'active' : ''\" class=\"map-view-button\" ng-click=\"showCategoriesMap();\"></button>\r" +
+    "\n" +
+    "                </li>\r" +
+    "\n" +
+    "                <li>\r" +
+    "\n" +
+    "                    <button ng-class=\"showCategoriesBlockList ? 'active' : ''\" class=\"list-view-button \" ng-click=\"showCategoriesList()\">&nbsp;</button>\r" +
+    "\n" +
+    "                </li>\r" +
+    "\n" +
+    "            </ul>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "    </div>\r" +
+    "\n" +
+    "    <div class=\"search-results-pane-wrapper pane-wrapper{{showCategoriesBlock && showCategoriesBlockList ? ' collapsed' : ''}}\">\r" +
+    "\n" +
+    "        <div class=\"search-results-pane pane\">\r" +
+    "\n" +
+    "            <h2 class=\"title\"><span class=\"criteria\">{{currentItem.title}} ({{sideCategories.data.length}})</span></h2>\r" +
+    "\n" +
+    "            <div class=\"info-content\">\r" +
+    "\n" +
+    "                <div class=\"content\">\r" +
+    "\n" +
+    "                    <ul>\r" +
+    "\n" +
+    "                        <li ng-repeat=\"(k, v) in sideCategories.data\">\r" +
+    "\n" +
+    "                            <div class=\"row\">\r" +
+    "\n" +
+    "                                <div class=\"col-md-5\">\r" +
+    "\n" +
+    "                                    <img src=\"{{mediaUrl + v.featured_image}}\" class=\"thumb\">\r" +
+    "\n" +
+    "                                </div>\r" +
+    "\n" +
+    "                                <div class=\"col-md-7 no-padding\">\r" +
+    "\n" +
+    "                                    <div class=\"content\">\r" +
+    "\n" +
+    "                                        <h3>{{v.title}}</h3>\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "                                        <p class=\"excerpt\" ng-if=\"v.content\" ng-bind-html=\"v.content | rawHtml\"></p>\r" +
+    "\n" +
+    "                                        <a ng-click=\"closeCategories()\" ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/' + currentItem.title + '/' + v.name}}\" class=\"more-button{{v.promoted ? ' promoted' : ''}}\"><span>More Info</span></a>\r" +
+    "\n" +
+    "                                    </div>\r" +
+    "\n" +
+    "                                </div>\r" +
+    "\n" +
+    "                            </div>\r" +
+    "\n" +
+    "                            <div class=\"row actions\">\r" +
+    "\n" +
+    "                                <div class=\"col-md-4\">\r" +
+    "\n" +
+    "                                    <button class=\"map-button\">View on map</button>\r" +
+    "\n" +
+    "                                </div>\r" +
+    "\n" +
+    "                                <div class=\"col-md-4 no-padding\">\r" +
+    "\n" +
+    "                                    <button class=\"wishlist-button\">Add to wishlist</button>\r" +
+    "\n" +
+    "                                </div>\r" +
+    "\n" +
+    "                                <div class=\"col-md-4\">\r" +
+    "\n" +
+    "                                    <button class=\"book-button\">Book now</button>\r" +
+    "\n" +
+    "                                </div>\r" +
+    "\n" +
+    "                            </div>\r" +
+    "\n" +
+    "                        </li>\r" +
+    "\n" +
+    "                    </ul>\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
+    "            </div>\r" +
+    "\n" +
+    "            <button class=\"close-button\">&nbsp;</button>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "    </div>\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "    <div class=\"search-results-pane-wrapper-1 pane-wrapper{{showCategoriesBlock && showCategoriesBlockMap ? ' collapsed' : ''}}\">\r" +
+    "\n" +
+    "        <div class=\"search-results-pane-1 pane\">\r" +
+    "\n" +
+    "            <div id=\"mapFrame\">\r" +
+    "\n" +
+    "                <my-map ng-if=\"showCategoriesBlock\"></my-map>\r" +
+    "\n" +
+    "            </div>\r" +
+    "\n" +
+    "            <button class=\"close-button\">&nbsp;</button>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "    </div>\r" +
+    "\n" +
     "</div>"
+  );
+
+
+  $templateCache.put('templates/directives/categoriesBlockSearch.html',
+    "<div>\r" +
+    "\n" +
+    "    <div ng-show=\"showCategorySearchBlock\" class=\"filterResault\">\r" +
+    "\n" +
+    "        <span class=\"slogen\">MAKING YOU <span>FEEL</span> LOCAL</span>\r" +
+    "\n" +
+    "        <div class=\"frButtons\">\r" +
+    "\n" +
+    "            <a href=\"#\" class=\"filter-i\"></a>\r" +
+    "\n" +
+    "            <a ng-click=\"showCategoriesSearchList()\" ng-class=\"showCategoriesSearchBlockList ? 'active' : ''\"class=\"filter-i-hover\"></a>\r" +
+    "\n" +
+    "            <a ng-click=\"showCategoriesSearchMap();\" ng-class=\"showCategoriesSearchBlockMap ? 'active' : ''\" class=\"mapNav-i-hover\"></a>\r" +
+    "\n" +
+    "            <a href=\"#\" class=\"mapNav-i\"></a>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "    </div>\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "    <div ng-show=\"showCategorySearchBlock\" class=\"filter_search_result imgNtext\">\r" +
+    "\n" +
+    "        <a href=\"back()\" class=\"back-btn\"></a>\r" +
+    "\n" +
+    "        <span class=\"ts-title\">Search by categorie {{currentItem.title}}</span>\r" +
+    "\n" +
+    "        <div class=\"results-list\">\r" +
+    "\n" +
+    "            <div ng-repeat=\"(k, v) in category_search_result\" class=\"text-separator\">\r" +
+    "\n" +
+    "                <div class=\"sm-imgText\">\r" +
+    "\n" +
+    "                    <img ng-src=\"{{content_image ? content_image : mediaUrl + v.featured_image}}\" />\r" +
+    "\n" +
+    "                    <div class=\"inner-smi\">\r" +
+    "\n" +
+    "                        <span class=\"smi-title\">{{v.title}}</span>\r" +
+    "\n" +
+    "                        <p  ng-if=\"v.content\" ng-bind-html=\"v.content | rawHtml\" class=\"smi-text\"></p>\r" +
+    "\n" +
+    "                        <div class=\"more-info-div\">\r" +
+    "\n" +
+    "                            <a class=\"more-info\" ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/' + currentItem.title + '/' + v.name}}\" ng-click=\"closeCategories()\">\r" +
+    "\n" +
+    "                                <img class=\"crown-i\" ng-if=\"v.promoted\" src=\"images/icons/crown.png\" />\r" +
+    "\n" +
+    "                                More Info\r" +
+    "\n" +
+    "                            </a>\r" +
+    "\n" +
+    "                        </div>\r" +
+    "\n" +
+    "                    </div>\r" +
+    "\n" +
+    "                    <div class=\"clearfix\"></div>\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
+    "                <a href=\"#\" class=\"view-map\">\r" +
+    "\n" +
+    "                    <img src=\"images/icons/g-nav.png\" />\r" +
+    "\n" +
+    "                    <span>View on map</span>\r" +
+    "\n" +
+    "                </a>\r" +
+    "\n" +
+    "            </div>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "    </div>\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "    <div ng-show=\"showCategoriesSearchBlockMap\" class=\"filter_search_result imgNtext\" style=\"width: 1178px;min-height: 955px;\">\r" +
+    "\n" +
+    "        <a href=\"back()\" class=\"back-btn\"></a>\r" +
+    "\n" +
+    "        <div id=\"mapFrame\">\r" +
+    "\n" +
+    "            <my-map ng-if=\"showCategorySearchBlock\"></my-map>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "    </div>\r" +
+    "\n" +
+    "</div>"
+  );
+
+
+  $templateCache.put('templates/directives/categoryHover.html',
+    "<div class=\"info-pane-wrapper pane-wrapper{{showCategoryBlock ? ' collapsed' : ''}}\">\r" +
+    "\n" +
+    "    <div class=\"info-pane pane{{sideCategory.content ? 'preloader' : ''}}\">\r" +
+    "\n" +
+    "        <div class=\"top-pane\" ng-if=\"sideCategory.img\" ng-attr-style=\"{{sideCategory.img ? 'background-image: url(' + mediaUrl + sideCategory.img + ');' : ''}}\"></div>\r" +
+    "\n" +
+    "        <div class=\"main-pane\" style=\"overflow: hidden; width: auto; height: {{ sideCategory.img ? '560px' : '855px'}};\">\r" +
+    "\n" +
+    "            <div class=\"row heading\">\r" +
+    "\n" +
+    "                <div class=\"col-md-12\">\r" +
+    "\n" +
+    "                    <h2 class=\"title\">{{sideCategory.title}}</h2>\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
+    "            </div>\r" +
+    "\n" +
+    "            <div class=\"row heading\">\r" +
+    "\n" +
+    "                <div class=\"col-md-12\">\r" +
+    "\n" +
+    "                    <div class=\"content\">\r" +
+    "\n" +
+    "                        <div ng-if=\"sideCategory.content\" ng-bind-html=\"sideCategory.content | rawHtml\"></div>\r" +
+    "\n" +
+    "                    </div>\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
+    "            </div>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "        <button ng-click=\"closeCategory()\" class=\"back-button\">&nbsp;</button>\r" +
+    "\n" +
+    "    </div>\r" +
+    "\n" +
+    "</div>"
+  );
+
+
+  $templateCache.put('templates/directives/objectBlock.html',
+    "<div class=\"item_info\" ng-class=\"sideObject.content_image ? 'item_info_img' : ''\" ng-show=\"showObjectBlock\" style=\"overflow-y: initial;\">\r" +
+    "\n" +
+    "    <div ng-scrollbar style=\"max-height: 100%;\" rebuild-on=\"rebuild:me\" >\r" +
+    "\n" +
+    "        <a ng-click=\"back()\" class=\"back-t\">Back to list view</a>\r" +
+    "\n" +
+    "        <a href=\"#\" class=\"close-btn\"></a>\r" +
+    "\n" +
+    "        <div class=\"ii-top\" ng-attr-style=\"{{ sideObject.content_image ? 'background-image: url(' + sideObject.content_image + ');' : ''}}\">\r" +
+    "\n" +
+    "            <div class=\"img-top-titles\">\r" +
+    "\n" +
+    "                <span class=\"inner-title\">{{ sideObject.title }}</span>\r" +
+    "\n" +
+    "                <span class=\"profession\">{{ sideObject.occupation }}</span>\r" +
+    "\n" +
+    "            </div>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "        <style>\r" +
+    "\n" +
+    "            .ngsb-wrap {\r" +
+    "\n" +
+    "                -ms-touch-action: none\r" +
+    "\n" +
+    "            }\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "            .ngsb-wrap .ngsb-container {\r" +
+    "\n" +
+    "                width: auto;\r" +
+    "\n" +
+    "                overflow: hidden;\r" +
+    "\n" +
+    "                transition: .5s all\r" +
+    "\n" +
+    "            }\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "            .ngsb-wrap:hover .ngsb-scrollbar {\r" +
+    "\n" +
+    "                opacity: 1;\r" +
+    "\n" +
+    "                filter: \"alpha(opacity=100)\";\r" +
+    "\n" +
+    "                -ms-filter: \"alpha(opacity=100)\"\r" +
+    "\n" +
+    "            }\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "            .ngsb-wrap .ngsb-scrollbar {\r" +
+    "\n" +
+    "                width: 7px;\r" +
+    "\n" +
+    "                height: 100%;\r" +
+    "\n" +
+    "                top: 0;\r" +
+    "\n" +
+    "                left: 0;\r" +
+    "\n" +
+    "                opacity: .75;\r" +
+    "\n" +
+    "                filter: \"alpha(opacity=75)\";\r" +
+    "\n" +
+    "                -ms-filter: \"alpha(opacity=75)\"\r" +
+    "\n" +
+    "            }\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "            .ngsb-wrap .ngsb-scrollbar .ngsb-thumb-container {\r" +
+    "\n" +
+    "                position: absolute;\r" +
+    "\n" +
+    "                top: 0;\r" +
+    "\n" +
+    "                left: 0;\r" +
+    "\n" +
+    "                bottom: 0;\r" +
+    "\n" +
+    "                right: 0;\r" +
+    "\n" +
+    "                height: auto\r" +
+    "\n" +
+    "            }\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "            .ngsb-wrap .ngsb-scrollbar a.ngsb-thumb-container {\r" +
+    "\n" +
+    "                margin: 20px 0\r" +
+    "\n" +
+    "            }\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "            .ngsb-wrap .ngsb-scrollbar .ngsb-track {\r" +
+    "\n" +
+    "                height: 100%;\r" +
+    "\n" +
+    "                margin: 0 auto;\r" +
+    "\n" +
+    "                width: 7px;\r" +
+    "\n" +
+    "                background: transparent;\r" +
+    "\n" +
+    "                filter: \"alpha(opacity=40)\";\r" +
+    "\n" +
+    "                -ms-filter: \"alpha(opacity=40)\";\r" +
+    "\n" +
+    "                box-shadow: 1px 1px 1px rgba(255, 255, 255, .1)\r" +
+    "\n" +
+    "            }\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "            .ngsb-wrap .ngsb-scrollbar .ngsb-thumb-pos {\r" +
+    "\n" +
+    "                cursor: pointer;\r" +
+    "\n" +
+    "                width: 100%;\r" +
+    "\n" +
+    "                height: 30px\r" +
+    "\n" +
+    "            }\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "            .ngsb-wrap .ngsb-scrollbar .ngsb-thumb-pos .ngsb-thumb {\r" +
+    "\n" +
+    "                transition: .5s all;\r" +
+    "\n" +
+    "                width: 7px;\r" +
+    "\n" +
+    "                height: 100%;\r" +
+    "\n" +
+    "                margin: 0 auto;\r" +
+    "\n" +
+    "                text-align: center;\r" +
+    "\n" +
+    "                background: rgba(128, 128, 128, 0.45);\r" +
+    "\n" +
+    "            }\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "            .ngsb-wrap .ngsb-scrollbar .ngsb-thumb-pos:hover .ngsb-thumb {\r" +
+    "\n" +
+    "                background: rgba(128, 128, 128, 0.6);\r" +
+    "\n" +
+    "                filter: \"alpha(opacity=50)\";\r" +
+    "\n" +
+    "                -ms-filter: \"alpha(opacity=50)\"\r" +
+    "\n" +
+    "            }\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "            .ngsb-wrap .ngsb-scrollbar .ngsb-thumb-pos:active {\r" +
+    "\n" +
+    "                background: rgba(128, 128, 128, 0.6);\r" +
+    "\n" +
+    "                filter: \"alpha(opacity=60)\";\r" +
+    "\n" +
+    "                -ms-filter: \"alpha(opacity=60)\"\r" +
+    "\n" +
+    "            }\r" +
+    "\n" +
+    "        </style>\r" +
+    "\n" +
+    "        <div class=\"ii-content\">\r" +
+    "\n" +
+    "            <div class=\"text-separator first\">\r" +
+    "\n" +
+    "                <a class=\"map-btn\" href=\"#\"><img src=\"images/icons/big-gold-map-nav.png\" /></a>\r" +
+    "\n" +
+    "                <div class=\"clearfix\"></div>\r" +
+    "\n" +
+    "                <div class=\"i-contact-info\">\r" +
+    "\n" +
+    "                    <div class=\"info-title\"></div>\r" +
+    "\n" +
+    "                    <table>\r" +
+    "\n" +
+    "                        <tr>\r" +
+    "\n" +
+    "                            <td class=\"ii-text first\">{{ sideObject.phone }}</td>\r" +
+    "\n" +
+    "                            <td class=\"ii-text second\">{{ sideObject.address_street + ' ' + sideObject.address_city }}</td>\r" +
+    "\n" +
+    "                        </tr>\r" +
+    "\n" +
+    "                        <tr>\r" +
+    "\n" +
+    "                            <td class=\"ii-text first\">{{ sideObject.email }}</td>\r" +
+    "\n" +
+    "                            <td class=\"ii-text second\">{{ sideObject.french_speakers }}</td>\r" +
+    "\n" +
+    "                        </tr>\r" +
+    "\n" +
+    "                    </table>\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
+    "                <div class=\"i-more-info\">\r" +
+    "\n" +
+    "                    <!--\r" +
+    "\n" +
+    "                    <div class=\"info-title more\"></div>\r" +
+    "\n" +
+    "                    <div class=\"row\">\r" +
+    "\n" +
+    "                        <span class=\"ii-text\">$$$</span>\r" +
+    "\n" +
+    "                    </div>\r" +
+    "\n" +
+    "                    <table>\r" +
+    "\n" +
+    "                        <tr>\r" +
+    "\n" +
+    "                            <td class=\"ii-text\">Mon-Thu</td>\r" +
+    "\n" +
+    "                            <td class=\"ii-text second\">10:00-19:00</td>\r" +
+    "\n" +
+    "                        </tr>\r" +
+    "\n" +
+    "                        <tr>\r" +
+    "\n" +
+    "                            <td class=\"ii-text\">Fri</td>\r" +
+    "\n" +
+    "                            <td class=\"ii-text second\">10:30-13:00</td>\r" +
+    "\n" +
+    "                        </tr>\r" +
+    "\n" +
+    "                    </table>\r" +
+    "\n" +
+    "                    -->\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
+    "            </div>\r" +
+    "\n" +
+    "            <div class=\"text-separator\">\r" +
+    "\n" +
+    "                <!--\r" +
+    "\n" +
+    "                <table class=\"item-services\">\r" +
+    "\n" +
+    "                    <tr>\r" +
+    "\n" +
+    "                        <th class=\"first-col\"></th>\r" +
+    "\n" +
+    "                        <th class=\"middle-col\">Title A</th>\r" +
+    "\n" +
+    "                        <th class=\"middle-col\">Title B</th>\r" +
+    "\n" +
+    "                        <th></th>\r" +
+    "\n" +
+    "                    </tr>\r" +
+    "\n" +
+    "                    <tr>\r" +
+    "\n" +
+    "                        <td>parking</td>\r" +
+    "\n" +
+    "                        <td><span class=\"bullet\"></span></td>\r" +
+    "\n" +
+    "                        <td></td>\r" +
+    "\n" +
+    "                        <td></td>\r" +
+    "\n" +
+    "                    </tr>\r" +
+    "\n" +
+    "                    <tr>\r" +
+    "\n" +
+    "                        <td>livraison</td>\r" +
+    "\n" +
+    "                        <td></td>\r" +
+    "\n" +
+    "                        <td><span class=\"bullet\"></span></td>\r" +
+    "\n" +
+    "                        <td></td>\r" +
+    "\n" +
+    "                    </tr>\r" +
+    "\n" +
+    "                    <tr>\r" +
+    "\n" +
+    "                        <td>Koupat Holim</td>\r" +
+    "\n" +
+    "                        <td><span class=\"bullet\"></span></td>\r" +
+    "\n" +
+    "                        <td><span class=\"bullet\"></span></td>\r" +
+    "\n" +
+    "                        <td></td>\r" +
+    "\n" +
+    "                    </tr>\r" +
+    "\n" +
+    "                </table>\r" +
+    "\n" +
+    "                -->\r" +
+    "\n" +
+    "                <p ng-bind-html=\"sideObject.content | rawHtml\"></p>\r" +
+    "\n" +
+    "                <p ng-repeat=\"(k,v) in a track by $index\">\r" +
+    "\n" +
+    "                    asda-{{k}}<br>\r" +
+    "\n" +
+    "                </p>\r" +
+    "\n" +
+    "            </div>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "    </div>\r" +
+    "\n" +
+    "</div>"
+  );
+
+
+  $templateCache.put('templates/directives/searchBlock.html',
+    "<div ng-show=\"showSearchBlock\" class=\"search_results\">\r" +
+    "\n" +
+    "    <div class=\"top_strip\">\r" +
+    "\n" +
+    "        <span ng-show=\"center_search_result.count\" class=\"numOfRes\"><span class=\"bold\">{{center_search_result.count}}</span> Results for {{search}}</span>\r" +
+    "\n" +
+    "        <span ng-show=\"!center_search_result.count && keywords.length\" class=\"numOfRes\">No results for {{search}}</span>\r" +
+    "\n" +
+    "        <span ng-show=\"!center_search_result.count && !keywords.length\" class=\"numOfRes\">Please type something to start</span>\r" +
+    "\n" +
+    "        <div class=\"clearfix\"></div>\r" +
+    "\n" +
+    "    </div>\r" +
+    "\n" +
+    "    <div class=\"inner_sr\">\r" +
+    "\n" +
+    "        <div ng-repeat=\"(catID, catData) in center_search_result.data\" class=\"category\">\r" +
+    "\n" +
+    "            <a ng-href=\"{{'#/' + catID + '/' + catData.name + '/search/' + keywords}}\">\r" +
+    "\n" +
+    "                <h3>{{catData.title}}</h3>\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "                <div class=\"count\">\r" +
+    "\n" +
+    "                    {{catData.itemsCount}} results\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "            <div class=\"items\">\r" +
+    "\n" +
+    "                <ul>\r" +
+    "\n" +
+    "                    <li ng-repeat=\"item in catData.items\">\r" +
+    "\n" +
+    "                        <div class=\"content\">\r" +
+    "\n" +
+    "                            <a ng-href=\"{{'#/' + catID + '-' + item.id + '/' + catData.name + '/' + item.name}}\">\r" +
+    "\n" +
+    "                                <h4>{{item.title | cut:true:35:' ...'}}</h4>\r" +
+    "\n" +
+    "                            </a>\r" +
+    "\n" +
+    "                            <p class=\"excerpt\" ng-if=\"item.excerpt\" ng-bind-html=\"item.excerpt | cut:true:150:' ...' | rawHtml\"></p>\r" +
+    "\n" +
+    "                        </div>\r" +
+    "\n" +
+    "                    </li>\r" +
+    "\n" +
+    "                </ul>\r" +
+    "\n" +
+    "            </div>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "        <div ng-repeat=\"(catID, catData) in center_search_result.data\" class=\"search_word_sec\">\r" +
+    "\n" +
+    "            <a ng-href=\"{{'#/' + catID + '/' + catData.name + '/search/' + keywords}}\" class=\"sws-title\">Cars</a>\r" +
+    "\n" +
+    "            <span class=\"numOfRes\">{{catData.itemsCount}} results</span>\r" +
+    "\n" +
+    "            <div ng-repeat=\"item in catData.items\" class=\"text-separator\">\r" +
+    "\n" +
+    "                <a ng-href=\"{{'#/' + catID + '-' + item.id + '/' + catData.name + '/' + item.name}}\" class=\"smi-title\">{{item.title | cut:true:35:' ...'}}</a>\r" +
+    "\n" +
+    "                <p class=\"smi-text\" ng-if=\"item.excerpt\" ng-bind-html=\"item.excerpt | cut:true:150:' ...' | rawHtml\"></p>\r" +
+    "\n" +
+    "            </div>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "    </div>\r" +
+    "\n" +
+    "</div>\r" +
+    "\n"
   );
 
 }]);

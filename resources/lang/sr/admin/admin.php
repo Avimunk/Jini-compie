@@ -19,5 +19,7 @@ return [
     'video_albums' => 'Видео албуми',
     'video_items' => 'Видеои',
     'users' => 'Кориници',
-	
+    'score' => 'Scoring',
+    'no_score' => 'None',
+
 	];

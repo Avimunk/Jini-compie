@@ -1,0 +1,45 @@
+<div>
+    <div ng-show="showCategorySearchBlock" class="filterResault">
+        <span class="slogen">MAKING YOU <span>FEEL</span> LOCAL</span>
+        <div class="frButtons">
+            <a href="#" class="filter-i"></a>
+            <a ng-click="showCategoriesSearchList()" ng-class="showCategoriesSearchBlockList ? 'active' : ''"class="filter-i-hover"></a>
+            <a ng-click="showCategoriesSearchMap();" ng-class="showCategoriesSearchBlockMap ? 'active' : ''" class="mapNav-i-hover"></a>
+            <a href="#" class="mapNav-i"></a>
+        </div>
+    </div>
+
+    <div ng-show="showCategorySearchBlock" class="filter_search_result imgNtext">
+        <a href="back()" class="back-btn"></a>
+        <span class="ts-title">Search by categorie {{currentItem.title}}</span>
+        <div class="results-list">
+            <div ng-repeat="(k, v) in category_search_result" class="text-separator">
+                <div class="sm-imgText">
+                    <img ng-src="{{content_image ? content_image : mediaUrl + v.featured_image}}" />
+                    <div class="inner-smi">
+                        <span class="smi-title">{{v.title}}</span>
+                        <p  ng-if="v.content" ng-bind-html="v.content | rawHtml" class="smi-text"></p>
+                        <div class="more-info-div">
+                            <a class="more-info" ng-href="{{'#/' + currentItem.id + '-' + v.id + '/' + currentItem.title + '/' + v.name}}" ng-click="closeCategories()">
+                                <img class="crown-i" ng-if="v.promoted" src="images/icons/crown.png" />
+                                More Info
+                            </a>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <a href="#" class="view-map">
+                    <img src="images/icons/g-nav.png" />
+                    <span>View on map</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div ng-show="showCategoriesSearchBlockMap" class="filter_search_result imgNtext" style="width: 1178px;min-height: 955px;">
+        <a href="back()" class="back-btn"></a>
+        <div id="mapFrame">
+            <my-map ng-if="showCategorySearchBlock"></my-map>
+        </div>
+    </div>
+</div>

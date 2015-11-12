@@ -79,6 +79,17 @@
                                 {!!$errors->first('title', '<span class="help-block">:message </span>')!!}
                             </div>
                             <div class="col-md-12">
+                                <label class="control-label" for="field_type">{{
+                            trans("admin/admin.score") }}</label>
+                                <select
+                                        style="width: 100%" name="score" id="score"
+                                        class="form-control">
+                                    @for($i=0; $i<= 10; $i++)
+                                        <option {{{isset($object) && $object->score == $i ? 'selected' : ''}}} value="{{$i}}">{{$i ?: trans("admin/admin.no_score")}}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                            <div class="col-md-12">
                                 <label class="control-label" for="content"> {{
                                     trans("admin/admin.content") }}</label> <textarea
                                     class="form-control" name="content" id="content">{{{ Input::old('content', isset($object) ? $object->content : null) }}}</textarea>

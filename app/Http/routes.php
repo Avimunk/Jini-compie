@@ -11,6 +11,13 @@
 |
 */
 
+/*// Password change:
+Route::get('/a', function(){
+    $user = \App\User::find(1);
+    $user->password = bcrypt(123456);
+    $user->save();
+    dd($user);
+});*/
 Route::get('/', 'HomeController@index');
 Route::get('home', 'HomeController@index');
 Route::get('about', 'PagesController@about');
@@ -24,6 +31,7 @@ Route::get('categories/{id}/content', 'CategoryController@getCategoryContent');
 Route::get('categories/{id}/objects', 'CategoryController@getCategoryObjects');
 
 Route::get('objects/search', 'ObjectController@getSearch');
+Route::get('objects/searchPage', 'ObjectController@getSearchPage');
 Route::get('objects/map', 'ObjectController@getMap');
 Route::get('objects/locations', 'ObjectController@getLocations');
 Route::get('objects/{id}/content', 'ObjectController@getContent');

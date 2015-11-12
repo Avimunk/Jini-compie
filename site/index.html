@@ -1,124 +1,484 @@
-<!DOCTYPE html>
-<html lang="he">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-        <title></title>
-        <link href="css/extensions.min.css" rel="stylesheet">
-        <link href="css/app.min.css" rel="stylesheet">
-        <script src="js/extensions.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.16.0/TweenMax.min.js"></script>
-        <script src="js/app.min.js"></script>
-        <style>
-            #breadcrumbs{
-                position: absolute;
-                top: 0;
-                right: 0;
-                background: #F1F6FC;
-            }
-            body {
-                font-family: 'Roboto';
-                background: #fff url(/Jini3/public/img/bg.jpg) no-repeat;
-                background-position: 0 0;
-                background-size: cover;
-                font-size: 16px;
-                overflow-x: hidden;
-            }
-            * {
-                box-sizing: border-box;
-            }
-            #demo-wrapper{
-                width: 643px;
-                height: 715px;
-                position: relative;
-                margin: 0 auto;
-                overflow: hidden;
-            }
-            .back-button {
-                cursor: pointer;
-                display: block;
-                position: absolute;
-                top: 0;
-                left: 0;
-                z-index: 10;
-                width: 83px;
-                height: 83px;
-                background-color: #fff;
-                background-image: url('/Jini3/public/img/icons/back.png');
-                background-repeat: no-repeat;
-                background-position: center;
-                -webkit-border-radius: 50%;
-                -moz-border-radius: 50%;
-                border-radius: 50%;
-            }
-            @media all and (max-width: 645px) {
-                #demo-wrapper{
-                    width: auto !important;
-                    height: auto !important;
-                }
-                .back-button {
-                    zoom: 0.5 !important;
-                }
-            }
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="he" xmlns="http://www.w3.org/1999/xhtml">
+<head prefix="og: http://ogp.me/ns#">
+    <title>JINI</title>
+    <meta content="" name="description"/>
+    <meta name="ROBOTS" content="INDEX" />
 
-            #menu {
-                display: block;
-                margin: 0 auto;
-            }
+    <!-- Content type and encoding -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link rel="shortcut icon" href="images/favicon.png"/>
 
-            #menu a {
-                cursor: pointer;
-                outline: none;
-                font-weight: bold;
-                font-size: 17px;
-            }
+    <!-- Link to stylesheet -->
+    <link href="css/app.min.css" rel="stylesheet">
+    <link href='//fonts.googleapis.com/css?family=Roboto+Condensed:400,300,700' rel='stylesheet' type='text/css'>
 
-            #menu .item .sector {
-                transition: all .5s linear;
-                fill: #fff;
-                stroke: transparent;
-            }
+    <!-- Javascript files -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=visualization"></script>
+    <script src="js/extensions.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.16.0/TweenMax.min.js"></script>
+    <script src="js/app.min.js"></script>
 
-            #menu .item .sector.opacity
-            {
-                opacity: 0.8;
-                transition: all 0s linear !important;
-            }
-
-            #menu .item.current
-            {
-                opacity: 0.6;
-            }
-
-
-            #menu .item:hover .sector, .item:focus .sector {
-                fill: #fff;
-                transition: all .2s linear !important;
-                opacity: 0.6;
-            }
-
-            #menu .item:hover .sector.opacity, .item:focus .sector.opacity {
-                fill: #fff;
-                transition: all .2s linear !important;
-                opacity: 0.6 ;
-            }
-
-            #menu .menu-trigger {
-                fill: #fff;
-                stroke: transparent;
-                opacity: 1;
-                pointer-events: auto; /* KEEP THIS to make sure it stays clickable even when SVG's pointer events is disabled */
-            }
-
-            #menu .menu-trigger:hover, .menu-trigger:focus {
-                cursor: pointer;
-            }
-            #menu symbol {
-                overflow: visible; /* KEEP THIS so that text will not get cut off it it is wider than the icon width */
-            }
-        </style>
-    </head>
+</head>
     <body ng-app="JINI" ng-controller="MainController">
-        <div ui-view></div>
+        <div class="site-bg">
+            <!--iframe autoplay src="http://www.youtube.com/embed/W7qWa52k-nE?rel=0&autoplay=1"
+       width="100%" height="100%" frameborder="0" allowfullscreen></iframe-->
+        </div>
+
+        <header>
+            <div class="left">
+                <a href="#" class="logo"><img src="images/logo.png" /></a>
+                <form>
+                    <input enter-submit ng-keyup="changeUrl()" ng-model="keywords" type="search" />
+                    <input type="submit" ng-click="changeUrl()"  value="" />
+
+                    <div ng-show="top_search_result.length > 0" class="search_autoComplete ">
+                        <ul class="sa-list">
+                            <li ng-repeat="v in top_search_result" ng-click="clearSearch()">
+                                <a ng-bind-html="v.title | highlight:keywords" ng-href="{{ v.type == 'category' ? ('#/' + v.id + '/' + v.name) : ('#/' + v.category['id'] + '-' + v.id + '/' + v.category['name'] + '/' + v.name)}}">
+                                </a>
+                             </li>
+                        </ul>
+                    </div>
+                </form>
+                <div class="breadcrumbs">
+                    <span ng-if="currentBreadCrumbs.length">
+                        <a href="#/">
+                            Home
+                        </a>
+                        /
+                    </span>
+                    <span ng-if="!currentBreadCrumbs.length">
+                        Home
+                    </span>
+                    <span ng-if="!$last" ng-repeat="(k, v) in currentBreadCrumbs">
+                        <a ng-href="{{'#/' + v.id + '/' + v.url}}">{{v.title}}</a>
+                        /
+                    </span>
+                    <span ng-if="$last" ng-repeat="(k, v) in currentBreadCrumbs">
+                        <span>{{v.title}}</span>
+                    </span>
+                </div>
+            </div>
+            <div class="right">
+                <div class="social">
+                    <a href="http://www.facebook.com" target="_blank"><img src="images/icons/twitter.png" /></a>
+                    <a href="http://www.facebook.com" target="_blank"><img src="images/icons/facebook.png" /></a>
+                    <a href="http://www.facebook.com" target="_blank"><img src="images/icons/linkdin.png" /></a>
+                </div>
+            </div>
+        </header>
+        <nav>
+            <ul class="side-menu">
+                <li class="liVision active">
+                    <a href="#" class="li-item vision"></a>
+                </li>
+                <li class="liFavorites">
+                    <a href="#" class="li-item favorites"></a>
+                </li>
+                <li class="liInfo">
+                    <a href="#" class="li-item info"></a>
+                </li>
+                <li class="liContact">
+                    <a href="#" class="li-item contact"></a>
+                </li>
+                <li class="liNews">
+                    <a href="#" class="li-item news"></a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="inner-page">
+
+            <div class="openDiv imgNtext visionDiv">
+                <a href="#" class="back-btn"></a>
+                <div class="top">
+                </div>
+                <div class="bottom">
+                    <div class="inner-b">
+                        <span class="inner-title">Our vision</span>
+                        <p class="inner-text">
+                            We know it is not so easy living in our beautiful land, especially when you are from a different country with your own language and culture, bearing the hope of your new life waiting around the corner.
+                            <br />
+                            <br />
+                            We are a group of Israeli and French entrepreneurs who realized the difficulties of moving to Israel and going through the process of accumulating in the promise land. So we partnered together to create the whole package for you, aiding you to become a part of the Israeli society.
+                            We named our company JINI
+
+                            difficulties of moving to Israel and going through the process of accumulating in the promise land. So we partnered together to create the whole package for you, aiding you to become a part of the Israeli society.
+                            We named our company JINI
+                        </p>
+                    </div>
+                </div>
+                <!--a class="gold-btn" href="#">Visit our website</a-->
+            </div>
+
+            <div class="openDiv imgNtext recommendedDiv">
+                <a href="#" class="back-btn"></a>
+                <div class="top-no-img">
+                    <span class="inner-title">Recommended</span>
+                    <p class="inner-text">
+                        We know it is not so easy living in our beautiful land, especially when you are from a different country with your own language and culture, bearing the hope of your new life waiting around the corner.
+                    </p>
+                </div>
+                <div class="bottom">
+                    <div class="inner-b">
+                        <div class="text-separator">
+                            <img src="images/hotel-pool.png" />
+                            <span class="inner-imgLabel">A Room By The Sunset</span>
+                            <p class="inner-text">
+                                Apartment description by the owner or vertisers or something by the owner or vertisers or something Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
+                            </p>
+                        </div>
+                        <div class="text-separator">
+                            <span class="ts-title">A Room By The Sunset</span>
+                            <p class="inner-text">
+                                Apartment description by the owner or vertisers or something by the owner or vertisers or something Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="openDiv imgNtext recommendedDiv rd2">
+                <a href="#" class="back-btn"></a>
+                <div class="top-no-img">
+                    <span class="inner-title">Recommended</span>
+                    <p class="inner-text">
+                        We know it is not so easy living in our beautiful land, especially when you are from a different country with your own language and culture, bearing the hope of your new life waiting around the corner.
+                    </p>
+                </div>
+                <div class="bottom">
+                    <div class="inner-b">
+                        <div class="text-separator">
+                            <div class="sm-imgText">
+                                <img src="images/small-images/s-room-pool.png" />
+                                <div class="inner-smi">
+                                    <span class="smi-title">A Room By The Sunset</span>
+                                    <p class="smi-text">Apartment description by the owner or vertisers or something by the owner or vertisers or something...</p>
+                                    <div class="more-info-div">
+                                        <a class="more-info" href="#">More Info</a>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                        <div class="text-separator">
+                            <div class="sm-imgText">
+                                <img src="images/small-images/s-room-pool.png" />
+                                <div class="inner-smi">
+                                    <span class="smi-title">A Room By The Sunset</span>
+                                    <p class="smi-text">Apartment description by the owner or vertisers or something by the owner or vertisers or something...</p>
+                                    <div class="more-info-div">
+                                        <a class="more-info" href="#">More Info</a>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                        <div class="text-separator">
+                            <span class="ts-title">BEST SUMMER TOUR IN ISRAEL 2015</span>
+                            <p class="inner-text">
+                                Apartment description by the owner or vertisers or something by the owner or vertisers or something Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                            </p>
+                            <div class="more-info-div">
+                                <a class="more-info" href="#">More Info</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="openDiv contactUs">
+                <a href="#" class="back-btn black-b"></a>
+                <span class="inner-title">Contact Us</span>
+                <p class="inner-text">
+                    We know it is not so easy living in our beautiful land, especially when you are from a the corner.
+                </p>
+                <form class="c-error">
+                    <input type="text" placeholder="Name" name="Name"/>
+                    <span class="error-txt">Must enter name</span>
+                    <input type="text" placeholder="Phone" name="Phone"/>
+                    <span class="error-txt">error</span>
+                    <input type="text" placeholder="E-mail" name="E-mail"/>
+                    <span class="error-txt">error</span>
+                    <select>
+                        <option>Contact about</option>
+                        <option>Contact about</option>
+                        <option>Contact about</option>
+                    </select>
+                    <span class="error-txt">error</span>
+                    <textarea placeholder="Message"></textarea>
+                    <span class="error-txt">error</span>
+                    <input type="submit" class="gold-btn" value="SEND" />
+                </form>
+            </div>
+
+            <div class="openDiv imgNtext channel24">
+                <a href="#" class="back-btn"></a>
+                <div class="top">
+                </div>
+                <div class="bottom">
+                    <div class="inner-b">
+                        <span class="inner-title">Chanel i24</span>
+                        <p class="inner-text">
+                            We know it is not so easy living in our beautiful land, especially when you are from a different country with your own language and culture, bearing the hope of your new life waiting around the corner.
+                        </p>
+                        <a class="black-btn" href="#">Visit website</a>
+                        <span class="inner-title">LIVE</span>
+                        <p class="inner-text">
+                            We know it is not so easy living in our beautiful land, especially when you are from a different.
+                        </p>
+                        <a class="black-btn" href="#">Visit website</a>
+                    </div>
+                </div>
+            </div>
+
+            <div ui-view></div>
+
+            <div class="filter_search_result imgNtext" style="display:none;">
+                <!--a href="#" class="back-btn"></a-->
+                <a href="#" class="close-btn"></a>
+                <span class="ts-title">Search by categorie Apartments</span>
+                <div class="results-list">
+                    <div class="text-separator">
+                        <div class="sm-imgText">
+                            <img src="images/small-images/s-room-pool.png" />
+                            <div class="inner-smi">
+                                <span class="smi-title">A Room By The Sunset</span>
+                                <p class="smi-text">Apartment description by the owner or...</p>
+                                <div class="more-info-div">
+                                    <a class="more-info" href="#"><img class="crown-i" src="images/icons/crown.png" />More Info</a>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <a href="#" class="view-map">
+                            <img src="images/icons/g-nav.png" />
+                            <span>View on map</span>
+                        </a>
+                    </div>
+                    <div class="text-separator">
+                        <div class="sm-imgText">
+                            <img src="images/small-images/s-room-pool.png" />
+                            <div class="inner-smi">
+                                <span class="smi-title">A Room By The Sunset</span>
+                                <p class="smi-text">Apartment description by the owner or vertisers or...</p>
+                                <div class="more-info-div">
+                                    <a class="more-info" href="#">More Info</a>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <a href="#" class="view-map">
+                            <img src="images/icons/g-nav.png" />
+                            <span>View on map</span>
+                        </a>
+                    </div>
+                    <div class="text-separator">
+                        <div class="sm-imgText">
+                            <img src="images/small-images/s-room-pool.png" />
+                            <div class="inner-smi">
+                                <span class="smi-title">A Room By The Sunset</span>
+                                <p class="smi-text">Apartment description by the owner or vertisers or...</p>
+                                <div class="more-info-div">
+                                    <a class="more-info" href="#">More Info</a>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <a href="#" class="view-map">
+                            <img src="images/icons/g-nav.png" />
+                            <span>View on map</span>
+                        </a>
+                    </div>
+                    <div class="text-separator">
+                        <div class="sm-imgText">
+                            <img src="images/small-images/s-room-pool.png" />
+                            <div class="inner-smi">
+                                <span class="smi-title">A Room By The Sunset</span>
+                                <p class="smi-text">Apartment description by the owner or vertisers or...</p>
+                                <div class="more-info-div">
+                                    <a class="more-info" href="#">More Info</a>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <a href="#" class="view-map">
+                            <img src="images/icons/g-nav.png" />
+                            <span>View on map</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+<!--
+            <div class="item_info" style="display:none;">
+                <a href="#" class="back-t">Back to list view</a>
+                <a href="#" class="close-btn"></a>
+                <div class="ii-top">
+                    <span class="inner-title">Fabienne Harris</span>
+                    <span class="profession">Child Psychologist and ABA consultant</span>
+                </div>
+                <div class="ii-content">
+                    <div class="text-separator">
+                        <a class="map-btn" href="#"><img src="images/icons/big-gold-map-nav.png" /></a>
+                        <div class="clearfix"></div>
+                        <div class="i-contact-info">
+                            <div class="info-title"></div>
+                            <table>
+                                <tr>
+                                    <td class="ii-text first">1-800-700-700</td>
+                                    <td class="ii-text second">Street name 47a, Tel-Aviv, Israel</td>
+                                </tr>
+                                <tr>
+                                    <td class="ii-text first">fabienneh@yahoo.com</td>
+                                    <td class="ii-text second">Francophone</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="i-more-info">
+                            <div class="info-title more"></div>
+                            <div class="row">
+                                <span class="ii-text">$$$</span>
+                            </div>
+                            <table>
+                                <tr>
+                                    <td class="ii-text">Mon-Thu</td>
+                                    <td class="ii-text second">10:00-19:00</td>
+                                </tr>
+                                <tr>
+                                    <td class="ii-text">Fri</td>
+                                    <td class="ii-text second">10:30-13:00</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="text-separator">
+                        <table class="item-services">
+                            <tr>
+                                <th class="first-col"></th>
+                                <th class="middle-col">Title A</th>
+                                <th class="middle-col">Title B</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td>parking</td>
+                                <td><span class="bullet"></span></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>livraison</td>
+                                <td></td>
+                                <td><span class="bullet"></span></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Koupat Holim</td>
+                                <td><span class="bullet"></span></td>
+                                <td><span class="bullet"></span></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <p>
+                            My name if Fabienne and Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. uae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="item_info item_info_img" style="display:none;">
+                <a href="#" class="back-t">Back to list view</a>
+                <a href="#" class="close-btn"></a>
+                <div class="ii-top">
+                    <div class="img-top-titles">
+                        <span class="inner-title">Fabienne Harris</span>
+                        <span class="profession">Child Psychologist and ABA consultant</span>
+                    </div>
+                </div>
+                <div class="ii-content">
+                    <div class="text-separator first">
+                        <a class="map-btn" href="#"><img src="images/icons/big-gold-map-nav.png" /></a>
+                        <div class="clearfix"></div>
+                        <div class="i-contact-info">
+                            <div class="info-title"></div>
+                            <table>
+                                <tr>
+                                    <td class="ii-text first">1-800-700-700</td>
+                                    <td class="ii-text second">Street name 47a, Tel-Aviv, Israel</td>
+                                </tr>
+                                <tr>
+                                    <td class="ii-text first">fabienneh@yahoo.com</td>
+                                    <td class="ii-text second">Francophone</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="i-more-info">
+                            <div class="info-title more"></div>
+                            <div class="row">
+                                <span class="ii-text">$$$</span>
+                            </div>
+                            <table>
+                                <tr>
+                                    <td class="ii-text">Mon-Thu</td>
+                                    <td class="ii-text second">10:00-19:00</td>
+                                </tr>
+                                <tr>
+                                    <td class="ii-text">Fri</td>
+                                    <td class="ii-text second">10:30-13:00</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="text-separator">
+                        <table class="item-services">
+                            <tr>
+                                <th class="first-col"></th>
+                                <th class="middle-col">Title A</th>
+                                <th class="middle-col">Title B</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td>parking</td>
+                                <td><span class="bullet"></span></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>livraison</td>
+                                <td></td>
+                                <td><span class="bullet"></span></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Koupat Holim</td>
+                                <td><span class="bullet"></span></td>
+                                <td><span class="bullet"></span></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <p>
+                            My name if Fabienne and Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. uae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
+                        </p>
+                    </div>
+                </div>
+            </div>
+-->
+            <objectblock></objectblock>
+            <categoryhover></categoryhover>
+            <categoriesblock></categoriesblock>
+
+            <div class="banner">
+                <span class="b-title">Dr. David Schwarz</span>
+                <p class="b-text">Dr. David Schwarz’s Chiropractic clinic provides numerous services that fit travelers such as treatment of lower back pain</p>
+                <div class="b-adress">
+                    <img src="images/icons/b-nav.png" />
+                    <span>Tarsat 11 st. Tel-Aviv</span>
+                </div>
+                <a href="#" class="read-more">READ MORE</a>
+                <div class="clearfix"></div>
+            </div>
+        </div>
     </body>
 </html>

@@ -1,0 +1,31 @@
+<div class="searchBlock {{showSearchBlock ? ' display' : ''}}">
+    <div class="search-criteria-pane pane">
+        <h2 ng-show="center_search_result.count" class="title">{{center_search_result.count}} Search results for <span class="criteria">{{search}}</span></h2>
+        <h2 ng-show="!center_search_result.count && keywords.length" class="title">No results for <span class="criteria">{{keywords}}</span></h2>
+        <h2 ng-show="!center_search_result.count && !keywords.length" class="title">Please type something to start</h2>
+        <button class="close-button" style="position: absolute; right: 0; top: 0;">x</button>
+        <div class="info-content">
+            <div ng-repeat="(catID, catData) in center_search_result.data" class="category">
+                <a ng-href="{{'#/' + catID + '/' + catData.name + '/search/' + keywords}}">
+                    <h3>{{catData.title}}</h3>
+
+                    <div class="count">
+                        {{catData.itemsCount}} results
+                    </div>
+                </a>
+                <div class="items">
+                    <ul>
+                        <li ng-repeat="item in catData.items">
+                            <div class="content">
+                                <a ng-href="{{'#/' + catID + '-' + item.id + '/' + catData.name + '/' + item.name}}">
+                                    <h4>{{item.title | cut:true:35:' ...'}}</h4>
+                                </a>
+                                <p class="excerpt" ng-if="item.excerpt" ng-bind-html="item.excerpt | cut:true:150:' ...' | rawHtml"></p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+<div>
+    <div class="search-criteria-pane-wrapper pane-wrapper{{showCategoriesBlock ? ' collapsed' : ''}}">
+        <div class="search-criteria-pane pane">
+            <h2 class="title">Filter results in <span class="criteria">{{currentItem.title}}</span></h2>
+            <button class="close-button">&nbsp;</button>
+            <ul class="view-mode">
+                <li>
+                    <button ng-class="showCategoriesBlockMap ? 'active' : ''" class="map-view-button" ng-click="showCategoriesMap();"></button>
+                </li>
+                <li>
+                    <button ng-class="showCategoriesBlockList ? 'active' : ''" class="list-view-button " ng-click="showCategoriesList()">&nbsp;</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="search-results-pane-wrapper pane-wrapper{{showCategoriesBlock && showCategoriesBlockList ? ' collapsed' : ''}}">
+        <div class="search-results-pane pane">
+            <h2 class="title"><span class="criteria">{{currentItem.title}} ({{sideCategories.data.length}})</span></h2>
+            <div class="info-content">
+                <div class="content">
+                    <ul>
+                        <li ng-repeat="(k, v) in sideCategories.data">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <img src="{{mediaUrl + v.featured_image}}" class="thumb">
+                                </div>
+                                <div class="col-md-7 no-padding">
+                                    <div class="content">
+                                        <h3>{{v.title}}</h3>
+
+                                        <p class="excerpt" ng-if="v.content" ng-bind-html="v.content | rawHtml"></p>
+                                        <a ng-click="closeCategories()" ng-href="{{'#/' + currentItem.id + '-' + v.id + '/' + currentItem.title + '/' + v.name}}" class="more-button{{v.promoted ? ' promoted' : ''}}"><span>More Info</span></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row actions">
+                                <div class="col-md-4">
+                                    <button class="map-button">View on map</button>
+                                </div>
+                                <div class="col-md-4 no-padding">
+                                    <button class="wishlist-button">Add to wishlist</button>
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="book-button">Book now</button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <button class="close-button">&nbsp;</button>
+        </div>
+    </div>
+
+    <div class="search-results-pane-wrapper-1 pane-wrapper{{showCategoriesBlock && showCategoriesBlockMap ? ' collapsed' : ''}}">
+        <div class="search-results-pane-1 pane">
+            <div id="mapFrame">
+                <my-map ng-if="showCategoriesBlock"></my-map>
+            </div>
+            <button class="close-button">&nbsp;</button>
+        </div>
+    </div>
+</div>

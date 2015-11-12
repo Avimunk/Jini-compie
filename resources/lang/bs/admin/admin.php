@@ -19,5 +19,7 @@ return [
     'video_albums' => 'Video albumi',
     'video_items' => 'Videoi',
     'users' => 'Korisnici',
-	
+    'score' => 'Scoring',
+    'no_score' => 'None',
+
 	];

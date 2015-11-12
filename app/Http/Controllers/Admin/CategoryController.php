@@ -64,6 +64,8 @@ class CategoryController extends AdminController {
         $object->content = $request->content;
         $object->excerpt = $request->content;
         $object->status = 1;
+        if($request->get('score'))
+            $object->score = $request->get('score');
         $object->guid = str_replace(".", "", uniqid('', true));
         $object->save();
 
@@ -170,7 +172,8 @@ class CategoryController extends AdminController {
             if ($imageObject = addImage($object, $destinationPath, $picture, $filename, $newfileName, $extension, $mimeType, '_content_image')) {
             }
         }
-
+        if($request->get('score'))
+            $object->score = $request->get('score');
         $object->save();
 
         $object->setValue('_tooltip', $request->toolTip);

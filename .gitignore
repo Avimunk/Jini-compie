@@ -38,6 +38,8 @@ Thumbs.db
 
 /site2
 /site/node_modules
+/site2/node_modules
+/siteold/node_modules
 /public/uploads
 /site/.sass-cache
 

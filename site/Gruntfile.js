@@ -53,7 +53,8 @@ module.exports = function(grunt) {
 						'lib/angular-sanitize/angular-sanitize.min.js',
 						'lib/angular-ui-router/release/angular-ui-router.min.js',
 						'lib/ngstorage/ngStorage.min.js',
-						'js/old.script.js',
+						'lib/ng-scrollbar/ng-scrollbar.min.js',
+						//'js/old.script.js',
 					]
 				}
 			},

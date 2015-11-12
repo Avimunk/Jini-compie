@@ -1,0 +1,46 @@
+#svgContainer {
+    width: 680px;
+    height: 715px;
+    position: absolute;
+    overflow: hidden;
+    padding: 0 30px;
+    top: 0;
+    right: 0;
+    -webkit-transition: all .3s;
+}
+
+#svgContainer.closed {
+    margin-right: -600px;
+}
+
+    #menu {
+        display: block;
+        margin: 0 auto;
+    }
+        #menu * {
+            font-family: 'Roboto Condensed',sans-serif !important;
+        }
+        #menu #itemsContainer {
+            z-index: 1000;
+        }
+        #menu .menu-trigger {
+            fill: #fff;
+            stroke: transparent;
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #menu symbol {
+            overflow: visible;
+        }
+        #menu a {
+            cursor: pointer;
+            outline: none;
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        #menu .item .sector {
+            transition: all .5s linear;
+            fill: #fff;
+            stroke: transparent;
+        }

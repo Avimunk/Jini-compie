@@ -47,6 +47,19 @@
                             {!!$errors->first('title', '<label class="control-label">:message</label>')!!}
                         </div>
                     </div>
+                    <div class="form-group {{{ $errors->has('score') ? 'error' : '' }}}">
+                        <div class="col-md-12">
+                            <label class="control-label" for="field_type">{{
+                            trans("admin/admin.score") }}</label>
+                            <select
+                                    style="width: 100%" name="score" id="score"
+                                    class="form-control">
+                                @for($i=0; $i<= 10; $i++)
+                                    <option {{{isset($object) && $object->score == $i ? 'selected' : ''}}} value="{{$i}}">{{$i ?: trans("admin/admin.no_score")}}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group {{{ $errors->has('parent_id') ? 'error' : '' }}}">
                         <div class="col-md-12">
                             <label class="control-label" for="parent_id">{{

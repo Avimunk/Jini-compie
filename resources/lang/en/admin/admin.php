@@ -45,5 +45,7 @@ return [
     'status' => 'Status',
     'export' => 'Export',
     'import' => 'Import',
-    'categories' => 'Categories'
-	];
+    'categories' => 'Categories',
+    'score' => 'Scoring',
+    'no_score' => 'None',
+];

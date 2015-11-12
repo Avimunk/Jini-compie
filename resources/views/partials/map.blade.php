@@ -301,10 +301,10 @@
 
 
 
-
+        siteUrl1 = '/Jini3/public';
         $(function() {
             $.ajax({
-                url: siteUrl + '/objects/locations{{ $criteria }}',
+                url: siteUrl1 + '/objects/locations{{ $criteria }}',
                 dataType: 'json',
                 contentType:"application/json; charset=utf-8",
                 success: function(response) {
@@ -318,9 +318,9 @@
                                 latlngbounds.extend(new google.maps.LatLng(response.data[i].geo_latitude, response.data[i].geo_longitude));
 
                                 if (data.promoted == 1) {
-                                    iconUrl = '/img/icons/map_pin_promoted_xs.png';
+                                    iconUrl = siteUrl1 + '/img/icons/map_pin_promoted_xs.png';
                                 } else {
-                                    iconUrl = '/img/icons/map_pin_xs.png';
+                                    iconUrl = siteUrl1 + '/img/icons/map_pin_xs.png';
                                 }
 
                                 var html = '<div class="marker-popup' + (!data.content_image ? ' no-content-image' : '') +'">' +

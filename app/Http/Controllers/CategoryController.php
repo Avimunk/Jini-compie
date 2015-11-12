@@ -100,6 +100,51 @@ class CategoryController extends Controller {
         return $result;
     }
 
+    private $items2;
+    private $itemsParents2;
+    private function itemArray2() {
+        $result = array();
+        foreach($this->items2 as $item) {
+            if ($item->parent_id == null) {
+                $a = [];
+                $items = $this->itemWithChildren2($item, $a);
+                if(!empty($items))
+                {
+                    $item['items_count'] = count($items);
+                    $item['items'] = $items;
+                }
+                $this->itemsParents2[$item->id] = array_merge($a,[$item->id]);
+                $result[$item->id] = $item;
+            }
+        }
+        return $result;
+    }
+    private function itemWithChildren2($item, $a) {
+        $result = array();
+        $children = $this->childrenOf2($item);
+        $a[] = $item->id;
+        foreach ($children as $child) {
+            $items = $this->itemWithChildren2($child, $a);
+            if(!empty($items))
+            {
+                $child['items_count'] = count($items);
+                $child['items'] = $items;
+            }
+            $this->itemsParents2[$child->id] = array_merge($a,[$child->id]);
+            $result[$child->id] = $child;
+        }
+        return $result;
+    }
+    private function childrenOf2($item) {
+        $result = array();
+        foreach($this->items as $i) {
+            if ($i->parent_id == $item->id) {
+                $result[$i->id] = $i;
+            }
+        }
+        return $result;
+    }
+
     private function fetchCategories()
     {
         if(!$this->items)
@@ -170,7 +215,10 @@ class CategoryController extends Controller {
 
         $this->itemsParents[0] = [];
         $categories = $this->itemArray();
-
+        $this->items2 = $this->items->getDictionary();
+        $categories2 = $this->itemArray2();
+        $this->itemsParents2[0] = [];
+//dd($this->itemsParents2, $categories2);
         $breadCrumbs = [];
         $breadCrumbs[0] = [];
         foreach($this->itemsParents as $itemID => $arr)
@@ -186,11 +234,18 @@ class CategoryController extends Controller {
                 ];
             }
         }
+//dd($id);
+        $currentItem = !$id ? false : [
+            'id'    => $id,
+            'title' => $this->items->getDictionary()[$id]['title'],
+            'contentImageUrl'   => $this->items->getDictionary()[$id]['contentImageUrl'],
+        ];
 
         return response()->json( [
-            'categories'  => $categories,
+            'categories'  => $categories2,
             'parents'     => $this->itemsParents,
             'breadcrumbs' => $breadCrumbs,
+            'currentItem' => $currentItem,
         ] );
     }
 
