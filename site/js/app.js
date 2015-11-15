@@ -1,3 +1,11 @@
+String.prototype.trunc =
+    function( n, useWordBoundary ){
+        var isTooLong = this.length > n,
+            s_ = isTooLong ? this.substr(0,n-1) : this;
+        s_ = (useWordBoundary && isTooLong) ? s_.substr(0,s_.lastIndexOf(' ')) : s_;
+        return  isTooLong ? s_ + '&hellip;' : s_;
+    };
+
 angular.module('JINI', [
     'ui.router',
     'ngStorage',
@@ -8,7 +16,6 @@ angular.module('JINI', [
     'JINI.directives',
     'JINI.filters',
     'JINI.services',
-    'JINI.templates',
     'JINI.templates',
 ])
 .config(Config)
@@ -126,7 +133,7 @@ function Config($stateProvider, $urlRouterProvider, $localStorageProvider) {
         })
         .state('object', {
             cache: true,
-            url: '/{id:[0-9][0-9]*}-{id2:[1-9][0-9]*}/{title:.*}/{title2:.*}',
+            url: '/{id:[0-9][0-9]*}-{id2:[1-9][0-9]*}{map:(?:/map)?}/{title:.*}/{title2:.*}',
             controller: 'CategoryController',
             templateUrl: 'templates/categories/8.html',
             resolve: {

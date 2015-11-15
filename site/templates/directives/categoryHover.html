@@ -1,20 +1,12 @@
-<div class="info-pane-wrapper pane-wrapper{{showCategoryBlock ? ' collapsed' : ''}}">
-    <div class="info-pane pane{{sideCategory.content ? 'preloader' : ''}}">
-        <div class="top-pane" ng-if="sideCategory.img" ng-attr-style="{{sideCategory.img ? 'background-image: url(' + mediaUrl + sideCategory.img + ');' : ''}}"></div>
-        <div class="main-pane" style="overflow: hidden; width: auto; height: {{ sideCategory.img ? '560px' : '855px'}};">
-            <div class="row heading">
-                <div class="col-md-12">
-                    <h2 class="title">{{sideCategory.title}}</h2>
-                </div>
-            </div>
-            <div class="row heading">
-                <div class="col-md-12">
-                    <div class="content">
-                        <div ng-if="sideCategory.content" ng-bind-html="sideCategory.content | rawHtml"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <button ng-click="closeCategory()" class="back-button">&nbsp;</button>
+<div ng-show="showCategoryBlock" class="openDiv imgNtext visionDiv categoryHover">
+    <a  ng-click="closeCategory()" class="back-btn"></a>
+    <div ng-if="sideCategory.img" class="top" ng-attr-style="{{sideCategory.img ? 'background-image: url(' + mediaUrl + sideCategory.img + ');' : ''}}">
     </div>
+    <div scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%" class="bottom {{sideCategory.img ? 'img' : 'noImg'}}" >
+        <div class="inner-b">
+            <span class="inner-title">{{sideCategory.title}}</span>
+            <p class="inner-text" ng-if="sideCategory.content" ng-bind-html="sideCategory.content | rawHtml"></p>
+        </div>
+    </div>
+    <!--a class="gold-btn" href="#">Visit our website</a-->
 </div>

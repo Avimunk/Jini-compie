@@ -27,16 +27,185 @@ angular.module('JINI.directives', [])
             templateUrl: 'templates/directives/categoriesBlockSearch.html',
         }
     })
-    .directive('myMap', ['$http', function($http) {
+    .directive('categoryMap', ['$http', function($http) {
         // directive link function
         var mapData = [];
         var link = function(scope, element, attrs) {
-            var map, infoWindow;
+            var map, infoWindow, infoBubble;
             var markers = [];
 
             // map config
             var mapOptions = {
-                center: new google.maps.LatLng(31.9026026, 34.946152, 9.75),
+                center: new google.maps.LatLng(32.0713513,34.8798235,9),
+                zoom: 10,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                mapTypeControl: true,
+                scrollwheel: true,
+                mapTypeControlOptions: {
+                    style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+                },
+                zoomControl: true,
+                zoomControlOptions: {
+                    position: google.maps.ControlPosition.LEFT_CENTER,
+                    style: google.maps.ZoomControlStyle.LARGE
+                }
+            };
+
+            // init the map
+            function initMap() {
+                if (map === void 0) {
+                    map = new google.maps.Map(element[0], mapOptions);
+                }
+            }
+
+            // place a marker
+            function setMarker(location, info, iconUrl, isImage) {
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: location,
+                    animation: google.maps.Animation.DROP
+                });
+
+                if (iconUrl) {
+                    marker.setIcon(iconUrl);
+                }
+
+                if (info == "" || typeof info == 'undefined')
+                    return;
+
+                marker.info = info;
+
+                markers.push(marker); // add marker to array
+
+                google.maps.event.addListener(marker, 'click', function() {
+
+                    if (infoBubble !== void 0) {
+                        infoBubble.close();
+                    }
+
+                    infoBubble = new InfoBubble({
+                        map: map,
+                        content: marker.info,
+
+                        padding: 0,
+                        backgroundColor: 'white',
+                        borderColor: 'transparent',
+                        backgroundClassName: 'infoBubbleBlock',
+
+                        minHeight: isImage ? '370' : '130',
+                        maxHeight: isImage ? '370' : '130',
+                        minWidth: '450',
+                        maxWidth: '450',
+
+                        borderRadius: 0,
+                        borderWidth: 0,
+
+                        arrowSize: 20,
+                        arrowPosition: 30,
+                        arrowStyle: 2,
+                        shadowStyle: 0,
+                        closeSrc: '/Jini3/images/icons/close-white-bg.png',
+                    });
+
+
+                    infoBubble.open(map, marker);
+
+                    /*
+                    if (infoWindow !== void 0) {
+                        infoWindow.close();
+                    }
+                    // create new window
+                    var infoWindowOptions = {
+                        content: marker.info,
+                        maxWidth: 512,
+                        height: 264
+                    };
+                    infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+                    infoWindow.open(map, marker);
+                    */
+                });
+
+            }
+
+            // show the map and place some markers
+            initMap();
+
+            var categoryID = scope.currentItem.id;
+            console.log(scope.search, typeof scope.search);
+            var queryString = typeof scope.search != 'undefined' && typeof scope.search != 'function' ? scope.search : '';
+            if(mapData[categoryID + queryString])
+            {
+                setMarkers(mapData[categoryID + queryString]);
+            }
+            else
+            {
+                $http.get('/Jini3/public/objects/locations?categoryid=' + categoryID + (queryString ? '&query=' + queryString : ''))
+                    .then(function(response){
+                        console.log('getMapData',response.data)
+
+                        mapData[categoryID + queryString] = response.data;
+                        console.log(mapData[categoryID + queryString]);
+                        setMarkers(mapData[categoryID + queryString]);
+                    });
+            }
+
+            function setMarkers(content)
+            {
+                for (var i = 0; i < content.data.length; i++){
+                    var data = content.data[i];
+
+                    if (data.promoted == 1) {
+                        iconUrl = '/Jini3/public/img/icons/map_pin_promoted_xs.png';
+                    }
+                    else {
+                        iconUrl = '/Jini3/public/img/icons/map_pin_xs.png';
+                    }
+
+                    var html = '<div class="marker-popup' + (!data.content_image ? ' no-content-image' : '  content-image') +'">' +
+                        '<div class="top-pane" style="background-image: url(' + data.content_image + ');"></div>' +
+                        '   <div class="main-pane">' +
+                        '       <div class="row heading">' +
+                        '           <a href="#/'+ scope.currentItem.id +'-'+data.id+'/'+scope.currentItem.title+'/'+data.title+'" class="col-md-12">' +
+                        '               <h2 class="title">' + data.title.trunc(40,true) + '</h2>' +
+                        '           </a>' +
+                        '       </div>' +
+                        '       <div class="row heading">' +
+                        '           <div class="col-md-12">' +
+                        '               <div class="content">' + data.excerpt.trunc(85,true) + '</div>' +
+                        '           </div>' +
+                        '       </div>' +
+                        '       <div class="row actions actions-pane">' +
+                        '           <div class="pull-left"><span class="address">' + data.address_street + ' ' + data.address_city + '</span></div>' +
+                        '       </div>' +
+                        '   </div>' +
+                        '</div>' +
+                        '</div>';
+
+                    setMarker(new google.maps.LatLng(data.geo_latitude, data.geo_longitude), html, iconUrl, (data.content_image ? true : false));
+                }
+            }
+
+
+        };
+
+        return {
+            restrict: 'EA',
+            template: '<div id="gmaps" style="width: 1178px; height: 980px;"></div>',
+            replace: true,
+            link: link
+        };
+    }])
+    .directive('objectMap', ['$http', function($http) {
+        // directive link function
+        var mapData = [];
+        var link = function(scope, element, attrs) {
+            console.log('objectMap', attrs);
+            var map, infoWindow, infoBubble;
+            var markers = [];
+
+            // map config
+            var mapOptions = {
+                center: new google.maps.LatLng(32.0713513,34.8798235,9),
                 zoom: 10,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
                 mapTypeControl: true,
@@ -77,79 +246,70 @@ angular.module('JINI.directives', [])
 
                 markers.push(marker); // add marker to array
 
-                google.maps.event.addListener(marker, 'click', function() {
-                    if (infoWindow !== void 0) {
-                        infoWindow.close();
-                    }
-                    // create new window
-                    var infoWindowOptions = {
-                        content: marker.info,
-                        maxWidth: 512,
-                        height: 264
-                    };
-                    infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-                    infoWindow.open(map, marker);
+                infoBubble = new InfoBubble({
+                    map: map,
+                    content: marker.info,
+
+                    padding: 0,
+                    backgroundColor: 'white',
+                    borderColor: 'transparent',
+                    backgroundClassName: 'infoBubbleBlock',
+
+                    minHeight: scope.sideObject.content_image ? '370' : '130',
+                    maxHeight: scope.sideObject.content_image ? '370' : '130',
+                    minWidth: '450',
+                    maxWidth: '450',
+
+                    borderRadius: 0,
+                    borderWidth: 0,
+
+                    arrowSize: 20,
+                    arrowPosition: 30,
+                    arrowStyle: 2,
+                    shadowStyle: 0,
+                    closeSrc: '/Jini3/images/icons/close-white-bg.png',
                 });
+                infoBubble.open(map, marker);
+
+                google.maps.event.addListener(marker, 'click', function() {
+                    infoBubble.open(map, marker);
+                });
+
             }
 
             // show the map and place some markers
             initMap();
-
-            var categoryID = scope.currentItem.id;
-            console.log(scope.search, typeof scope.search);
-            var queryString = typeof scope.search != 'undefined' && typeof scope.search != 'function' ? scope.search : '';
-            if(mapData[categoryID + queryString])
+            if(scope.sideObject.address_location_g && scope.sideObject.address_location_k)
             {
-                setMarkers(mapData[categoryID + queryString]);
-            }
-            else
-            {
-                $http.get('/Jini3/public/objects/locations?categoryid=' + categoryID + (queryString ? '&query=' + queryString : ''))
-                    .then(function(response){
-                        console.log('getMapData',response.data)
-
-                        mapData[categoryID + queryString] = response.data;
-                        console.log(mapData[categoryID + queryString]);
-                        setMarkers(mapData[categoryID + queryString]);
-                    });
-            }
-
-            function setMarkers(content)
-            {
-                for (var i = 0; i < content.data.length; i++){
-                    var data = content.data[i];
-
-                    if (data.promoted == 1) {
-                        iconUrl = '/Jini3/public/img/icons/map_pin_promoted_xs.png';
-                    }
-                    else {
-                        iconUrl = '/Jini3/public/img/icons/map_pin_xs.png';
-                    }
-
-                    var html = '<a href="#/'+ scope.currentItem.id +'-'+data.id+'/'+scope.currentItem.title+'/'+data.title+'" class="marker-popup' + (!data.content_image ? ' no-content-image' : '') +'">' +
-                        '<div class="top-pane" style="background-image: url(' + data.content_image + ');"></div>' +
-                        '   <div class="main-pane">' +
-                        '       <div class="row heading">' +
-                        '           <div class="col-md-12">' +
-                        '               <h2 class="title">' + data.title + '</h2>' +
-                        '           </div>' +
-                        '       </div>' +
-                        '       <div class="row heading">' +
-                        '           <div class="col-md-12">' +
-                        '               <div class="content">' + data.excerpt + '</div>' +
-                        '           </div>' +
-                        '       </div>' +
-                        '       <div class="row actions actions-pane">' +
-                        '           <div class="pull-left"><span class="address">' + data.address_street + ' ' + data.address_city + '</span></div>' +
-                        '           <div class="pull-right"><button class="book-button">Book</button></div>' +
-                        '       </div>' +
-                        '   </div>' +
-                        '   <button class="close-button"></button>' +
-                        '</div>' +
-                        '</div>';
-
-                    setMarker(new google.maps.LatLng(data.geo_latitude, data.geo_longitude), html, iconUrl);
+                console.log('mapItem')
+                if (scope.sideObject.promoted == 1) {
+                    iconUrl = '/Jini3/public/img/icons/map_pin_promoted_xs.png';
                 }
+                else {
+                    iconUrl = '/Jini3/public/img/icons/map_pin_xs.png';
+                }
+
+                var html = '<div class="marker-popup' + (!scope.sideObject.content_image ? ' no-content-image' : ' content-image') +'">' +
+                    '<div class="top-pane" style="background-image: url(' + scope.sideObject.content_image + ');"></div>' +
+                    '   <div class="main-pane">' +
+                    '       <div class="row heading">' +
+                    '           <a href="#/0-'+scope.sideObject.id+'/Home/'+scope.sideObject.title+'" class="col-md-12">' +
+                    '               <h2 class="title">' + scope.sideObject.title.trunc(40,true) + '</h2>' +
+                    '           </a>' +
+                    '       </div>' +
+                    '       <div class="row heading">' +
+                    '           <div class="col-md-12">' +
+                    '               <div class="content">' + (scope.sideObject.excerpt + ' Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing').trunc(85,true) + '</div>' +
+                    '           </div>' +
+                    '       </div>' +
+                    '       <div class="row actions actions-pane">' +
+                    '           <div class="pull-left"><span class="address">' + scope.sideObject.address_street + ' ' + scope.sideObject.address_city + '</span></div>' +
+                    '       </div>' +
+                    '   </div>' +
+                    '</div>' +
+                    '</div>';
+
+                setMarker(new google.maps.LatLng(scope.sideObject.address_location_g, scope.sideObject.address_location_k), html, iconUrl);
             }
         };
 

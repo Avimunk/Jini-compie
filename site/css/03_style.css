@@ -82,6 +82,7 @@ html, body{
 			color: #fff;
 		}
 	.back-btn{
+		cursor: pointer;
 		display: block;
 		width: 35px;
 		height: 35px;
@@ -335,7 +336,7 @@ header{
 	}
 		/* IMAGE AND TEXT */
 			.imgNtext{
-				display: none;
+				/*display: none;*/
 				position: relative;
 				margin-left: 2px;
 				width: 535px;
@@ -351,7 +352,7 @@ header{
 					display: block;
 					width: 100%;
 					height: calc(100% - 323px);
-					padding: 35px 0px 0px; 
+					/*padding: 35px 0px 0px; */
 				}
 					.imgNtext .bottom .inner-b{
 						height: 100%;
@@ -482,7 +483,7 @@ header{
 		background-position: top center;
 	}
 	.visionDiv .bottom{
-		overflow-y: scroll;
+		/*overflow-y: scroll;*/
 	}
 	/* CHANNEL 24 SEC */
 	.channel24 .top{
@@ -700,6 +701,9 @@ header{
 			top: 20px;
 			right: 20px;
 		}
+			.filterResault .frButtons a{
+				cursor: pointer;
+			}
 			
 		.filter-i{
 			display: inline-block;
@@ -1063,6 +1067,33 @@ header{
 			width: 7px;
 		}
 
+		.categoryHover .bottom.img .scroll-viewport {
+			height: 532px;
+			width: 542px;
+		}
+		.categoryHover .bottom.noImg .scroll-viewport {
+			height: 855px;
+			width: 542px;
+		}
+		.categoryHover .scroll-bar {
+			border-radius: 0;
+			background: none;
+			left: 0px !important;
+			width: 7px;
+			right: initial;
+		}
+		.categoryHover .scroll-overview {
+			width: 542px;
+			padding-top: 35px;
+			overflow: hidden;
+		}
+		.categoryHover .scroll-thumb {
+			background-color: rgba(128, 128, 128, 0.51);
+			border-radius: 0;
+			left: 0px;
+			width: 7px;
+		}
+
 		.filter_search_result .results-list .scroll-viewport {
 			height: 740px;
 			width: 380px;
@@ -1127,4 +1158,36 @@ header{
 			border-radius: 0;
 			left: 1px;
 			width: 7px;
+		}
+
+
+		/* map block */
+		.infoBubbleBlock{
+			overflow: hidden;
+		}
+		.gm-style img{
+			padding: 10px 10px 0 0;
+		}
+		.content-image .top-pane{
+			position: relative;
+			width: 450px;
+			height: 240px;
+			/*background: url(../images/iteminfoImg.png);*/
+			background-position: top center;
+			background-repeat: no-repeat;
+			color: #fff;
+		}
+		.main-pane h2{
+			padding: 12px 20px;
+			color: #000;
+			font-size: 24px;
+			font-family: bodoni;
+			letter-spacing: -.02em;
+		}
+		.main-pane .content{
+			padding: 0 20px 12px;
+			color: #000;
+			font-size: 18px;
+			font-family: Roboto,sans-serif;
+			line-height: 20px;
 		}

@@ -71,13 +71,13 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "        <div class=\"frButtons\">\r" +
     "\n" +
-    "            <a ng-click=\"showCategoriesList()\" class=\"filter-i\"></a>\r" +
+    "            <a ng-click=\"showCategoriesList()\" ng-class=\"showCategoriesBlockList ? 'active' : ''\" class=\"filter-i\"></a>\r" +
     "\n" +
-    "            <a ng-class=\"showCategoriesBlockList ? 'active' : ''\"class=\"filter-i-hover\"></a>\r" +
+    "            <a class=\"filter-i-hover\"></a>\r" +
     "\n" +
-    "            <a ng-class=\"showCategoriesBlockMap ? 'active' : ''\" class=\"mapNav-i-hover\"></a>\r" +
+    "            <a class=\"mapNav-i-hover\"></a>\r" +
     "\n" +
-    "            <a ng-click=\"showCategoriesMap();\" class=\"mapNav-i\"></a>\r" +
+    "            <a ng-click=\"showCategoriesMap();\" ng-class=\"showCategoriesBlockMap ? 'active' : ''\" class=\"mapNav-i\"></a>\r" +
     "\n" +
     "        </div>\r" +
     "\n" +
@@ -85,13 +85,13 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "\r" +
     "\n" +
-    "    <div ng-show=\"showCategoryBlockList\" class=\"filter_search_result\">\r" +
+    "    <div ng-show=\"showCategoriesBlock && showCategoriesBlockList\" class=\"filter_search_result\">\r" +
     "\n" +
-    "        <a href=\"back()\" class=\"back-btn\"></a>\r" +
+    "        <a ng-click=\"back()\" class=\"back-btn\"></a>\r" +
     "\n" +
     "        <span class=\"ts-title\">Search by categorie {{currentItem.title}}</span>\r" +
     "\n" +
-    "        <div class=\"results-list\">\r" +
+    "        <div class=\"results-list\" scrollbar=\"{autoUpdate: true,wheelSpeed : 20}\" style=\"max-height: 100%;width: 429px\">\r" +
     "\n" +
     "            <div ng-repeat=\"(k, v) in sideCategories.data\" class=\"text-separator\">\r" +
     "\n" +
@@ -139,13 +139,13 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "\r" +
     "\n" +
-    "    <div ng-show=\"showCategoriesBlockMap\" class=\"filter_search_result\" style=\"width: 1178px;min-height: 955px;\">\r" +
+    "    <div ng-if=\"showCategoriesBlock && showCategoriesBlockMap\" class=\"filter_search_result map\" style=\"width: 1178px;min-height: 955px;\">\r" +
     "\n" +
-    "        <a href=\"back()\" class=\"back-btn\"></a>\r" +
+    "        <a ng-click=\"back()\" class=\"back-btn\"></a>\r" +
     "\n" +
     "        <div id=\"mapFrame\">\r" +
     "\n" +
-    "            <my-map ng-if=\"showCategoriesBlock\"></my-map>\r" +
+    "            <category-map ng-if=\"showCategoriesBlock\"></category-map>\r" +
     "\n" +
     "        </div>\r" +
     "\n" +
@@ -178,9 +178,9 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "\r" +
     "\n" +
-    "    <div ng-show=\"showCategoriesSearchBlockList\" class=\"filter_search_result\">\r" +
+    "    <div ng-show=\"showCategorySearchBlock && showCategoriesSearchBlockList\" class=\"filter_search_result\">\r" +
     "\n" +
-    "        <a href=\"back()\" class=\"back-btn\"></a>\r" +
+    "        <a ng-click=\"back()\" class=\"back-btn\"></a>\r" +
     "\n" +
     "        <span class=\"ts-title\">Search by categorie {{currentItem.title}}</span>\r" +
     "\n" +
@@ -232,13 +232,13 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "\r" +
     "\n" +
-    "    <div ng-show=\"showCategoriesSearchBlockMap\" class=\"filter_search_result\" style=\"width: 1178px;min-height: 955px;\">\r" +
+    "    <div ng-if=\"showCategorySearchBlock && showCategoriesSearchBlockMap\" class=\"filter_search_result map\" style=\"width: 1178px;min-height: 955px;\">\r" +
     "\n" +
-    "        <a href=\"back()\" class=\"back-btn\"></a>\r" +
+    "        <a ng-click=\"back()\" class=\"back-btn\"></a>\r" +
     "\n" +
     "        <div id=\"mapFrame\">\r" +
     "\n" +
-    "            <my-map ng-if=\"showCategorySearchBlock\"></my-map>\r" +
+    "            <category-map ng-if=\"showCategorySearchBlock\"></category-map>\r" +
     "\n" +
     "        </div>\r" +
     "\n" +
@@ -249,132 +249,180 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('templates/directives/categoryHover.html',
-    "<div class=\"info-pane-wrapper pane-wrapper{{showCategoryBlock ? ' collapsed' : ''}}\">\r" +
+    "<div ng-show=\"showCategoryBlock\" class=\"openDiv imgNtext visionDiv categoryHover\">\r" +
     "\n" +
-    "    <div class=\"info-pane pane{{sideCategory.content ? 'preloader' : ''}}\">\r" +
+    "    <a  ng-click=\"closeCategory()\" class=\"back-btn\"></a>\r" +
     "\n" +
-    "        <div class=\"top-pane\" ng-if=\"sideCategory.img\" ng-attr-style=\"{{sideCategory.img ? 'background-image: url(' + mediaUrl + sideCategory.img + ');' : ''}}\"></div>\r" +
+    "    <div ng-if=\"sideCategory.img\" class=\"top\" ng-attr-style=\"{{sideCategory.img ? 'background-image: url(' + mediaUrl + sideCategory.img + ');' : ''}}\">\r" +
     "\n" +
-    "        <div class=\"main-pane\" style=\"overflow: hidden; width: auto; height: {{ sideCategory.img ? '560px' : '855px'}};\">\r" +
+    "    </div>\r" +
     "\n" +
-    "            <div class=\"row heading\">\r" +
+    "    <div scrollbar=\"{autoUpdate: true,wheelSpeed : 20}\" style=\"max-height: 100%\" class=\"bottom {{sideCategory.img ? 'img' : 'noImg'}}\" >\r" +
     "\n" +
-    "                <div class=\"col-md-12\">\r" +
+    "        <div class=\"inner-b\">\r" +
     "\n" +
-    "                    <h2 class=\"title\">{{sideCategory.title}}</h2>\r" +
+    "            <span class=\"inner-title\">{{sideCategory.title}}</span>\r" +
     "\n" +
-    "                </div>\r" +
-    "\n" +
-    "            </div>\r" +
-    "\n" +
-    "            <div class=\"row heading\">\r" +
-    "\n" +
-    "                <div class=\"col-md-12\">\r" +
-    "\n" +
-    "                    <div class=\"content\">\r" +
-    "\n" +
-    "                        <div ng-if=\"sideCategory.content\" ng-bind-html=\"sideCategory.content | rawHtml\"></div>\r" +
-    "\n" +
-    "                    </div>\r" +
-    "\n" +
-    "                </div>\r" +
-    "\n" +
-    "            </div>\r" +
+    "            <p class=\"inner-text\" ng-if=\"sideCategory.content\" ng-bind-html=\"sideCategory.content | rawHtml\"></p>\r" +
     "\n" +
     "        </div>\r" +
     "\n" +
-    "        <button ng-click=\"closeCategory()\" class=\"back-button\">&nbsp;</button>\r" +
-    "\n" +
     "    </div>\r" +
+    "\n" +
+    "    <!--a class=\"gold-btn\" href=\"#\">Visit our website</a-->\r" +
     "\n" +
     "</div>"
   );
 
 
   $templateCache.put('templates/directives/objectBlock.html',
-    "<div class=\"item_info\" style=\"padding: 0 !important;overflow-y: initial;\" ng-class=\"sideObject.content_image ? 'item_info_img' : ''\" ng-if=\"showObjectBlock\">\r" +
+    "<div>\r" +
     "\n" +
-    "    <div scrollbar=\"{autoUpdate: true,wheelSpeed : 20}\" style=\"max-height: 100%;width: 542px\" >\r" +
+    "    <div class=\"item_info\" style=\"padding: 0 !important;overflow-y: initial;\" ng-class=\"sideObject.content_image ? 'item_info_img' : ''\" ng-if=\"showObjectBlock\">\r" +
     "\n" +
-    "        <div class=\"in-scroller-content\">\r" +
+    "        <div scrollbar=\"{autoUpdate: true,wheelSpeed : 20}\" style=\"max-height: 100%;width: 542px\" >\r" +
     "\n" +
-    "            <a ng-click=\"back()\" class=\"back-t\">Back to list view</a>\r" +
+    "            <div class=\"in-scroller-content\">\r" +
     "\n" +
-    "            <a href=\"#\" class=\"close-btn\"></a>\r" +
+    "                <a ng-click=\"back()\" class=\"back-t\">Back to list view</a>\r" +
     "\n" +
-    "            <div class=\"ii-top\" ng-attr-style=\"{{ sideObject.content_image ? 'background-image: url(' + sideObject.content_image + ');' : ''}}\">\r" +
+    "                <a href=\"#\" class=\"close-btn\"></a>\r" +
     "\n" +
-    "                <div class=\"img-top-titles\">\r" +
+    "                <div class=\"ii-top\" ng-attr-style=\"{{ sideObject.content_image ? 'background-image: url(' + sideObject.content_image + ');' : ''}}\">\r" +
     "\n" +
-    "                    <span class=\"inner-title\">{{ sideObject.title }}</span>\r" +
+    "                    <div class=\"img-top-titles\">\r" +
     "\n" +
-    "                    <span class=\"profession\">{{ sideObject.occupation }}</span>\r" +
+    "                        <span class=\"inner-title\">{{ sideObject.title }}</span>\r" +
     "\n" +
-    "                </div>\r" +
-    "\n" +
-    "            </div>\r" +
-    "\n" +
-    "            <div class=\"ii-content\">\r" +
-    "\n" +
-    "                <div class=\"text-separator first\">\r" +
-    "\n" +
-    "                    <a class=\"map-btn\" href=\"#\"><img src=\"images/icons/big-gold-map-nav.png\" /></a>\r" +
-    "\n" +
-    "                    <div class=\"clearfix\"></div>\r" +
-    "\n" +
-    "                    <div class=\"i-contact-info\">\r" +
-    "\n" +
-    "                        <div class=\"info-title\"></div>\r" +
-    "\n" +
-    "                        <table>\r" +
-    "\n" +
-    "                            <tr>\r" +
-    "\n" +
-    "                                <td class=\"ii-text first\">{{ sideObject.phone }}</td>\r" +
-    "\n" +
-    "                                <td class=\"ii-text second\">{{ sideObject.address_street + ' ' + sideObject.address_city }}</td>\r" +
-    "\n" +
-    "                            </tr>\r" +
-    "\n" +
-    "                            <tr>\r" +
-    "\n" +
-    "                                <td class=\"ii-text first\">{{ sideObject.email }}</td>\r" +
-    "\n" +
-    "                                <td class=\"ii-text second\">{{ sideObject.french_speakers }}</td>\r" +
-    "\n" +
-    "                            </tr>\r" +
-    "\n" +
-    "                        </table>\r" +
+    "                        <span class=\"profession\">{{ sideObject.occupation }}</span>\r" +
     "\n" +
     "                    </div>\r" +
     "\n" +
-    "                    <div class=\"i-more-info\">\r" +
+    "                </div>\r" +
     "\n" +
-    "                        <!--\r" +
+    "                <div class=\"ii-content\">\r" +
     "\n" +
-    "                        <div class=\"info-title more\"></div>\r" +
+    "                    <div class=\"text-separator first\">\r" +
     "\n" +
-    "                        <div class=\"row\">\r" +
+    "                        <a class=\"map-btn\" href=\"#\"><img src=\"images/icons/big-gold-map-nav.png\" /></a>\r" +
     "\n" +
-    "                            <span class=\"ii-text\">$$$</span>\r" +
+    "                        <div class=\"clearfix\"></div>\r" +
+    "\n" +
+    "                        <div class=\"i-contact-info\">\r" +
+    "\n" +
+    "                            <div class=\"info-title\"></div>\r" +
+    "\n" +
+    "                            <table>\r" +
+    "\n" +
+    "                                <tr>\r" +
+    "\n" +
+    "                                    <td class=\"ii-text first\">{{ sideObject.phone }}</td>\r" +
+    "\n" +
+    "                                    <td class=\"ii-text second\">{{ sideObject.address_street + ' ' + sideObject.address_city }}</td>\r" +
+    "\n" +
+    "                                </tr>\r" +
+    "\n" +
+    "                                <tr>\r" +
+    "\n" +
+    "                                    <td class=\"ii-text first\">{{ sideObject.email }}</td>\r" +
+    "\n" +
+    "                                    <td class=\"ii-text second\">{{ sideObject.french_speakers }}</td>\r" +
+    "\n" +
+    "                                </tr>\r" +
+    "\n" +
+    "                            </table>\r" +
     "\n" +
     "                        </div>\r" +
     "\n" +
-    "                        <table>\r" +
+    "                        <div class=\"i-more-info\">\r" +
+    "\n" +
+    "                            <!--\r" +
+    "\n" +
+    "                            <div class=\"info-title more\"></div>\r" +
+    "\n" +
+    "                            <div class=\"row\">\r" +
+    "\n" +
+    "                                <span class=\"ii-text\">$$$</span>\r" +
+    "\n" +
+    "                            </div>\r" +
+    "\n" +
+    "                            <table>\r" +
+    "\n" +
+    "                                <tr>\r" +
+    "\n" +
+    "                                    <td class=\"ii-text\">Mon-Thu</td>\r" +
+    "\n" +
+    "                                    <td class=\"ii-text second\">10:00-19:00</td>\r" +
+    "\n" +
+    "                                </tr>\r" +
+    "\n" +
+    "                                <tr>\r" +
+    "\n" +
+    "                                    <td class=\"ii-text\">Fri</td>\r" +
+    "\n" +
+    "                                    <td class=\"ii-text second\">10:30-13:00</td>\r" +
+    "\n" +
+    "                                </tr>\r" +
+    "\n" +
+    "                            </table>\r" +
+    "\n" +
+    "                            -->\r" +
+    "\n" +
+    "                        </div>\r" +
+    "\n" +
+    "                    </div>\r" +
+    "\n" +
+    "                    <div class=\"text-separator\">\r" +
+    "\n" +
+    "                        <!--\r" +
+    "\n" +
+    "                        <table class=\"item-services\">\r" +
     "\n" +
     "                            <tr>\r" +
     "\n" +
-    "                                <td class=\"ii-text\">Mon-Thu</td>\r" +
+    "                                <th class=\"first-col\"></th>\r" +
     "\n" +
-    "                                <td class=\"ii-text second\">10:00-19:00</td>\r" +
+    "                                <th class=\"middle-col\">Title A</th>\r" +
+    "\n" +
+    "                                <th class=\"middle-col\">Title B</th>\r" +
+    "\n" +
+    "                                <th></th>\r" +
     "\n" +
     "                            </tr>\r" +
     "\n" +
     "                            <tr>\r" +
     "\n" +
-    "                                <td class=\"ii-text\">Fri</td>\r" +
+    "                                <td>parking</td>\r" +
     "\n" +
-    "                                <td class=\"ii-text second\">10:30-13:00</td>\r" +
+    "                                <td><span class=\"bullet\"></span></td>\r" +
+    "\n" +
+    "                                <td></td>\r" +
+    "\n" +
+    "                                <td></td>\r" +
+    "\n" +
+    "                            </tr>\r" +
+    "\n" +
+    "                            <tr>\r" +
+    "\n" +
+    "                                <td>livraison</td>\r" +
+    "\n" +
+    "                                <td></td>\r" +
+    "\n" +
+    "                                <td><span class=\"bullet\"></span></td>\r" +
+    "\n" +
+    "                                <td></td>\r" +
+    "\n" +
+    "                            </tr>\r" +
+    "\n" +
+    "                            <tr>\r" +
+    "\n" +
+    "                                <td>Koupat Holim</td>\r" +
+    "\n" +
+    "                                <td><span class=\"bullet\"></span></td>\r" +
+    "\n" +
+    "                                <td><span class=\"bullet\"></span></td>\r" +
+    "\n" +
+    "                                <td></td>\r" +
     "\n" +
     "                            </tr>\r" +
     "\n" +
@@ -382,75 +430,15 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                        -->\r" +
     "\n" +
+    "                        <p ng-bind-html=\"sideObject.content | rawHtml\"></p>\r" +
+    "\n" +
+    "                        <p ng-repeat=\"(k,v) in a track by $index\">\r" +
+    "\n" +
+    "                            asda-{{k}}<br>\r" +
+    "\n" +
+    "                        </p>\r" +
+    "\n" +
     "                    </div>\r" +
-    "\n" +
-    "                </div>\r" +
-    "\n" +
-    "                <div class=\"text-separator\">\r" +
-    "\n" +
-    "                    <!--\r" +
-    "\n" +
-    "                    <table class=\"item-services\">\r" +
-    "\n" +
-    "                        <tr>\r" +
-    "\n" +
-    "                            <th class=\"first-col\"></th>\r" +
-    "\n" +
-    "                            <th class=\"middle-col\">Title A</th>\r" +
-    "\n" +
-    "                            <th class=\"middle-col\">Title B</th>\r" +
-    "\n" +
-    "                            <th></th>\r" +
-    "\n" +
-    "                        </tr>\r" +
-    "\n" +
-    "                        <tr>\r" +
-    "\n" +
-    "                            <td>parking</td>\r" +
-    "\n" +
-    "                            <td><span class=\"bullet\"></span></td>\r" +
-    "\n" +
-    "                            <td></td>\r" +
-    "\n" +
-    "                            <td></td>\r" +
-    "\n" +
-    "                        </tr>\r" +
-    "\n" +
-    "                        <tr>\r" +
-    "\n" +
-    "                            <td>livraison</td>\r" +
-    "\n" +
-    "                            <td></td>\r" +
-    "\n" +
-    "                            <td><span class=\"bullet\"></span></td>\r" +
-    "\n" +
-    "                            <td></td>\r" +
-    "\n" +
-    "                        </tr>\r" +
-    "\n" +
-    "                        <tr>\r" +
-    "\n" +
-    "                            <td>Koupat Holim</td>\r" +
-    "\n" +
-    "                            <td><span class=\"bullet\"></span></td>\r" +
-    "\n" +
-    "                            <td><span class=\"bullet\"></span></td>\r" +
-    "\n" +
-    "                            <td></td>\r" +
-    "\n" +
-    "                        </tr>\r" +
-    "\n" +
-    "                    </table>\r" +
-    "\n" +
-    "                    -->\r" +
-    "\n" +
-    "                    <p ng-bind-html=\"sideObject.content | rawHtml\"></p>\r" +
-    "\n" +
-    "                    <p ng-repeat=\"(k,v) in a track by $index\">\r" +
-    "\n" +
-    "                        asda-{{k}}<br>\r" +
-    "\n" +
-    "                    </p>\r" +
     "\n" +
     "                </div>\r" +
     "\n" +
@@ -460,7 +448,20 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "    </div>\r" +
     "\n" +
-    "</div>"
+    "    <div ng-if=\"showObjectBlock && showObjectBlockMap\" class=\"filter_search_result map object\" style=\"width: 1178px;min-height: 955px;\">\r" +
+    "\n" +
+    "        <!--<a ng-click=\"back()\" class=\"back-btn\"></a>-->\r" +
+    "\n" +
+    "        <div id=\"mapFrame\">\r" +
+    "\n" +
+    "            <object-map data-lng=\"{{ sideObject.lng }}\" data-lat=\"{{ sideObject.lat }}\" ng-if=\"showObjectBlock\"></object-map>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "    </div>\r" +
+    "\n" +
+    "</div>\r" +
+    "\n"
   );
 
 

@@ -53,11 +53,12 @@ module.exports = function(grunt) {
 						'lib/angular-sanitize/angular-sanitize.min.js',
 						'lib/angular-ui-router/release/angular-ui-router.min.js',
 						'lib/ngstorage/ngStorage.min.js',
-						'lib/ng-scrollbar/ng-scrollbar.min.js',
 						'lib/ng-tiny-scrollbar/ng-tiny-scrollbar.min.js',
-						//'js/old.script.js',
 					]
-				}
+				},
+				options: {
+					mangle: false,
+				},
 			},
 			app: {
 				files: {

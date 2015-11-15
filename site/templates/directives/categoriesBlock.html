@@ -2,17 +2,17 @@
     <div ng-show="showCategoriesBlock" class="filterResault">
         <span class="slogen">MAKING YOU <span>FEEL</span> LOCAL</span>
         <div class="frButtons">
-            <a ng-click="showCategoriesList()" class="filter-i"></a>
-            <a ng-class="showCategoriesBlockList ? 'active' : ''"class="filter-i-hover"></a>
-            <a ng-class="showCategoriesBlockMap ? 'active' : ''" class="mapNav-i-hover"></a>
-            <a ng-click="showCategoriesMap();" class="mapNav-i"></a>
+            <a ng-click="showCategoriesList()" ng-class="showCategoriesBlockList ? 'active' : ''" class="filter-i"></a>
+            <a class="filter-i-hover"></a>
+            <a class="mapNav-i-hover"></a>
+            <a ng-click="showCategoriesMap();" ng-class="showCategoriesBlockMap ? 'active' : ''" class="mapNav-i"></a>
         </div>
     </div>
 
-    <div ng-show="showCategoryBlockList" class="filter_search_result">
-        <a href="back()" class="back-btn"></a>
+    <div ng-show="showCategoriesBlock && showCategoriesBlockList" class="filter_search_result">
+        <a ng-click="back()" class="back-btn"></a>
         <span class="ts-title">Search by categorie {{currentItem.title}}</span>
-        <div class="results-list">
+        <div class="results-list" scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 429px">
             <div ng-repeat="(k, v) in sideCategories.data" class="text-separator">
                 <div class="sm-imgText">
                     <img ng-src="{{mediaUrl + v.featured_image}}" />
@@ -36,10 +36,10 @@
         </div>
     </div>
 
-    <div ng-show="showCategoriesBlockMap" class="filter_search_result" style="width: 1178px;min-height: 955px;">
-        <a href="back()" class="back-btn"></a>
+    <div ng-if="showCategoriesBlock && showCategoriesBlockMap" class="filter_search_result map" style="width: 1178px;min-height: 955px;">
+        <a ng-click="back()" class="back-btn"></a>
         <div id="mapFrame">
-            <my-map ng-if="showCategoriesBlock"></my-map>
+            <category-map ng-if="showCategoriesBlock"></category-map>
         </div>
     </div>
 </div>

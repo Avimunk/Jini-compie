@@ -1,85 +1,93 @@
-<div class="item_info" style="padding: 0 !important;overflow-y: initial;" ng-class="sideObject.content_image ? 'item_info_img' : ''" ng-if="showObjectBlock">
-    <div scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 542px" >
-        <div class="in-scroller-content">
-            <a ng-click="back()" class="back-t">Back to list view</a>
-            <a href="#" class="close-btn"></a>
-            <div class="ii-top" ng-attr-style="{{ sideObject.content_image ? 'background-image: url(' + sideObject.content_image + ');' : ''}}">
-                <div class="img-top-titles">
-                    <span class="inner-title">{{ sideObject.title }}</span>
-                    <span class="profession">{{ sideObject.occupation }}</span>
-                </div>
-            </div>
-            <div class="ii-content">
-                <div class="text-separator first">
-                    <a class="map-btn" href="#"><img src="images/icons/big-gold-map-nav.png" /></a>
-                    <div class="clearfix"></div>
-                    <div class="i-contact-info">
-                        <div class="info-title"></div>
-                        <table>
-                            <tr>
-                                <td class="ii-text first">{{ sideObject.phone }}</td>
-                                <td class="ii-text second">{{ sideObject.address_street + ' ' + sideObject.address_city }}</td>
-                            </tr>
-                            <tr>
-                                <td class="ii-text first">{{ sideObject.email }}</td>
-                                <td class="ii-text second">{{ sideObject.french_speakers }}</td>
-                            </tr>
-                        </table>
+<div>
+    <div class="item_info" style="padding: 0 !important;overflow-y: initial;" ng-class="sideObject.content_image ? 'item_info_img' : ''" ng-if="showObjectBlock">
+        <div scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 542px" >
+            <div class="in-scroller-content">
+                <a ng-click="back()" class="back-t">Back to list view</a>
+                <a href="#" class="close-btn"></a>
+                <div class="ii-top" ng-attr-style="{{ sideObject.content_image ? 'background-image: url(' + sideObject.content_image + ');' : ''}}">
+                    <div class="img-top-titles">
+                        <span class="inner-title">{{ sideObject.title }}</span>
+                        <span class="profession">{{ sideObject.occupation }}</span>
                     </div>
-                    <div class="i-more-info">
-                        <!--
-                        <div class="info-title more"></div>
-                        <div class="row">
-                            <span class="ii-text">$$$</span>
+                </div>
+                <div class="ii-content">
+                    <div class="text-separator first">
+                        <a class="map-btn" href="#"><img src="images/icons/big-gold-map-nav.png" /></a>
+                        <div class="clearfix"></div>
+                        <div class="i-contact-info">
+                            <div class="info-title"></div>
+                            <table>
+                                <tr>
+                                    <td class="ii-text first">{{ sideObject.phone }}</td>
+                                    <td class="ii-text second">{{ sideObject.address_street + ' ' + sideObject.address_city }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="ii-text first">{{ sideObject.email }}</td>
+                                    <td class="ii-text second">{{ sideObject.french_speakers }}</td>
+                                </tr>
+                            </table>
                         </div>
-                        <table>
+                        <div class="i-more-info">
+                            <!--
+                            <div class="info-title more"></div>
+                            <div class="row">
+                                <span class="ii-text">$$$</span>
+                            </div>
+                            <table>
+                                <tr>
+                                    <td class="ii-text">Mon-Thu</td>
+                                    <td class="ii-text second">10:00-19:00</td>
+                                </tr>
+                                <tr>
+                                    <td class="ii-text">Fri</td>
+                                    <td class="ii-text second">10:30-13:00</td>
+                                </tr>
+                            </table>
+                            -->
+                        </div>
+                    </div>
+                    <div class="text-separator">
+                        <!--
+                        <table class="item-services">
                             <tr>
-                                <td class="ii-text">Mon-Thu</td>
-                                <td class="ii-text second">10:00-19:00</td>
+                                <th class="first-col"></th>
+                                <th class="middle-col">Title A</th>
+                                <th class="middle-col">Title B</th>
+                                <th></th>
                             </tr>
                             <tr>
-                                <td class="ii-text">Fri</td>
-                                <td class="ii-text second">10:30-13:00</td>
+                                <td>parking</td>
+                                <td><span class="bullet"></span></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>livraison</td>
+                                <td></td>
+                                <td><span class="bullet"></span></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Koupat Holim</td>
+                                <td><span class="bullet"></span></td>
+                                <td><span class="bullet"></span></td>
+                                <td></td>
                             </tr>
                         </table>
                         -->
+                        <p ng-bind-html="sideObject.content | rawHtml"></p>
+                        <p ng-repeat="(k,v) in a track by $index">
+                            asda-{{k}}<br>
+                        </p>
                     </div>
                 </div>
-                <div class="text-separator">
-                    <!--
-                    <table class="item-services">
-                        <tr>
-                            <th class="first-col"></th>
-                            <th class="middle-col">Title A</th>
-                            <th class="middle-col">Title B</th>
-                            <th></th>
-                        </tr>
-                        <tr>
-                            <td>parking</td>
-                            <td><span class="bullet"></span></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>livraison</td>
-                            <td></td>
-                            <td><span class="bullet"></span></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Koupat Holim</td>
-                            <td><span class="bullet"></span></td>
-                            <td><span class="bullet"></span></td>
-                            <td></td>
-                        </tr>
-                    </table>
-                    -->
-                    <p ng-bind-html="sideObject.content | rawHtml"></p>
-                    <p ng-repeat="(k,v) in a track by $index">
-                        asda-{{k}}<br>
-                    </p>
-                </div>
             </div>
+        </div>
+    </div>
+    <div ng-if="showObjectBlock && showObjectBlockMap" class="filter_search_result map object" style="width: 1178px;min-height: 955px;">
+        <!--<a ng-click="back()" class="back-btn"></a>-->
+        <div id="mapFrame">
+            <object-map data-lng="{{ sideObject.lng }}" data-lat="{{ sideObject.lat }}" ng-if="showObjectBlock"></object-map>
         </div>
     </div>
 </div>

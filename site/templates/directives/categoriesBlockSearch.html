@@ -9,8 +9,8 @@
         </div>
     </div>
 
-    <div ng-show="showCategoriesSearchBlockList" class="filter_search_result">
-        <a href="back()" class="back-btn"></a>
+    <div ng-show="showCategorySearchBlock && showCategoriesSearchBlockList" class="filter_search_result">
+        <a ng-click="back()" class="back-btn"></a>
         <span class="ts-title">Search by categorie {{currentItem.title}}</span>
         <div class="results-list" scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 429px">
             <div ng-repeat="(k, v) in category_search_result" class="text-separator">
@@ -36,10 +36,10 @@
         </div>
     </div>
 
-    <div ng-show="showCategoriesSearchBlockMap" class="filter_search_result" style="width: 1178px;min-height: 955px;">
-        <a href="back()" class="back-btn"></a>
+    <div ng-if="showCategorySearchBlock && showCategoriesSearchBlockMap" class="filter_search_result map" style="width: 1178px;min-height: 955px;">
+        <a ng-click="back()" class="back-btn"></a>
         <div id="mapFrame">
-            <my-map ng-if="showCategorySearchBlock"></my-map>
+            <category-map ng-if="showCategorySearchBlock"></category-map>
         </div>
     </div>
 </div>

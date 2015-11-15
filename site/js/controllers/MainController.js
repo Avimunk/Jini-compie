@@ -9,7 +9,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
     console.log('MainController');
 
     $rootScope.siteUrl = '/Jini3/#';
-    $rootScope.mediaUrl = '/Jini3/public/uploads/';
+    $rootScope.mediaUrl = 'http://ec2-52-27-196-120.us-west-2.compute.amazonaws.com/uploads/';
 
     var history = [];
     $rootScope.$on('$locationChangeSuccess', function() {
@@ -27,22 +27,19 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         fixPie.init($rootScope.currentCategoriesLength, $rootScope.isFirst);
     };
 
-    var resizeTimeout = false;
-    angular.element($window).bind('resize', function() {
-        if(resizeTimeout)
-            clearTimeout(resizeTimeout);
-
-        //resizeTimeout = setTimeout(function(){
-            console.log('window.innerWidth', window.innerWidth);
-            var width = window.innerWidth;
-            if(width < 1627 && width > 980)
-            {
-                $rootScope.set_map_width = width - 10 - 365 - 80 - 70;
+    $rootScope.setMapWidth = function(digest){
+        var width = window.innerWidth;
+        if(width < 1627 && width > 980)
+        {
+            $rootScope.set_map_width = width - 10 - 365 - 80 - 70;
+            if(digest)
                 $rootScope.$digest();
-            }
-            //$rootScope.set_map_width = elem[0].offsetHeight;
+        }
+    };
+    $rootScope.setMapWidth(false);
 
-        //}, 200);
+    angular.element($window).bind('resize', function() {
+        $rootScope.setMapWidth(true);
     });
 
     $rootScope.centerImage = '../img/no_selector.png';
@@ -156,6 +153,9 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             $rootScope.showCategoriesBlock  = true;
             $rootScope.showCategoryBlock    = false;
             $rootScope.showObjectBlock      = false;
+
+            if(!$rootScope.showCategoriesBlockList && !$rootScope.showCategoriesBlockMap)
+                $rootScope.showCategoriesBlockList = true;
         },
         showObject: function()
         {
