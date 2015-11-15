@@ -31,8 +31,8 @@
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.16.0/TweenMax.min.js"></script>
     <script src="js/app.min.js"></script>
-    <script src="infobubble.js"></script>
-    <script src="infobubble-compiled.js"></script>
+    <script src="lib/helpers/infobubble.js"></script>
+    <script src="lib/helpers/infobubble-compiled.js"></script>
 </head>
     <body ng-app="JINI" ng-controller="MainController">
         <div class="site-bg">
@@ -42,10 +42,10 @@
 
         <header>
             <div class="left">
-                <a href="#" class="logo"><img src="images/logo.png" /></a>
+                <a href="#/" class="logo"><img src="images/logo.png" /></a>
                 <form>
                     <input enter-submit ng-keyup="changeUrl()" ng-model="keywords" type="search" />
-                    <input type="submit" ng-click="changeUrl()"  value="" />
+                    <input type="submit" ng-click="changeUrl(true)"  value="" />
                     <div style="overflow-y: initial;height: 250px;max-height: 250px;" ng-show="top_search_result.length > 0" class="search_autoComplete ">
                         <div style="max-height:100%;height:250px" scrollbar="{autoUpdate: true,wheelSpeed : 20}">
                             <ul class="sa-list">
@@ -78,9 +78,9 @@
             </div>
             <div class="right">
                 <div class="social">
-                    <a href="http://www.facebook.com" target="_blank"><img src="images/icons/twitter.png" /></a>
-                    <a href="http://www.facebook.com" target="_blank"><img src="images/icons/facebook.png" /></a>
-                    <a href="http://www.facebook.com" target="_blank"><img src="images/icons/linkdin.png" /></a>
+                    <a ng-click="showHistory()"><img src="images/icons/twitter.png" /></a>
+                    <a ng-click="showHistory()"><img src="images/icons/facebook.png" /></a>
+                    <a ng-click="showHistory()"><img src="images/icons/linkdin.png" /></a>
                 </div>
             </div>
         </header>

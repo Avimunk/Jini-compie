@@ -16,10 +16,13 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         history.push($location.$$path);
     });
 
+    $rootScope.showHistory = function(){
+        console.log(history);
+    };
+
     $rootScope.back = function () {
         var prevUrl = history.length > 1 ? history.splice(-2)[0] : "/";
         $location.path(prevUrl);
-        history = []; //Delete history array after going back
     };
 
     $rootScope.pie = pie;
@@ -62,8 +65,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
     //return false;
     var justOpened = false;
     $rootScope.openItem = function(item, type){
-
-        if($state.current.name == 'search' || $state.current.name == 'searchInCategory' && type != 'object')
+        if(($state.current.name == 'search' || $state.current.name == 'searchInCategory') && type != 'object')
         {
             $rootScope.displayHandle.closeAll();
             return false;
@@ -225,10 +227,6 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
 
     }
 
-    $rootScope.a = [];
-    $rootScope.a.length = 50;
-
-
     $rootScope.showHomePageBlock = function() {
         $rootScope.displayHandle.showCategoryOrHomePage();
 
@@ -272,69 +270,101 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         $rootScope.showCategoriesBlockMap  = false;
     }
 
-    var topSearchUrl = '/Jini3/public/objects/search?query=';
-    var centerSearchUrl = '/Jini3/public/objects/searchPage?query=';
-    var interval = false;
-    var timeout;
-    var searches = {
+    var topSearchUrl = '/Jini3/public/objects/search?query=',
+    centerSearchUrl = '/Jini3/public/objects/searchPage?query=',
+    interval1 = false,
+    interval2 = false,
+    interval3 = false,
+    timeout1,
+    timeout2,
+    timeout3,
+    searches = {
         page: [],
         regular: [],
     };
     $rootScope.search = function(){
-        if(interval)
-        {
-            clearTimeout(timeout);
-        }
-        interval = true;
-        timeout = setTimeout(function(){
+
             console.log($scope.keywords);
             if($state.current.name == 'search')
             {
-                $rootScope.top_search_result = false;
-                if(searches.page[$scope.keywords])
+                if(interval1)
                 {
-                    $rootScope.center_search_result = searches.page[$scope.keywords];
+                    clearTimeout(timeout1);
                 }
-                else
-                {
-                    $http.get(centerSearchUrl + $scope.keywords).then(function(resp){
-                        searches.page[$scope.keywords] = $rootScope.center_search_result = resp.data;
-                    });
-                }
+                var currentSearch = $rootScope.keywords;
+                interval1 = true;
+                timeout1 = setTimeout(function(){
+
+                    interval1 = false;
+                    $rootScope.top_search_result = false;
+
+                    if(searches.page[currentSearch])
+                    {
+                        $rootScope.center_search_result = searches.page[currentSearch];
+                        if(!$rootScope.$$phase) $rootScope.$digest();
+                    }
+                    else
+                    {
+                        $http.get(centerSearchUrl + currentSearch).then(function(resp){
+                            searches.page[currentSearch] = $rootScope.center_search_result = resp.data;
+                            if(!$rootScope.$$phase) $rootScope.$digest();
+                        });
+                    }
+
+
+                }, 500);
 
             }
             else if($state.current.name == 'searchInCategory')
             {
-                $rootScope.top_search_result = $rootScope.center_search_result = false;
+                if(interval2)
+                {
+                    clearTimeout(timeout2);
+                }
+                interval2 = true;
+                timeout2 = setTimeout(function(){
 
-                if(searches.page[$scope.keywords + '|' + $state.params.id])
-                {
-                    $rootScope.category_search_result = searches.page[$scope.keywords + '|' + $state.params.id];
-                }
-                else
-                {
-                    $http.get(centerSearchUrl + $scope.keywords + '&categoryid=' + $state.params.id).then(function(resp){
-                        searches.page[$scope.keywords + '|' + $state.params.id] = $rootScope.category_search_result = resp.data;
-                    });
-                }
+                    interval2 = false;
+                    $rootScope.top_search_result = $rootScope.center_search_result = false;
+
+                    if(searches.page[$scope.keywords + '|' + $state.params.id])
+                    {
+                        $rootScope.category_search_result = searches.page[$scope.keywords + '|' + $state.params.id];
+                        if(!$rootScope.$$phase) $rootScope.$digest();
+                    }
+                    else
+                    {
+                        $http.get(centerSearchUrl + $scope.keywords + '&categoryid=' + $state.params.id).then(function(resp){
+                            searches.page[$scope.keywords + '|' + $state.params.id] = $rootScope.category_search_result = resp.data;
+                            if(!$rootScope.$$phase) $rootScope.$digest();
+                        });
+                    }
+
+                }, 500);
             }
             else
             {
-                if(searches.regular[$scope.keywords])
+                if(interval3)
                 {
-                    $rootScope.top_search_result = searches.page[$scope.keywords];
+                    clearTimeout(timeout3);
                 }
-                else
-                {
-                    $http.get(topSearchUrl + $scope.keywords).then(function(resp){
-                        searches.page[$scope.keywords] = $rootScope.top_search_result = resp.data;
-                    });
-                }
-                $rootScope.$broadcast('rebuild:search');
-                console.log('rebuild:search');
+                interval3 = true;
+                timeout3 = setTimeout(function(){
+                    interval3 = false;
+                    if(searches.regular[$scope.keywords])
+                    {
+                        $rootScope.top_search_result = searches.regular[$scope.keywords];
+                        if(!$rootScope.$$phase) $rootScope.$digest();
+                    }
+                    else
+                    {
+                        $http.get(topSearchUrl + $scope.keywords).then(function(resp){
+                            searches.regular[$scope.keywords] = $rootScope.top_search_result = resp.data;
+                            if(!$rootScope.$$phase) $rootScope.$digest();
+                        });
+                    }
+                }, 500);
             }
-            interval = false;
-        }, 500);
         return false;
     }
     $rootScope.clearSearch = function(){
@@ -342,20 +372,32 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         $rootScope.top_search_result = false;
     }
 
-    $rootScope.changeUrl = function(){
+    $rootScope.changeUrl = function(isButtonClick){
         if($state.current.name == 'search')
         {
             if($scope.keywords.length >= 1)
+            {
                 $location.path('/search/' + $scope.keywords)
+            }
+
         }
         else if($state.current.name == 'searchInCategory')
         {
+            console.log('changeUrl -> searchInCategory',$state.params)
             if($scope.keywords.length >= 1)
-                $location.path('/' + $state.params.id + '/' + $state.params.title + '/search/' + $scope.keywords)
+            {
+                if($state.params.map)
+                    $location.path('/' + $state.params.id + '/' + $state.params.title + '/search/map/' + $scope.keywords)
+                else
+                    $location.path('/' + $state.params.id + '/' + $state.params.title + '/search/' + $scope.keywords)
+            }
         }
         else
         {
-            $rootScope.search();
+            if(isButtonClick)
+                $location.path('/search/' + $scope.keywords);
+            else
+                $rootScope.search();
         }
         return false;
     }
@@ -368,8 +410,10 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         if($rootScope.showCategoriesSearchBlockMap)
             return true;
 
-        $rootScope.showCategoriesSearchBlockList = false;
-        $rootScope.showCategoriesSearchBlockMap  = true;
+        $location.path('/' + $state.params.id + '/' + $state.params.title + '/search/map/' + $scope.keywords)
+
+        //$rootScope.showCategoriesSearchBlockList = false;
+        //$rootScope.showCategoriesSearchBlockMap  = true;
     }
     $rootScope.showCategoriesSearchList = function(){
         console.log('clicked!showCategoriesList');
@@ -379,7 +423,9 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         if($rootScope.showCategoriesSearchBlockList)
             return true;
 
-        $rootScope.showCategoriesSearchBlockList = true;
-        $rootScope.showCategoriesSearchBlockMap  = false;
+        $location.path('/' + $state.params.id + '/' + $state.params.title + '/search/' + $scope.keywords);
+
+        //$rootScope.showCategoriesSearchBlockList = true;
+        //$rootScope.showCategoriesSearchBlockMap  = false;
     }
 };

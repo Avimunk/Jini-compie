@@ -5,6 +5,20 @@ function CategoryController($rootScope, $scope, $stateParams, $state, $http) {
     console.log('CategoryControllerLoaded. ID:', $stateParams.id)
     console.log('CategoryController', $state.current)
     $scope.currentID = $stateParams.id;
+    $rootScope.keywords = null;
+
+    $rootScope.backUrl = false;
+    switch($state.current.name)
+    {
+        case 'object':
+            var fromSearch = ($state.params.fromSearch ? '/search/' + ($state.params.fromSearch).replace('fromSearch-', '') : '')
+            $rootScope.backUrl = '#/'+ $state.params.id +'/' + $state.params.title + fromSearch;
+            break;
+
+        case 'category':
+            $rootScope.backUrl = '#/search/' + ($state.params.fromSearch).replace('fromSearch-', '');
+            break;
+    }
 
 
     $rootScope.showObjectBlockMap = false;

@@ -50,6 +50,7 @@ html, body{
 		background: url(../images/icons/close-grey-bg.png);
 		background-repeat: no-repeat;
 		background-position: center;
+		cursor: pointer;
 	}
 	.gold-btn{
 		display: block;

@@ -1,5 +1,5 @@
 <div ng-show="showCategoryBlock" class="openDiv imgNtext visionDiv categoryHover">
-    <a  ng-click="closeCategory()" class="back-btn"></a>
+    <a  ng-click="displayHandle.closeAll()" class="back-btn"></a>
     <div ng-if="sideCategory.img" class="top" ng-attr-style="{{sideCategory.img ? 'background-image: url(' + mediaUrl + sideCategory.img + ');' : ''}}">
     </div>
     <div scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%" class="bottom {{sideCategory.img ? 'img' : 'noImg'}}" >

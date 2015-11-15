@@ -1,11 +1,3 @@
-String.prototype.trunc =
-    function( n, useWordBoundary ){
-        var isTooLong = this.length > n,
-            s_ = isTooLong ? this.substr(0,n-1) : this;
-        s_ = (useWordBoundary && isTooLong) ? s_.substr(0,s_.lastIndexOf(' ')) : s_;
-        return  isTooLong ? s_ + '&hellip;' : s_;
-    };
-
 angular.module('JINI', [
     'ui.router',
     'ngStorage',
@@ -29,57 +21,6 @@ function Config($stateProvider, $urlRouterProvider, $localStorageProvider) {
 
     // if route not found
     $urlRouterProvider.otherwise('/');
-    //
-    //// Routes
-    //$stateProvider
-    //    .state('home', {
-    //        abstract: true,
-    //        //cache: true,
-    //        url: '/a',
-    //        //controller: 'HomeController',
-    //        controller: function(){
-    //            alert('asdasdasd');
-    //        },
-    //        template: '<div> asdhkjla sdkajsd akls djlkasdas<div ui-view></div></div>',
-    //        //templateUrl: 'templates/categories/8.html',
-    //        /*resolve: {
-    //            categories: ['CategoryService', '$stateParams', function(CategoryService, $stateParams){
-    //                console.log('CALL: resolve.categories1')
-    //                return CategoryService.getCategories($stateParams);
-    //            }],
-    //            setScope: ['$rootScope', '$state', '$stateParams', 'categories', 'setScopeService', function($rootScope, $state, $stateParams, categories, setScopeService){
-    //                console.log('CALL: resolve.setScope1')
-    //                return setScopeService.init($rootScope, $state, $stateParams, categories);
-    //            }]
-    //        },*/
-    //    })
-    //    .state('home.category', {
-    //        //cache: true,
-    //        url: '{id:[1-9][0-9]*}/{title:.*}',
-    //        //controller: 'CategoryController',
-    //        template: 'home.category',
-    //        //templateUrl: 'templates/categories/8.html',
-    //    })
-    //    .state('home.object', {
-    //        //cache: true,
-    //        url: '{id:[1-9][0-9]*}-{id2:[1-9][0-9]*}/{title:.*}/{title2:.*}',
-    //        //controller: 'CategoryController',
-    //        template: 'home.object',
-    //        //templateUrl: 'templates/categories/8.html',
-    //        resolve: {
-    //            object: ['$stateParams', 'objectService' ,'setScope', '$rootScope' , function($stateParams, objectService, setScope, $rootScope){
-    //                console.log('CALL: resolve.object3', setScope)
-    //                $rootScope.currentItem = false;
-    //                return objectService.getObjectData($stateParams).then(function(item){
-    //                    //$rootScope.openObject(item)
-    //                    item.type = 'object';
-    //                    $rootScope.openItem(item)
-    //                    return true;
-    //                });
-    //            }]
-    //        }
-    //    })
-    //;
 
     // Routes
     $stateProvider
@@ -101,7 +42,7 @@ function Config($stateProvider, $urlRouterProvider, $localStorageProvider) {
         })
         .state('searchInCategory', {
             cache: true,
-            url: '/{id:[1-9][0-9]*}/{title:.*?}/search/{search:.+}',
+            url: '/{id:[1-9][0-9]*}/{title:.*?}/search{map:(?:/map)?}/{search:.+}',
             controller: 'SearchController',
             templateUrl: 'templates/categories/8.html',
             resolve: {
@@ -117,7 +58,7 @@ function Config($stateProvider, $urlRouterProvider, $localStorageProvider) {
         })
         .state('category', {
             cache: true,
-            url: '/{id:[1-9][0-9]*}/{title:.*}',
+            url: '/{id:[1-9][0-9]*}/{title:.*}{fromSearch:(?:/fromSearch/.*)?}',
             controller: 'CategoryController',
             templateUrl: 'templates/categories/8.html',
             resolve: {
@@ -133,7 +74,7 @@ function Config($stateProvider, $urlRouterProvider, $localStorageProvider) {
         })
         .state('object', {
             cache: true,
-            url: '/{id:[0-9][0-9]*}-{id2:[1-9][0-9]*}{map:(?:/map)?}/{title:.*}/{title2:.*}',
+            url: '/{id:[0-9][0-9]*}-{id2:[1-9][0-9]*}{map:(?:/map)?}/{title:.*}/{title2:.*}/{fromSearch:(?:fromSearch-.*)}',
             controller: 'CategoryController',
             templateUrl: 'templates/categories/8.html',
             resolve: {

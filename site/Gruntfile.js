@@ -54,6 +54,7 @@ module.exports = function(grunt) {
 						'lib/angular-ui-router/release/angular-ui-router.min.js',
 						'lib/ngstorage/ngStorage.min.js',
 						'lib/ng-tiny-scrollbar/ng-tiny-scrollbar.min.js',
+						'lib/helpers/helpers.js',
 					]
 				},
 				options: {

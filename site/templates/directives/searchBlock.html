@@ -10,7 +10,7 @@
             <a ng-href="{{'#/' + catID + '/' + catData.name + '/search/' + keywords}}" class="sws-title">{{catData.title}}</a>
             <span class="numOfRes">{{catData.itemsCount}} results</span>
             <div ng-repeat="item in catData.items" class="text-separator">
-                <a ng-href="{{'#/' + catID + '-' + item.id + '/' + catData.name + '/' + item.name}}" class="smi-title">{{item.title | cut:true:35:' ...'}}</a>
+                <a ng-href="{{'#/' + catID + '-' + item.id + '/' + catData.title + '/' + item.name + '/fromSearch-' + keywords}}" class="smi-title">{{item.title | cut:true:35:' ...'}}</a>
                 <p class="smi-text" ng-if="item.excerpt" ng-bind-html="item.excerpt | cut:true:150:' ...' | rawHtml">Apartment description by the owner or advertiser Apartment description by the owner or advertiser...</p>
             </div>
 

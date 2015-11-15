@@ -87,7 +87,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "    <div ng-show=\"showCategoriesBlock && showCategoriesBlockList\" class=\"filter_search_result\">\r" +
     "\n" +
-    "        <a ng-click=\"back()\" class=\"back-btn\"></a>\r" +
+    "        <a ng-click=\"displayHandle.closeAll()\" class=\"back-btn\"></a>\r" +
     "\n" +
     "        <span class=\"ts-title\">Search by categorie {{currentItem.title}}</span>\r" +
     "\n" +
@@ -180,7 +180,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "    <div ng-show=\"showCategorySearchBlock && showCategoriesSearchBlockList\" class=\"filter_search_result\">\r" +
     "\n" +
-    "        <a ng-click=\"back()\" class=\"back-btn\"></a>\r" +
+    "        <a ng-href=\"{{backUrl}}\" ng-if=\"backUrl\" class=\"back-btn\"></a>\r" +
     "\n" +
     "        <span class=\"ts-title\">Search by categorie {{currentItem.title}}</span>\r" +
     "\n" +
@@ -200,7 +200,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                        <div class=\"more-info-div\">\r" +
     "\n" +
-    "                            <a class=\"more-info\" ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/' + currentItem.title + '/' + v.name}}\" ng-click=\"closeCategories()\">\r" +
+    "                            <a class=\"more-info\" ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/' + currentItem.title + '/' + v.name + '/fromSearch-' + keywords}}\" ng-click=\"closeCategories()\">\r" +
     "\n" +
     "                                <img class=\"crown-i\" ng-if=\"v.promoted\" src=\"images/icons/crown.png\" />\r" +
     "\n" +
@@ -216,7 +216,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                </div>\r" +
     "\n" +
-    "                <a href=\"#\" class=\"view-map\">\r" +
+    "                <a ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/fromSearch-' + keywords}}\" class=\"view-map\">\r" +
     "\n" +
     "                    <img src=\"images/icons/g-nav.png\" />\r" +
     "\n" +
@@ -234,7 +234,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "    <div ng-if=\"showCategorySearchBlock && showCategoriesSearchBlockMap\" class=\"filter_search_result map\" style=\"width: 1178px;min-height: 955px;\">\r" +
     "\n" +
-    "        <a ng-click=\"back()\" class=\"back-btn\"></a>\r" +
+    "        <a ng-href=\"{{backUrl}}\" ng-if=\"backUrl\" class=\"back-btn\"></a>\r" +
     "\n" +
     "        <div id=\"mapFrame\">\r" +
     "\n" +
@@ -251,7 +251,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
   $templateCache.put('templates/directives/categoryHover.html',
     "<div ng-show=\"showCategoryBlock\" class=\"openDiv imgNtext visionDiv categoryHover\">\r" +
     "\n" +
-    "    <a  ng-click=\"closeCategory()\" class=\"back-btn\"></a>\r" +
+    "    <a  ng-click=\"displayHandle.closeAll()\" class=\"back-btn\"></a>\r" +
     "\n" +
     "    <div ng-if=\"sideCategory.img\" class=\"top\" ng-attr-style=\"{{sideCategory.img ? 'background-image: url(' + mediaUrl + sideCategory.img + ');' : ''}}\">\r" +
     "\n" +
@@ -284,9 +284,9 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "            <div class=\"in-scroller-content\">\r" +
     "\n" +
-    "                <a ng-click=\"back()\" class=\"back-t\">Back to list view</a>\r" +
+    "                <a ng-href=\"{{backUrl}}\" ng-if=\"backUrl\" class=\"back-t\">Back to list view</a>\r" +
     "\n" +
-    "                <a href=\"#\" class=\"close-btn\"></a>\r" +
+    "                <a ng-click=\"displayHandle.closeAll()\" class=\"close-btn\"></a>\r" +
     "\n" +
     "                <div class=\"ii-top\" ng-attr-style=\"{{ sideObject.content_image ? 'background-image: url(' + sideObject.content_image + ');' : ''}}\">\r" +
     "\n" +
@@ -304,7 +304,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                    <div class=\"text-separator first\">\r" +
     "\n" +
-    "                        <a class=\"map-btn\" href=\"#\"><img src=\"images/icons/big-gold-map-nav.png\" /></a>\r" +
+    "                        <a class=\"map-btn\" href=\"javascript:void(0)\"><img src=\"images/icons/big-gold-map-nav.png\" /></a>\r" +
     "\n" +
     "                        <div class=\"clearfix\"></div>\r" +
     "\n" +
@@ -490,7 +490,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "            <div ng-repeat=\"item in catData.items\" class=\"text-separator\">\r" +
     "\n" +
-    "                <a ng-href=\"{{'#/' + catID + '-' + item.id + '/' + catData.name + '/' + item.name}}\" class=\"smi-title\">{{item.title | cut:true:35:' ...'}}</a>\r" +
+    "                <a ng-href=\"{{'#/' + catID + '-' + item.id + '/' + catData.title + '/' + item.name + '/fromSearch-' + keywords}}\" class=\"smi-title\">{{item.title | cut:true:35:' ...'}}</a>\r" +
     "\n" +
     "                <p class=\"smi-text\" ng-if=\"item.excerpt\" ng-bind-html=\"item.excerpt | cut:true:150:' ...' | rawHtml\">Apartment description by the owner or advertiser Apartment description by the owner or advertiser...</p>\r" +
     "\n" +

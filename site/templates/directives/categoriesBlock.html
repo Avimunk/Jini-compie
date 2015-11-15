@@ -10,7 +10,7 @@
     </div>
 
     <div ng-show="showCategoriesBlock && showCategoriesBlockList" class="filter_search_result">
-        <a ng-click="back()" class="back-btn"></a>
+        <a ng-click="displayHandle.closeAll()" class="back-btn"></a>
         <span class="ts-title">Search by categorie {{currentItem.title}}</span>
         <div class="results-list" scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 429px">
             <div ng-repeat="(k, v) in sideCategories.data" class="text-separator">
