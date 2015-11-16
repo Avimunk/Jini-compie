@@ -44,13 +44,13 @@
             <div class="left">
                 <a href="#/" class="logo"><img src="images/logo.png" /></a>
                 <form>
-                    <input enter-submit ng-keyup="changeUrl()" ng-model="keywords" type="search" />
+                    <input enter-submit ng-keyup="changeUrl()" ng-model="keywords" type="text" />
                     <input type="submit" ng-click="changeUrl(true)"  value="" />
                     <div style="overflow-y: initial;height: 250px;max-height: 250px;" ng-show="top_search_result.length > 0" class="search_autoComplete ">
                         <div style="max-height:100%;height:250px" scrollbar="{autoUpdate: true,wheelSpeed : 20}">
                             <ul class="sa-list">
                                 <li ng-repeat="v in top_search_result" ng-click="clearSearch()">
-                                    <a ng-bind-html="v.title | highlight:keywords" ng-href="{{ v.type == 'category' ? ('#/' + v.id + '/' + v.name) : ('#/' + v.category['id'] + '-' + v.id + '/' + v.category['name'] + '/' + v.name)}}">
+                                    <a ng-bind-html="v.title | highlight:keywords" ng-href="{{ v.type == 'category' ? ('#/' + v.id + '/' + v.name) : ('#/' + v.category['id'] + '-' + v.id + '/' + v.category['name'] + '/' + v.name + '/')}}">
                                     </a>
                                 </li>
                             </ul>
@@ -86,20 +86,20 @@
         </header>
         <nav>
             <ul class="side-menu">
-                <li class="liVision active">
-                    <a href="#" class="li-item vision"></a>
+                <li class="liVision" ng-class="isPage && currentPage == 'about' ? 'active' : ''">
+                    <a href="#/about" class="li-item vision"></a>
                 </li>
-                <li class="liFavorites">
-                    <a href="#" class="li-item favorites"></a>
+                <li class="liFavorites" ng-class="isPage && currentPage == '' ? 'active' : ''">
+                    <a href="javascript:void(0)" class="li-item favorites"></a>
                 </li>
-                <li class="liInfo">
-                    <a href="#" class="li-item info"></a>
+                <li class="liInfo" ng-class="isPage && currentPage == '' ? 'active' : ''">
+                    <a href="javascript:void(0)" class="li-item info"></a>
                 </li>
-                <li class="liContact">
-                    <a href="#" class="li-item contact"></a>
+                <li class="liContact" ng-class="isPage && currentPage == 'contact' ? 'active' : ''">
+                    <a href="#contact" class="li-item contact"></a>
                 </li>
-                <li class="liNews">
-                    <a href="#" class="li-item news"></a>
+                <li class="liNews" ng-class="isPage && currentPage == '24news' ? 'active' : ''">
+                    <a href="#/24news" class="li-item news"></a>
                 </li>
             </ul>
         </nav>
@@ -122,7 +122,9 @@
                     height: {{item_info_width - 100}}px !important;
                 }
 
-
+                .pageBlock .scroll-viewport, .pageBlock .bottom{
+                    height: {{item_info_width - 423}}px !important;
+                }
             </style>
             <style ng-if="set_map_width">
                 .filter_search_result.map, #gmaps{
@@ -132,7 +134,7 @@
                     width: {{set_map_width - 177}}px !important;
                 }
             </style>
-
+<!--
             <div style="display: none" class="openDiv imgNtext visionDiv">
                 <a href="#" class="back-btn"></a>
                 <div class="top">
@@ -152,7 +154,6 @@
                         </p>
                     </div>
                 </div>
-                <!--a class="gold-btn" href="#">Visit our website</a-->
             </div>
 
             <div style="display: none" class="openDiv imgNtext recommendedDiv">
@@ -275,21 +276,21 @@
                     </div>
                 </div>
             </div>
-
+-->
             <div ui-view></div>
 
             <objectblock></objectblock>
             <categoriesblock></categoriesblock>
             <categoryhover></categoryhover>
 
-            <div class="banner">
-                <span class="b-title">Dr. David Schwarz</span>
-                <p class="b-text">Dr. David Schwarz’s Chiropractic clinic provides numerous services that fit travelers such as treatment of lower back pain</p>
-                <div class="b-adress">
+            <div class="banner" ng-class="showHomeBanner ? 'collapsed' : ''" ng-show="showHomeBanner">
+                <span class="b-title">{{showHomeBanner.title}}</span>
+                <p class="b-text">{{showHomeBanner.content}}</p>
+                <div class="ng-hide b-adress">
                     <img src="images/icons/b-nav.png" />
                     <span>Tarsat 11 st. Tel-Aviv</span>
                 </div>
-                <a href="#" class="read-more">READ MORE</a>
+                <a ng-href="{{showHomeBanner.url}}" class="read-more">READ MORE</a>
                 <div class="clearfix"></div>
             </div>
         </div>

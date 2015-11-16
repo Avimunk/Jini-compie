@@ -72,9 +72,25 @@ function Config($stateProvider, $urlRouterProvider, $localStorageProvider) {
                 }]
             }
         })
+        .state('singlePage', {
+            cache: false,
+            url: '/{name:(?:about|contact|24news)}',
+            controller: 'SinglePageController',
+            templateUrl: 'templates/categories/8.html',
+            resolve: {
+                categories: ['CategoryService', '$stateParams', function(CategoryService, $stateParams){
+                    console.log('CALL: resolve.categories6')
+                    return CategoryService.getCategories($stateParams);
+                }],
+                setScope: ['$rootScope', '$state', '$stateParams', 'categories', 'setScopeService', function($rootScope, $state, $stateParams, categories, setScopeService){
+                    console.log('CALL: resolve.setScope6')
+                    return setScopeService.init($rootScope, $state, $stateParams, categories);
+                }]
+            }
+        })
         .state('object', {
             cache: true,
-            url: '/{id:[0-9][0-9]*}-{id2:[1-9][0-9]*}{map:(?:/map)?}/{title:.*}/{title2:.*}/{fromSearch:(?:fromSearch-.*)}',
+            url: '/{id:[0-9][0-9]*}-{id2:[1-9][0-9]*}{map:(?:/map)?}/{title:.*}/{title2:.*}/{fromSearch:(?:fromSearch-.*)?}',
             controller: 'CategoryController',
             templateUrl: 'templates/categories/8.html',
             resolve: {

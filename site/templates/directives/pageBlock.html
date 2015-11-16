@@ -1,0 +1,11 @@
+<div ng-if="pageBlock" ng-class="pageBlock ? 'collapsed' : ''" class="openDiv imgNtext visionDiv pageBlock">
+    <a href="#/" class="back-btn"></a>
+    <div class="top" ng-attr-style="{{pageContent.img ? 'background-image:url(/Jini3/images/'+ pageContent.img +')' : ''}}"></div>
+    <div class="bottom">
+        <div class="inner-b" scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;padding: 20px;">
+            <span class="inner-title">{{pageContent.title}}</span>
+            <p class="inner-text" ng-bind-html="pageContent.content | rawHtml"></p>
+        </div>
+    </div>
+    <!--a class="gold-btn" href="#">Visit our website</a-->
+</div>

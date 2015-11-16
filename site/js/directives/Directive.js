@@ -6,6 +6,13 @@ angular.module('JINI.directives', [])
             templateUrl: 'templates/directives/categoryHover.html',
         }
     })
+    .directive('pageBlock', function(){
+        return {
+            restrict: 'EA',
+            replace: true,
+            templateUrl: 'templates/directives/pageBlock.html',
+        }
+    })
     .directive('objectblock', function(){
         return {
             restrict: 'EA',
@@ -342,11 +349,21 @@ angular.module('JINI.directives', [])
     })
     .directive('fixInsideSize', ['$window', '$rootScope', function($window, $rootScope) {
         return function(scope, elem, attrs) {
-            $rootScope.item_info_width = elem[0].offsetHeight;
+
             angular.element($window).bind('resize', function() {
-                $rootScope.item_info_width = elem[0].offsetHeight;
+                var height = elem[0].offsetHeight;
+                if(height > 730)
+                    $rootScope.item_info_width = height;
+                else
+                    $rootScope.item_info_width = height + 53;
+
+                console.log($rootScope.item_info_width);
                 $rootScope.$digest();
             });
+
+            $rootScope.item_info_width = elem[0].offsetHeight;
+            $rootScope.$digest();
+            console.log($rootScope.item_info_width)
         }
     }])
 ;

@@ -1,4 +1,4 @@
-<div ng-show="showCategoryBlock" class="openDiv imgNtext visionDiv categoryHover">
+<div ng-show="showCategoryBlock" ng-class="showCategoryBlock ? 'collapsed' : ''" class="openDiv imgNtext visionDiv categoryHover">
     <a  ng-click="displayHandle.closeAll()" class="back-btn"></a>
     <div ng-if="sideCategory.img" class="top" ng-attr-style="{{sideCategory.img ? 'background-image: url(' + mediaUrl + sideCategory.img + ');' : ''}}">
     </div>

@@ -40,7 +40,11 @@
         }
 
         #menu .item .sector {
-            transition: all .5s linear;
+            transition: all .1s linear;
             fill: #fff;
             stroke: transparent;
+            opacity: 0.8;
+        }
+        #menu .item:hover .sector, #menu .item:focus .sector {
+            opacity: 0.6;
         }

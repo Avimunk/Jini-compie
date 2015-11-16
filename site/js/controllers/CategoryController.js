@@ -5,7 +5,7 @@ function CategoryController($rootScope, $scope, $stateParams, $state, $http) {
     console.log('CategoryControllerLoaded. ID:', $stateParams.id)
     console.log('CategoryController', $state.current)
     $scope.currentID = $stateParams.id;
-    $rootScope.keywords = null;
+    $rootScope.clearSearch();
 
     $rootScope.backUrl = false;
     switch($state.current.name)

@@ -1,5 +1,5 @@
 <div>
-    <div class="item_info" style="padding: 0 !important;overflow-y: initial;" ng-class="sideObject.content_image ? 'item_info_img' : ''" ng-if="showObjectBlock">
+    <div class="item_info {{showObjectBlock ? 'collapsed' : ''}}" ng-class="sideObject.content_image ? 'item_info_img' : ''" ng-show="showObjectBlock">
         <div scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 542px" >
             <div class="in-scroller-content">
                 <a ng-href="{{backUrl}}" ng-if="backUrl" class="back-t">Back to list view</a>

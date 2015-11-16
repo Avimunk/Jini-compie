@@ -1,7 +1,7 @@
 <div ng-show="showSearchBlock" class="search_results">
     <div class="top_strip">
-        <span ng-show="center_search_result.count" class="numOfRes"><span class="bold">{{center_search_result.count}}</span> Results for {{search}}</span>
-        <span ng-show="!center_search_result.count && keywords.length" class="numOfRes">No results for {{search}}</span>
+        <span ng-show="center_search_result.count" class="numOfRes"><span class="bold">{{center_search_result.count}}</span> Results for {{keywords}}</span>
+        <span ng-show="!center_search_result.count && keywords.length" class="numOfRes">No results for {{keywords}}</span>
         <span ng-show="!center_search_result.count && !keywords.length" class="numOfRes">Please type something to start</span>
         <div class="clearfix"></div>
     </div>

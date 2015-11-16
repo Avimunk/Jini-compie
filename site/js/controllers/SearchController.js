@@ -4,7 +4,8 @@ angular.module('JINI.controllers')
 function SearchController($scope, $rootScope, $stateParams, $state) {
     console.log('SearchControllerLoaded. ID:')
 
-    $rootScope.keywords = $scope.search = $stateParams.search;
+    $rootScope.displayHandle.closeAll()
+    $rootScope.keywords = $stateParams.search;
     $scope.currentID = $stateParams.id || 0;
 
     $rootScope.backUrl = false;

@@ -1,5 +1,5 @@
 <div>
-    <div ng-show="showCategorySearchBlock" class="filterResault">
+    <div ng-show="showCategorySearchBlock" ng-class="showCategorySearchBlock ? 'collapsed' : ''" class="filterResault">
         <span class="slogen">MAKING YOU <span>FEEL</span> LOCAL</span>
         <div class="frButtons">
             <a ng-click="showCategoriesSearchList()" ng-class="showCategoriesSearchBlockList ? 'active' : ''" class="filter-i"></a>
@@ -9,7 +9,7 @@
         </div>
     </div>
 
-    <div ng-show="showCategorySearchBlock && showCategoriesSearchBlockList" class="filter_search_result">
+    <div ng-class="showCategorySearchBlock && showCategoriesSearchBlockList ? 'collapsed' : ''" ng-show="showCategorySearchBlock && showCategoriesSearchBlockList" class="filter_search_result">
         <a ng-href="{{backUrl}}" ng-if="backUrl" class="back-btn"></a>
         <span class="ts-title">Search by categorie {{currentItem.title}}</span>
         <div class="results-list" scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 429px">
@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <div ng-if="showCategorySearchBlock && showCategoriesSearchBlockMap" class="filter_search_result map" style="width: 1178px;min-height: 955px;">
+    <div ng-class="showCategorySearchBlock && showCategoriesSearchBlockMap ? 'collapsed' : ''" ng-if="showCategorySearchBlock && showCategoriesSearchBlockMap" class="filter_search_result map" style="width: 1178px;min-height: 955px;">
         <a ng-href="{{backUrl}}" ng-if="backUrl" class="back-btn"></a>
         <div id="mapFrame">
             <category-map ng-if="showCategorySearchBlock"></category-map>

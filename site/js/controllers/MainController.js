@@ -13,6 +13,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
 
     var history = [];
     $rootScope.$on('$locationChangeSuccess', function() {
+        $rootScope.isPage = false;
         history.push($location.$$path);
     });
 
@@ -67,11 +68,19 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
     $rootScope.openItem = function(item, type){
         if(($state.current.name == 'search' || $state.current.name == 'searchInCategory') && type != 'object')
         {
+            console.log('in search page');
+            $rootScope.displayHandle.closeAll();
+            return false;
+        }
+        else if($state.current.name == 'singlePage' && type != 'object')
+        {
+            console.log('in single page');
             $rootScope.displayHandle.closeAll();
             return false;
         }
         else
         {
+            $rootScope.clearSearch();
             $rootScope.showCategorySearchBlock = $scope.showSearchBlock = $rootScope.top_search_result = $rootScope.center_search_result = $rootScope.category_search_result = false;
         }
 
@@ -84,8 +93,11 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         if(!Object.keys(item).length)
         {
             $rootScope.leftBlocksHandler.homePageView();
+            //$rootScope.displayHandle.closeAll();
             return;
         }
+
+        $rootScope.showHomeBanner = false;
 
         // all types:
         switch(item.type)
@@ -108,12 +120,19 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                 break;
         }
     }
-
+    $rootScope.a = [];
+    $rootScope.a.length = 50;
     $rootScope.leftBlocksHandler = {
         categoryHover: function(categoryData, fromParent)
         {
             if($state.current.name == 'search' || $state.current.name == 'searchInCategory')
             {
+                $rootScope.displayHandle.closeAll();
+                return false;
+            }
+            else if($state.current.name == 'singlePage')
+            {
+                console.log('in single page');
                 $rootScope.displayHandle.closeAll();
                 return false;
             }
@@ -136,8 +155,8 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         },
         homePageView: function()
         {
-            $rootScope.displayHandle.showCategoryOrHomePage();
-            $rootScope.showHomePageBlock();
+            $rootScope.displayHandle.closeAll();
+            $rootScope.showHomePageBanner();
         }
     }
 
@@ -169,11 +188,12 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         closeAll: function()
         {
             console.log('closeAll');
-            $rootScope.showCategoryBlock = $rootScope.showObjectBlock = $rootScope.showCategoriesBlock = false;
+            $rootScope.showHomeBanner = $rootScope.showCategoryBlock = $rootScope.showObjectBlock = $rootScope.showCategoriesBlock = false;
         }
     }
 
     $rootScope.showCategoryHover = function(categoryData){
+        $rootScope.showHomeBanner = false;
         var id = categoryData.id;
         if(sideCategoriesHover[id])
         {
@@ -227,18 +247,12 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
 
     }
 
-    $rootScope.showHomePageBlock = function() {
-        $rootScope.displayHandle.showCategoryOrHomePage();
-
-        if(sideCategoriesHover[0])
-            $rootScope.sideCategory = sideCategoriesHover[0]
-        else
-            $rootScope.sideCategory = sideCategoriesHover[0] = {
-                id:      '0',
-                title:   'Home page',
-                img:     false,
-                content: 'This is the home page example data!',
-            };
+    $rootScope.showHomePageBanner = function() {
+        $http.get('/Jini3/data/home/banner.json')
+            .then(function(response){
+                var items = response.data;
+                $rootScope.showHomeBanner = items[Math.floor(Math.random()*items.length)];
+            });
     }
 
     $rootScope.closeOnMouseover = function(){
@@ -284,9 +298,12 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
     };
     $rootScope.search = function(){
 
-            console.log($scope.keywords);
             if($state.current.name == 'search')
             {
+                if(timeout2)
+                    clearTimeout(timeout2);
+                if(timeout3)
+                    clearTimeout(timeout3);
                 if(interval1)
                 {
                     clearTimeout(timeout1);
@@ -296,7 +313,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                 timeout1 = setTimeout(function(){
 
                     interval1 = false;
-                    $rootScope.top_search_result = false;
+                    $rootScope.top_search_result = null;
 
                     if(searches.page[currentSearch])
                     {
@@ -317,6 +334,10 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             }
             else if($state.current.name == 'searchInCategory')
             {
+                if(timeout1)
+                    clearTimeout(timeout1);
+                if(timeout3)
+                    clearTimeout(timeout3);
                 if(interval2)
                 {
                     clearTimeout(timeout2);
@@ -344,6 +365,11 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             }
             else
             {
+                if(timeout1)
+                    clearTimeout(timeout1);
+                if(timeout2) {
+                    clearTimeout(timeout2);
+                }
                 if(interval3)
                 {
                     clearTimeout(timeout3);

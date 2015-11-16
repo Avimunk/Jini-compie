@@ -1,5 +1,5 @@
 <div>
-    <div ng-show="showCategoriesBlock" class="filterResault">
+    <div ng-show="showCategoriesBlock" ng-class="showCategoriesBlock ? 'collapsed' : ''" class="filterResault">
         <span class="slogen">MAKING YOU <span>FEEL</span> LOCAL</span>
         <div class="frButtons">
             <a ng-click="showCategoriesList()" ng-class="showCategoriesBlockList ? 'active' : ''" class="filter-i"></a>
@@ -9,7 +9,7 @@
         </div>
     </div>
 
-    <div ng-show="showCategoriesBlock && showCategoriesBlockList" class="filter_search_result">
+    <div ng-show="showCategoriesBlock && showCategoriesBlockList" ng-class="showCategoriesBlock && showCategoriesBlockList ? 'collapsed' : ''" class="filter_search_result">
         <a ng-click="displayHandle.closeAll()" class="back-btn"></a>
         <span class="ts-title">Search by categorie {{currentItem.title}}</span>
         <div class="results-list" scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 429px">
@@ -20,7 +20,7 @@
                         <span class="smi-title">{{v.title}}</span>
                         <p  ng-if="v.content" ng-bind-html="v.content | rawHtml" class="smi-text"></p>
                         <div class="more-info-div">
-                            <a class="more-info" ng-href="{{'#/' + currentItem.id + '-' + v.id + '/' + currentItem.title + '/' + v.name}}" ng-click="closeCategories()">
+                            <a class="more-info" ng-href="{{'#/' + currentItem.id + '-' + v.id + '/' + currentItem.title + '/' + v.name + '/'}}" ng-click="closeCategories()">
                                 <img class="crown-i" ng-if="v.promoted" src="images/icons/crown.png" />
                                 More Info
                             </a>
@@ -28,7 +28,7 @@
                     </div>
                     <div class="clearfix"></div>
                 </div>
-                <a href="#" class="view-map">
+                <a ng-href="{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/'}}" class="view-map">
                     <img src="images/icons/g-nav.png" />
                     <span>View on map</span>
                 </a>
@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <div ng-if="showCategoriesBlock && showCategoriesBlockMap" class="filter_search_result map" style="width: 1178px;min-height: 955px;">
+    <div ng-if="showCategoriesBlock && showCategoriesBlockMap" ng-class="showCategoriesBlock && showCategoriesBlockMap ? 'collapsed' : ''" class="filter_search_result map" style="width: 1178px;min-height: 955px;">
         <a ng-click="back()" class="back-btn"></a>
         <div id="mapFrame">
             <category-map ng-if="showCategoriesBlock"></category-map>

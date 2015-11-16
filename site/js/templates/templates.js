@@ -6,6 +6,8 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "<categories-search-block></categories-search-block>\r" +
     "\n" +
+    "<page-block></page-block>\r" +
+    "\n" +
     "\r" +
     "\n" +
     "<div id=\"svgContainer\" ng-attr-class=\"{{ showCategoriesBlock || showObjectBlock || showCategorySearchBlock ? 'closed' : ''}}\" ng-mouseover=\"closeOnMouseover()\">\r" +
@@ -65,7 +67,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
   $templateCache.put('templates/directives/categoriesBlock.html',
     "<div>\r" +
     "\n" +
-    "    <div ng-show=\"showCategoriesBlock\" class=\"filterResault\">\r" +
+    "    <div ng-show=\"showCategoriesBlock\" ng-class=\"showCategoriesBlock ? 'collapsed' : ''\" class=\"filterResault\">\r" +
     "\n" +
     "        <span class=\"slogen\">MAKING YOU <span>FEEL</span> LOCAL</span>\r" +
     "\n" +
@@ -85,7 +87,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "\r" +
     "\n" +
-    "    <div ng-show=\"showCategoriesBlock && showCategoriesBlockList\" class=\"filter_search_result\">\r" +
+    "    <div ng-show=\"showCategoriesBlock && showCategoriesBlockList\" ng-class=\"showCategoriesBlock && showCategoriesBlockList ? 'collapsed' : ''\" class=\"filter_search_result\">\r" +
     "\n" +
     "        <a ng-click=\"displayHandle.closeAll()\" class=\"back-btn\"></a>\r" +
     "\n" +
@@ -107,7 +109,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                        <div class=\"more-info-div\">\r" +
     "\n" +
-    "                            <a class=\"more-info\" ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/' + currentItem.title + '/' + v.name}}\" ng-click=\"closeCategories()\">\r" +
+    "                            <a class=\"more-info\" ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/' + currentItem.title + '/' + v.name + '/'}}\" ng-click=\"closeCategories()\">\r" +
     "\n" +
     "                                <img class=\"crown-i\" ng-if=\"v.promoted\" src=\"images/icons/crown.png\" />\r" +
     "\n" +
@@ -123,7 +125,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                </div>\r" +
     "\n" +
-    "                <a href=\"#\" class=\"view-map\">\r" +
+    "                <a ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/'}}\" class=\"view-map\">\r" +
     "\n" +
     "                    <img src=\"images/icons/g-nav.png\" />\r" +
     "\n" +
@@ -139,7 +141,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "\r" +
     "\n" +
-    "    <div ng-if=\"showCategoriesBlock && showCategoriesBlockMap\" class=\"filter_search_result map\" style=\"width: 1178px;min-height: 955px;\">\r" +
+    "    <div ng-if=\"showCategoriesBlock && showCategoriesBlockMap\" ng-class=\"showCategoriesBlock && showCategoriesBlockMap ? 'collapsed' : ''\" class=\"filter_search_result map\" style=\"width: 1178px;min-height: 955px;\">\r" +
     "\n" +
     "        <a ng-click=\"back()\" class=\"back-btn\"></a>\r" +
     "\n" +
@@ -158,7 +160,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
   $templateCache.put('templates/directives/categoriesBlockSearch.html',
     "<div>\r" +
     "\n" +
-    "    <div ng-show=\"showCategorySearchBlock\" class=\"filterResault\">\r" +
+    "    <div ng-show=\"showCategorySearchBlock\" ng-class=\"showCategorySearchBlock ? 'collapsed' : ''\" class=\"filterResault\">\r" +
     "\n" +
     "        <span class=\"slogen\">MAKING YOU <span>FEEL</span> LOCAL</span>\r" +
     "\n" +
@@ -178,7 +180,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "\r" +
     "\n" +
-    "    <div ng-show=\"showCategorySearchBlock && showCategoriesSearchBlockList\" class=\"filter_search_result\">\r" +
+    "    <div ng-class=\"showCategorySearchBlock && showCategoriesSearchBlockList ? 'collapsed' : ''\" ng-show=\"showCategorySearchBlock && showCategoriesSearchBlockList\" class=\"filter_search_result\">\r" +
     "\n" +
     "        <a ng-href=\"{{backUrl}}\" ng-if=\"backUrl\" class=\"back-btn\"></a>\r" +
     "\n" +
@@ -232,7 +234,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "\r" +
     "\n" +
-    "    <div ng-if=\"showCategorySearchBlock && showCategoriesSearchBlockMap\" class=\"filter_search_result map\" style=\"width: 1178px;min-height: 955px;\">\r" +
+    "    <div ng-class=\"showCategorySearchBlock && showCategoriesSearchBlockMap ? 'collapsed' : ''\" ng-if=\"showCategorySearchBlock && showCategoriesSearchBlockMap\" class=\"filter_search_result map\" style=\"width: 1178px;min-height: 955px;\">\r" +
     "\n" +
     "        <a ng-href=\"{{backUrl}}\" ng-if=\"backUrl\" class=\"back-btn\"></a>\r" +
     "\n" +
@@ -249,7 +251,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('templates/directives/categoryHover.html',
-    "<div ng-show=\"showCategoryBlock\" class=\"openDiv imgNtext visionDiv categoryHover\">\r" +
+    "<div ng-show=\"showCategoryBlock\" ng-class=\"showCategoryBlock ? 'collapsed' : ''\" class=\"openDiv imgNtext visionDiv categoryHover\">\r" +
     "\n" +
     "    <a  ng-click=\"displayHandle.closeAll()\" class=\"back-btn\"></a>\r" +
     "\n" +
@@ -278,7 +280,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
   $templateCache.put('templates/directives/objectBlock.html',
     "<div>\r" +
     "\n" +
-    "    <div class=\"item_info\" style=\"padding: 0 !important;overflow-y: initial;\" ng-class=\"sideObject.content_image ? 'item_info_img' : ''\" ng-if=\"showObjectBlock\">\r" +
+    "    <div class=\"item_info {{showObjectBlock ? 'collapsed' : ''}}\" ng-class=\"sideObject.content_image ? 'item_info_img' : ''\" ng-show=\"showObjectBlock\">\r" +
     "\n" +
     "        <div scrollbar=\"{autoUpdate: true,wheelSpeed : 20}\" style=\"max-height: 100%;width: 542px\" >\r" +
     "\n" +
@@ -465,14 +467,39 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
   );
 
 
+  $templateCache.put('templates/directives/pageBlock.html',
+    "<div ng-if=\"pageBlock\" ng-class=\"pageBlock ? 'collapsed' : ''\" class=\"openDiv imgNtext visionDiv pageBlock\">\r" +
+    "\n" +
+    "    <a href=\"#/\" class=\"back-btn\"></a>\r" +
+    "\n" +
+    "    <div class=\"top\" ng-attr-style=\"{{pageContent.img ? 'background-image:url(/Jini3/images/'+ pageContent.img +')' : ''}}\"></div>\r" +
+    "\n" +
+    "    <div class=\"bottom\">\r" +
+    "\n" +
+    "        <div class=\"inner-b\" scrollbar=\"{autoUpdate: true,wheelSpeed : 20}\" style=\"max-height: 100%;padding: 20px;\">\r" +
+    "\n" +
+    "            <span class=\"inner-title\">{{pageContent.title}}</span>\r" +
+    "\n" +
+    "            <p class=\"inner-text\" ng-bind-html=\"pageContent.content | rawHtml\"></p>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "    </div>\r" +
+    "\n" +
+    "    <!--a class=\"gold-btn\" href=\"#\">Visit our website</a-->\r" +
+    "\n" +
+    "</div>"
+  );
+
+
   $templateCache.put('templates/directives/searchBlock.html',
     "<div ng-show=\"showSearchBlock\" class=\"search_results\">\r" +
     "\n" +
     "    <div class=\"top_strip\">\r" +
     "\n" +
-    "        <span ng-show=\"center_search_result.count\" class=\"numOfRes\"><span class=\"bold\">{{center_search_result.count}}</span> Results for {{search}}</span>\r" +
+    "        <span ng-show=\"center_search_result.count\" class=\"numOfRes\"><span class=\"bold\">{{center_search_result.count}}</span> Results for {{keywords}}</span>\r" +
     "\n" +
-    "        <span ng-show=\"!center_search_result.count && keywords.length\" class=\"numOfRes\">No results for {{search}}</span>\r" +
+    "        <span ng-show=\"!center_search_result.count && keywords.length\" class=\"numOfRes\">No results for {{keywords}}</span>\r" +
     "\n" +
     "        <span ng-show=\"!center_search_result.count && !keywords.length\" class=\"numOfRes\">Please type something to start</span>\r" +
     "\n" +
