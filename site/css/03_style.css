@@ -217,6 +217,10 @@ header{
 						font-weight: 400;
 						padding:11px 3px;
 					}
+						.search_autoComplete .sa-list li.current{
+							color: red;
+							background: gold;
+						}
 						.search_autoComplete .sa-list li a{
 							text-decoration: none;
 							font-size: 18px;
@@ -377,17 +381,24 @@ header{
 					    margin: auto;
 					}
 		/* CONTACT US SEC */
+			.contactUs.collapsed{
+				width: 535px;
+			}
 			.contactUs{
-				display: none;
 				position: relative;
-				overflow-y: scroll; 
 				left: 0;
     			top: 0;
-				width: 535px;
+				width: 0;
 				height: 100%;
 				background: rgba(255, 255, 255, 0.9);
-				padding: 95px 55px 0;
+				transition: all .3s;
+				-moz-transition: all .3s;
+				-webkit-transition: all .3s;
+				overflow: hidden;
 			}
+				.contactUs > div{
+					padding: 95px 55px 0;
+				}
 				.contactUs .inner-text{
 					margin-bottom: 35px;
 				}
@@ -1250,4 +1261,16 @@ header{
 			font-size: 18px;
 			font-family: Roboto,sans-serif;
 			line-height: 20px;
+		}
+
+
+		/* Temporary */
+		.closeSearchBtn {
+			display: inline-block;
+			font-size: 30px;
+			position: absolute;
+			right: 50px;
+			top: 6px;
+			color: white;
+			cursor: pointer;
 		}

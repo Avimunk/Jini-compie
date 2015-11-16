@@ -45,13 +45,14 @@
                 <a href="#/" class="logo"><img src="images/logo.png" /></a>
                 <form>
                     <input enter-submit ng-keyup="changeUrl()" ng-model="keywords" type="text" />
+                    <div ng-show="keywords" ng-click="closeSearchBtn()" class="closeSearchBtn">x</div>
                     <input type="submit" ng-click="changeUrl(true)"  value="" />
+
                     <div style="overflow-y: initial;height: 250px;max-height: 250px;" ng-show="top_search_result.length > 0" class="search_autoComplete ">
                         <div style="max-height:100%;height:250px" scrollbar="{autoUpdate: true,wheelSpeed : 20}">
                             <ul class="sa-list">
-                                <li ng-repeat="v in top_search_result" ng-click="clearSearch()">
-                                    <a ng-bind-html="v.title | highlight:keywords" ng-href="{{ v.type == 'category' ? ('#/' + v.id + '/' + v.name) : ('#/' + v.category['id'] + '-' + v.id + '/' + v.category['name'] + '/' + v.name + '/')}}">
-                                    </a>
+                                <li ng-repeat="v in top_search_result" ng-class="$index + 1 == top_search_position ? 'current' : ''" ng-click="clearSearch()">
+                                    <a ng-bind-html="v.title | highlight:keywords" ng-href="{{ v.type == 'category' ? ('#/' + v.id + '/' + v.name) : ('#/' + v.category['id'] + '-' + v.id + '/' + v.category['name'] + '/' + v.name + '/')}}"></a>
                                 </li>
                             </ul>
                         </div>

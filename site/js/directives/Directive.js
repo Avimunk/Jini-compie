@@ -252,10 +252,10 @@ angular.module('JINI.directives', [])
                 marker.info = info;
 
                 markers.push(marker); // add marker to array
-
                 infoBubble = new InfoBubble({
                     map: map,
                     content: marker.info,
+                    position: new google.maps.LatLng(parseFloat(scope.sideObject.address_location_g) + 0.035, scope.sideObject.address_location_k),
 
                     padding: 0,
                     backgroundColor: 'white',
@@ -276,7 +276,7 @@ angular.module('JINI.directives', [])
                     shadowStyle: 0,
                     closeSrc: '/Jini3/images/icons/close-white-bg.png',
                 });
-                infoBubble.open(map, marker);
+                infoBubble.open(map);
 
                 google.maps.event.addListener(marker, 'click', function() {
                     infoBubble.open(map, marker);
@@ -327,14 +327,46 @@ angular.module('JINI.directives', [])
             link: link
         };
     }])
-    .directive('enterSubmit', ['$location', function ($location) {
+    .directive('enterSubmit', ['$location', '$rootScope', function ($location, $rootScope) {
         return {
             restrict: 'A',
             link: function (scope, elem, attrs) {
                 elem.bind('keydown', function(event) {
                     var code = event.keyCode || event.which;
                     if (code === 13) {
+                        if($rootScope.top_search_position && $rootScope.top_search_result.length)
+                        {
+                            item = $rootScope.top_search_result[$rootScope.top_search_position + 1];
+                            console.log(item)
+                            if(item)
+                            {
+                                var location = item.type == 'category' ? ('#/' + item.id + '/' + item.name) : ('#/' + item.category['id'] + '-' + item.id + '/' + item.category['name'] + '/' + item.name + '/')
+                                $location.path(location);
+                                return false;
+                            }
+                        }
                         $location.path('/search/' + elem.val());
+                    }
+
+                    if(!$rootScope.top_search_position)
+                        $rootScope.top_search_position = 0;
+
+                    var searchResults = $rootScope.top_search_result.length;
+                    if(searchResults){
+                        if (code === 38) { // Up
+                            console.log('upkey', searchResults, $rootScope.top_search_position)
+                            if($rootScope.top_search_position <= 0)
+                                return false;
+
+                            $rootScope.top_search_position = $rootScope.top_search_position - 1;
+                        }
+                        if (code === 40) { // Down
+                            console.log('downkey', searchResults, $rootScope.top_search_position)
+                            if($rootScope.top_search_position >= searchResults)
+                                return false;
+
+                            $rootScope.top_search_position = $rootScope.top_search_position + 1;
+                        }
                     }
                 });
             }

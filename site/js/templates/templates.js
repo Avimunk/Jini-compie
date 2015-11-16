@@ -468,25 +468,83 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('templates/directives/pageBlock.html',
-    "<div ng-if=\"pageBlock\" ng-class=\"pageBlock ? 'collapsed' : ''\" class=\"openDiv imgNtext visionDiv pageBlock\">\r" +
+    "<div ng-if=\"pageBlock\" class=\"pageBlock\">\r" +
     "\n" +
-    "    <a href=\"#/\" class=\"back-btn\"></a>\r" +
+    "    <div ng-switch=\"currentPage\">\r" +
     "\n" +
-    "    <div class=\"top\" ng-attr-style=\"{{pageContent.img ? 'background-image:url(/Jini3/images/'+ pageContent.img +')' : ''}}\"></div>\r" +
+    "        <div ng-switch-when=\"contact\" ng-class=\"pageBlock && currentPage == 'contact' ? 'collapsed' : ''\" class=\"contactUs\">\r" +
     "\n" +
-    "    <div class=\"bottom\">\r" +
+    "            <div>\r" +
     "\n" +
-    "        <div class=\"inner-b\" scrollbar=\"{autoUpdate: true,wheelSpeed : 20}\" style=\"max-height: 100%;padding: 20px;\">\r" +
+    "                <a href=\"#\" class=\"back-btn black-b\"></a>\r" +
     "\n" +
-    "            <span class=\"inner-title\">{{pageContent.title}}</span>\r" +
+    "                <span class=\"inner-title\">Contact Us</span>\r" +
     "\n" +
-    "            <p class=\"inner-text\" ng-bind-html=\"pageContent.content | rawHtml\"></p>\r" +
+    "                <p class=\"inner-text\">\r" +
+    "\n" +
+    "                    We know it is not so easy living in our beautiful land, especially when you are from a the corner.\r" +
+    "\n" +
+    "                </p>\r" +
+    "\n" +
+    "                <form class=\"c-error\">\r" +
+    "\n" +
+    "                    <input type=\"text\" placeholder=\"Name\" name=\"Name\"/>\r" +
+    "\n" +
+    "                    <span class=\"error-txt\">Must enter name</span>\r" +
+    "\n" +
+    "                    <input type=\"text\" placeholder=\"Phone\" name=\"Phone\"/>\r" +
+    "\n" +
+    "                    <span class=\"error-txt\">error</span>\r" +
+    "\n" +
+    "                    <input type=\"text\" placeholder=\"E-mail\" name=\"E-mail\"/>\r" +
+    "\n" +
+    "                    <span class=\"error-txt\">error</span>\r" +
+    "\n" +
+    "                    <select>\r" +
+    "\n" +
+    "                        <option>Contact about</option>\r" +
+    "\n" +
+    "                        <option>Contact about</option>\r" +
+    "\n" +
+    "                        <option>Contact about</option>\r" +
+    "\n" +
+    "                    </select>\r" +
+    "\n" +
+    "                    <span class=\"error-txt\">error</span>\r" +
+    "\n" +
+    "                    <textarea placeholder=\"Message\"></textarea>\r" +
+    "\n" +
+    "                    <span class=\"error-txt\">error</span>\r" +
+    "\n" +
+    "                    <input type=\"submit\" class=\"gold-btn\" value=\"SEND\" />\r" +
+    "\n" +
+    "                </form>\r" +
+    "\n" +
+    "            </div>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "        <div ng-switch-default ng-class=\"pageBlock ? 'collapsed' : ''\" class=\"imgNtext visionDiv\">\r" +
+    "\n" +
+    "            <a href=\"#/\" class=\"back-btn\"></a>\r" +
+    "\n" +
+    "            <div class=\"top\" ng-attr-style=\"{{pageContent.img ? 'background-image:url(/Jini3/images/'+ pageContent.img +')' : ''}}\"></div>\r" +
+    "\n" +
+    "            <div class=\"bottom\">\r" +
+    "\n" +
+    "                <div class=\"inner-b\" scrollbar=\"{autoUpdate: true,wheelSpeed : 20}\" style=\"max-height: 100%;padding: 20px;\">\r" +
+    "\n" +
+    "                    <span class=\"inner-title\">{{pageContent.title}}</span>\r" +
+    "\n" +
+    "                    <p class=\"inner-text\" ng-bind-html=\"pageContent.content | rawHtml\"></p>\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
+    "            </div>\r" +
     "\n" +
     "        </div>\r" +
     "\n" +
     "    </div>\r" +
-    "\n" +
-    "    <!--a class=\"gold-btn\" href=\"#\">Visit our website</a-->\r" +
     "\n" +
     "</div>"
   );

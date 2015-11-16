@@ -14,15 +14,18 @@ function SinglePageController($rootScope, $scope, $stateParams, $state, $http) {
     $rootScope.currentPage = pageName;
 
     var pages = {};
-    if(pages[pageName])
+    if(pageName != 'contact')
     {
-        $scope.pageContent = pages[pageName];
-    }
-    else
-    {
-        $http.get('/Jini3/data/pages/' + pageName + '.json')
-            .then(function(response){
-                $scope.pageContent = pages[pageName] = response.data;
-            });
+        if(pages[pageName])
+        {
+            $scope.pageContent = pages[pageName];
+        }
+        else
+        {
+            $http.get('/Jini3/data/pages/' + pageName + '.json')
+                .then(function(response){
+                    $scope.pageContent = pages[pageName] = response.data;
+                });
+        }
     }
 };

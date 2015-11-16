@@ -1,11 +1,40 @@
-<div ng-if="pageBlock" ng-class="pageBlock ? 'collapsed' : ''" class="openDiv imgNtext visionDiv pageBlock">
-    <a href="#/" class="back-btn"></a>
-    <div class="top" ng-attr-style="{{pageContent.img ? 'background-image:url(/Jini3/images/'+ pageContent.img +')' : ''}}"></div>
-    <div class="bottom">
-        <div class="inner-b" scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;padding: 20px;">
-            <span class="inner-title">{{pageContent.title}}</span>
-            <p class="inner-text" ng-bind-html="pageContent.content | rawHtml"></p>
+<div ng-if="pageBlock" class="pageBlock">
+    <div ng-switch="currentPage">
+        <div ng-switch-when="contact" ng-class="pageBlock && currentPage == 'contact' ? 'collapsed' : ''" class="contactUs">
+            <div>
+                <a href="#" class="back-btn black-b"></a>
+                <span class="inner-title">Contact Us</span>
+                <p class="inner-text">
+                    We know it is not so easy living in our beautiful land, especially when you are from a the corner.
+                </p>
+                <form class="c-error">
+                    <input type="text" placeholder="Name" name="Name"/>
+                    <span class="error-txt">Must enter name</span>
+                    <input type="text" placeholder="Phone" name="Phone"/>
+                    <span class="error-txt">error</span>
+                    <input type="text" placeholder="E-mail" name="E-mail"/>
+                    <span class="error-txt">error</span>
+                    <select>
+                        <option>Contact about</option>
+                        <option>Contact about</option>
+                        <option>Contact about</option>
+                    </select>
+                    <span class="error-txt">error</span>
+                    <textarea placeholder="Message"></textarea>
+                    <span class="error-txt">error</span>
+                    <input type="submit" class="gold-btn" value="SEND" />
+                </form>
+            </div>
+        </div>
+        <div ng-switch-default ng-class="pageBlock ? 'collapsed' : ''" class="imgNtext visionDiv">
+            <a href="#/" class="back-btn"></a>
+            <div class="top" ng-attr-style="{{pageContent.img ? 'background-image:url(/Jini3/images/'+ pageContent.img +')' : ''}}"></div>
+            <div class="bottom">
+                <div class="inner-b" scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;padding: 20px;">
+                    <span class="inner-title">{{pageContent.title}}</span>
+                    <p class="inner-text" ng-bind-html="pageContent.content | rawHtml"></p>
+                </div>
+            </div>
         </div>
     </div>
-    <!--a class="gold-btn" href="#">Visit our website</a-->
 </div>

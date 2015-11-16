@@ -296,6 +296,10 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         page: [],
         regular: [],
     };
+    $rootScope.top_search_result = false;
+    $rootScope.center_search_result = false;
+    $rootScope.category_search_result = false;
+
     $rootScope.search = function(){
 
             if($state.current.name == 'search')
@@ -396,6 +400,27 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
     $rootScope.clearSearch = function(){
         $scope.keywords = null;
         $rootScope.top_search_result = false;
+    }
+    $rootScope.closeSearchBtn = function(){
+        if($rootScope.top_search_result && $rootScope.top_search_result.length)
+        {
+            console.log('here1!');
+            $rootScope.clearSearch();
+            return false;
+        }
+
+        if($rootScope.center_search_result && $rootScope.center_search_result.count)
+        {
+            console.log('here2!');
+            $rootScope.back();
+        }
+        console.log($rootScope.category_search_result)
+        if($rootScope.category_search_result)
+        {
+            console.log('here3!');
+            console.log('center_search_result', ('#/' + $state.params.id + '/' + encodeURI($state.params.title)));
+            $location.path('/' + $state.params.id + '/' + encodeURI($state.params.title));
+        }
     }
 
     $rootScope.changeUrl = function(isButtonClick){
