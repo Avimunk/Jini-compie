@@ -46,14 +46,14 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         $rootScope.setMapWidth(true);
     });
 
-    $rootScope.centerImage = '../img/no_selector.png';
+    $rootScope.centerImage = '../img/menu-logo.png';
 
     $rootScope.imageOn = function(e){
         $rootScope.centerImage = e.featuredImageUrl;
     };
 
     $rootScope.imageOff = function(){
-        $rootScope.centerImage = '../img/no_selector.png';
+        $rootScope.centerImage = '../img/menu-logo.png';
     };
 
     var sideCategoriesHover = [];
@@ -136,19 +136,36 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                 $rootScope.displayHandle.closeAll();
                 return false;
             }
+
             if(typeof fromParent == 'undefined' && justOpened)return false;
+
+            if(mapTimeout)
+                clearTimeout(mapTimeout);
+
             $rootScope.displayHandle.showCategoryOrHomePage();
             $rootScope.showCategoryHover(categoryData);
 
         },
         categoryList: function(categoryData)
         {
+            if($rootScope.showCategoriesBlockMap)
+            {
+                //$rootScope.set_map_width = 999;
+                $rootScope.setMapWidth();
+            }
+
             $rootScope.displayHandle.showCategoryList();
             $rootScope.showCategoryList(categoryData);
 
         },
         objectView: function(objectData)
         {
+            if($rootScope.showCategoriesBlockMap)
+            {
+                //$rootScope.set_map_width = 999;
+                $rootScope.setMapWidth();
+            }
+
             $rootScope.displayHandle.showObject();
             $rootScope.showObject(objectData);
 
@@ -164,8 +181,8 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         showCategoryOrHomePage: function()
         {
             console.log('showCategoryOrHomePage');
-            $rootScope.showCategoriesBlock  = false;
             $rootScope.showCategoryBlock    = true;
+            $rootScope.showCategoriesBlock  = false;
             $rootScope.showObjectBlock      = false;
         },
         showCategoryList: function()
@@ -193,6 +210,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
     }
 
     $rootScope.showCategoryHover = function(categoryData){
+
         $rootScope.showHomeBanner = false;
         var id = categoryData.id;
         if(sideCategoriesHover[id])
@@ -255,12 +273,46 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             });
     }
 
+    var mapTimeout = false;
     $rootScope.closeOnMouseover = function(){
         if(justOpened)
             return false;
 
-        if($rootScope.showCategoriesBlock || $rootScope.showObjectBlock)
-            $rootScope.displayHandle.closeAll();
+        if($rootScope.showCategoriesBlock)
+        {
+            if($rootScope.showCategoriesBlockMap)
+            {
+                $rootScope.set_map_width = 0;
+                mapTimeout = setTimeout(function(){
+                    console.log('timeout!');
+                    $rootScope.displayHandle.closeAll();
+                    $rootScope.$digest();
+                },300);
+
+            }
+            else
+            {
+                $rootScope.displayHandle.closeAll();
+            }
+        }
+        else if($rootScope.showObjectBlock)
+        {
+            if($rootScope.showObjectBlockMap)
+            {
+                $rootScope.set_map_width = 0;
+                mapTimeout = setTimeout(function(){
+                    console.log('timeout!');
+                    $rootScope.displayHandle.closeAll();
+                    $rootScope.$digest();
+                },300);
+
+            }
+        else
+            {
+                $rootScope.displayHandle.closeAll();
+            }
+        }
+
     }
 
     $rootScope.showCategoriesMap = function(){
@@ -296,6 +348,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         page: [],
         regular: [],
     };
+    $rootScope.keywords = {};
     $rootScope.top_search_result = false;
     $rootScope.center_search_result = false;
     $rootScope.category_search_result = false;
@@ -312,12 +365,12 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                 {
                     clearTimeout(timeout1);
                 }
-                var currentSearch = $rootScope.keywords;
+                var currentSearch = $rootScope.keywords.keywords;
                 interval1 = true;
                 timeout1 = setTimeout(function(){
 
                     interval1 = false;
-                    $rootScope.top_search_result = null;
+                    $rootScope.center_search_result = $rootScope.top_search_result = null;
 
                     if(searches.page[currentSearch])
                     {
@@ -352,15 +405,15 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                     interval2 = false;
                     $rootScope.top_search_result = $rootScope.center_search_result = false;
 
-                    if(searches.page[$scope.keywords + '|' + $state.params.id])
+                    if(searches.page[$rootScope.keywords.keywords + '|' + $state.params.id])
                     {
-                        $rootScope.category_search_result = searches.page[$scope.keywords + '|' + $state.params.id];
+                        $rootScope.category_search_result = searches.page[$rootScope.keywords.keywords + '|' + $state.params.id];
                         if(!$rootScope.$$phase) $rootScope.$digest();
                     }
                     else
                     {
-                        $http.get(centerSearchUrl + $scope.keywords + '&categoryid=' + $state.params.id).then(function(resp){
-                            searches.page[$scope.keywords + '|' + $state.params.id] = $rootScope.category_search_result = resp.data;
+                        $http.get(centerSearchUrl + $rootScope.keywords.keywords + '&categoryid=' + $state.params.id).then(function(resp){
+                            searches.page[$rootScope.keywords.keywords + '|' + $state.params.id] = $rootScope.category_search_result = resp.data;
                             if(!$rootScope.$$phase) $rootScope.$digest();
                         });
                     }
@@ -369,6 +422,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             }
             else
             {
+                //console.log($rootScope.keywords.keywords);
                 if(timeout1)
                     clearTimeout(timeout1);
                 if(timeout2) {
@@ -381,15 +435,15 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                 interval3 = true;
                 timeout3 = setTimeout(function(){
                     interval3 = false;
-                    if(searches.regular[$scope.keywords])
+                    if(searches.regular[$rootScope.keywords.keywords])
                     {
-                        $rootScope.top_search_result = searches.regular[$scope.keywords];
+                        $rootScope.top_search_result = searches.regular[$rootScope.keywords.keywords];
                         if(!$rootScope.$$phase) $rootScope.$digest();
                     }
                     else
                     {
-                        $http.get(topSearchUrl + $scope.keywords).then(function(resp){
-                            searches.regular[$scope.keywords] = $rootScope.top_search_result = resp.data;
+                        $http.get(topSearchUrl + $rootScope.keywords.keywords).then(function(resp){
+                            searches.regular[$rootScope.keywords.keywords] = $rootScope.top_search_result = resp.data;
                             if(!$rootScope.$$phase) $rootScope.$digest();
                         });
                     }
@@ -398,7 +452,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         return false;
     }
     $rootScope.clearSearch = function(){
-        $scope.keywords = null;
+        $rootScope.keywords.keywords = null;
         $rootScope.top_search_result = false;
     }
     $rootScope.closeSearchBtn = function(){
@@ -414,39 +468,44 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             console.log('here2!');
             $rootScope.back();
         }
-        console.log($rootScope.category_search_result)
+
         if($rootScope.category_search_result)
         {
             console.log('here3!');
             console.log('center_search_result', ('#/' + $state.params.id + '/' + encodeURI($state.params.title)));
             $location.path('/' + $state.params.id + '/' + encodeURI($state.params.title));
         }
+
+        $rootScope.clearSearch();
+        setTimeout(function(){
+            $rootScope.clearSearch();
+        },300);
     }
 
     $rootScope.changeUrl = function(isButtonClick){
         if($state.current.name == 'search')
         {
-            if($scope.keywords.length >= 1)
+            if($rootScope.keywords.keywords.length >= 1)
             {
-                $location.path('/search/' + $scope.keywords)
+                $location.path('/search/' + $rootScope.keywords.keywords)
             }
 
         }
         else if($state.current.name == 'searchInCategory')
         {
             console.log('changeUrl -> searchInCategory',$state.params)
-            if($scope.keywords.length >= 1)
+            if($rootScope.keywords.keywords.length >= 1)
             {
                 if($state.params.map)
-                    $location.path('/' + $state.params.id + '/' + $state.params.title + '/search/map/' + $scope.keywords)
+                    $location.path('/' + $state.params.id + '/' + $state.params.title + '/search/map/' + $rootScope.keywords.keywords)
                 else
-                    $location.path('/' + $state.params.id + '/' + $state.params.title + '/search/' + $scope.keywords)
+                    $location.path('/' + $state.params.id + '/' + $state.params.title + '/search/' + $rootScope.keywords.keywords)
             }
         }
         else
         {
             if(isButtonClick)
-                $location.path('/search/' + $scope.keywords);
+                $location.path('/search/' + $rootScope.keywords.keywords);
             else
                 $rootScope.search();
         }
@@ -461,7 +520,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         if($rootScope.showCategoriesSearchBlockMap)
             return true;
 
-        $location.path('/' + $state.params.id + '/' + $state.params.title + '/search/map/' + $scope.keywords)
+        $location.path('/' + $state.params.id + '/' + $state.params.title + '/search/map/' + $rootScope.keywords.keywords)
 
         //$rootScope.showCategoriesSearchBlockList = false;
         //$rootScope.showCategoriesSearchBlockMap  = true;
@@ -474,7 +533,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         if($rootScope.showCategoriesSearchBlockList)
             return true;
 
-        $location.path('/' + $state.params.id + '/' + $state.params.title + '/search/' + $scope.keywords);
+        $location.path('/' + $state.params.id + '/' + $state.params.title + '/search/' + $rootScope.keywords.keywords);
 
         //$rootScope.showCategoriesSearchBlockList = true;
         //$rootScope.showCategoriesSearchBlockMap  = false;

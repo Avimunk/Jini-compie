@@ -1,0 +1,24 @@
+{
+  "title"   : "Recommended",
+  "subTitle": "Votre liste des favoris, pour ne rien oublier de vos envies.",
+  "items"   : [
+    {
+      "img"     : "recommended-medecin.jpg",
+      "title"   : "Medecins",
+      "content" : "JINI a trouvé pour vous tous les docteurs francophones en Israël",
+      "url"     : "#/145/m%C3%A9decin"
+    },
+    {
+      "img"     : "recommended-bar.jpg",
+      "title"   : "Bars",
+      "content" : "Rendez-vous dans la rubrique Sortir pour connaitre les bars les plus tendance d’Israël",
+      "url"     : "#/168/bars"
+    },
+    {
+      "img"     : false,
+      "title"   : "Assurance",
+      "content" : "Rejoignez le Club JINI pour obtenir les meilleurs prix concernant les assurances.",
+      "url"     : "#/4909/assurance"
+    }
+  ]
+}

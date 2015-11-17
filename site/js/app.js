@@ -74,7 +74,7 @@ function Config($stateProvider, $urlRouterProvider, $localStorageProvider) {
         })
         .state('singlePage', {
             cache: false,
-            url: '/{name:(?:about|contact|24news)}',
+            url: '/{name:(?:vision|recommended|info|contact|24news)}',
             controller: 'SinglePageController',
             templateUrl: 'templates/categories/8.html',
             resolve: {
@@ -126,8 +126,9 @@ function Config($stateProvider, $urlRouterProvider, $localStorageProvider) {
                 }],
                 setScope: ['$rootScope', '$state', '$stateParams', 'categories', 'setScopeService', function($rootScope, $state, $stateParams, categories, setScopeService){
                     console.log('CALL: resolve.setScope4')
+                    $rootScope.allBreadCrumbs = categories.breadcrumbs;
                     return setScopeService.init($rootScope, $state, $stateParams, categories);
-                }],
+                }]
             }
         })
     ;

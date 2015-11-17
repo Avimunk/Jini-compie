@@ -39,8 +39,31 @@ function setScopeService(){
             else if(currentParent.length <= 1)
                 $rootScope.parentID = 0;
             else
-                $rootScope.parentID = currentParent[currentParent.length - 2];
-
+            {
+                itemParents = categories.breadcrumbs[id];
+                if(itemParents.length < 2)
+                {
+                    $rootScope.parentID = 0;
+                }
+                else
+                {
+                    if(itemParents[itemParents.length - 1].hasItems)
+                    {
+                        $rootScope.parentID = itemParents[itemParents.length - 2];
+                    }
+                    else
+                    {
+                        if(itemParents.length == 2)
+                        {
+                            $rootScope.parentID = 0;
+                        }
+                        else
+                        {
+                            $rootScope.parentID = itemParents[itemParents.length - 3];
+                        }
+                    }
+                }
+            }
             $rootScope.currentCategories = splitCurrentCategoriesTitle($rootScope.currentCategories);
 
             return true;
@@ -420,83 +443,6 @@ function pie() {
         },
     };
 }
-
-/*
-function messages($http, $state) {
-    var messages = {};
-
-    messages.parents = [];
-    messages.breadcrumbs = [];
-    messages.categories = [];
-    messages.currentCategories = [];
-
-    messages.getCurrentBreadCrumbs = function($scope, id){
-        $scope.currentBreadCrumbs = messages.breadcrumbs[id];
-    }
-    messages.add = function($scope, id){
-        messages.isFirst = $scope.isFirst = false;
-
-        if(id === undefined)
-            id = 0;
-
-        if(messages.categories.length && typeof messages.parents[id] == 'undefined')
-            $state.go('home')
-
-        if(messages.categories.length)
-        {
-            var currentParent = messages.parents[id];
-            $scope.currentCategories = messages.currentCategories = getCategoriesByParentArray(messages.categories, currentParent.slice());
-
-            if(currentParent.length == 0)
-                $scope.parentID = null;
-            else if(currentParent.length <= 1)
-                $scope.parentID = 0;
-            else
-                $scope.parentID = currentParent[currentParent.length - 2];
-
-            $scope.currentCategories = splitCurrentCategoriesTitle($scope.currentCategories);
-
-            // Set the breadcrumbs:
-                messages.getCurrentBreadCrumbs($scope, id);
-            console.log($scope.currentCategories)
-        }
-        else
-        {
-            messages.isFirst = $scope.isFirst = true;
-            $http.get("/Jini3/public/categories/"+id+"/categories")
-                .success(function(response) {
-                    $scope.categories = messages.categories = response.categories;
-                    $scope.parents = messages.parents = response.parents;
-                    $scope.breadcrumbs = messages.breadcrumbs = response.breadcrumbs;
-
-                    if(typeof response.parents == 'undefined' || typeof response.parents[id] == 'undefined')
-                        $state.go('home')
-
-                    var currentParent = response.parents[id];
-
-                    $scope.currentCategories = messages.currentCategories = getCategoriesByParentArray(messages.categories, currentParent.slice());
-
-                    if(currentParent.length == 0)
-                        $scope.parentID = null;
-                    else if(currentParent.length <= 1)
-                        $scope.parentID = 0;
-                    else
-                        $scope.parentID = currentParent[currentParent.length - 2];
-
-                    $scope.currentCategories = splitCurrentCategoriesTitle($scope.currentCategories);
-                    console.log($scope.currentCategories)
-
-                    // Set the breadcrumbs:
-                        messages.getCurrentBreadCrumbs($scope, id);
-
-                });
-        }
-
-    };
-
-    return messages;
-}
-*/
 
 function split2s(str, delim) {
     var p=str.indexOf(delim);

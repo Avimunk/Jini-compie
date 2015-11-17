@@ -35,6 +35,7 @@
     <script src="lib/helpers/infobubble-compiled.js"></script>
 </head>
     <body ng-app="JINI" ng-controller="MainController">
+
         <div class="site-bg">
             <!--iframe autoplay src="http://www.youtube.com/embed/W7qWa52k-nE?rel=0&autoplay=1"
        width="100%" height="100%" frameborder="0" allowfullscreen></iframe-->
@@ -44,15 +45,15 @@
             <div class="left">
                 <a href="#/" class="logo"><img src="images/logo.png" /></a>
                 <form>
-                    <input enter-submit ng-keyup="changeUrl()" ng-model="keywords" type="text" />
-                    <div ng-show="keywords" ng-click="closeSearchBtn()" class="closeSearchBtn">x</div>
+                    <input enter-submit ng-keyup="changeUrl()" ng-model="keywords.keywords" type="text" />
+                    <div ng-show="keywords.keywords" ng-click="closeSearchBtn()" class="search-close"></div>
                     <input type="submit" ng-click="changeUrl(true)"  value="" />
 
                     <div style="overflow-y: initial;height: 250px;max-height: 250px;" ng-show="top_search_result.length > 0" class="search_autoComplete ">
                         <div style="max-height:100%;height:250px" scrollbar="{autoUpdate: true,wheelSpeed : 20}">
                             <ul class="sa-list">
                                 <li ng-repeat="v in top_search_result" ng-class="$index + 1 == top_search_position ? 'current' : ''" ng-click="clearSearch()">
-                                    <a ng-bind-html="v.title | highlight:keywords" ng-href="{{ v.type == 'category' ? ('#/' + v.id + '/' + v.name) : ('#/' + v.category['id'] + '-' + v.id + '/' + v.category['name'] + '/' + v.name + '/')}}"></a>
+                                    <a ng-bind-html="v.title | highlight:keywords.keywords" ng-href="{{ v.type == 'category' ? ('#/' + v.id + '/' + v.name) : ('#/' + v.category['id'] + '-' + v.id + '/' + v.category['name'] + '/' + v.name + '/')}}"></a>
                                 </li>
                             </ul>
                         </div>
@@ -79,22 +80,22 @@
             </div>
             <div class="right">
                 <div class="social">
-                    <a ng-click="showHistory()"><img src="images/icons/twitter.png" /></a>
-                    <a ng-click="showHistory()"><img src="images/icons/facebook.png" /></a>
-                    <a ng-click="showHistory()"><img src="images/icons/linkdin.png" /></a>
+                    <a href="http://www.twitter.com" target="_blank"><img src="images/icons/twitter.png" /></a>
+                    <a href="http://www.facebook.com" target="_blank"><img src="images/icons/facebook.png" /></a>
+                    <a href="http://www.linkedin.com" target="_blank"><img src="images/icons/linkdin.png" /></a>
                 </div>
             </div>
         </header>
         <nav>
             <ul class="side-menu">
-                <li class="liVision" ng-class="isPage && currentPage == 'about' ? 'active' : ''">
-                    <a href="#/about" class="li-item vision"></a>
+                <li class="liVision" ng-class="isPage && currentPage == 'vision' ? 'active' : ''">
+                    <a href="#/vision" class="li-item vision"></a>
                 </li>
-                <li class="liFavorites" ng-class="isPage && currentPage == '' ? 'active' : ''">
-                    <a href="javascript:void(0)" class="li-item favorites"></a>
+                <li class="liFavorites" ng-class="isPage && currentPage == 'recommended' ? 'active' : ''">
+                    <a href="#/recommended" class="li-item favorites"></a>
                 </li>
-                <li class="liInfo" ng-class="isPage && currentPage == '' ? 'active' : ''">
-                    <a href="javascript:void(0)" class="li-item info"></a>
+                <li class="liInfo" ng-class="isPage && currentPage == 'info' ? 'active' : ''">
+                    <a href="#/info" class="li-item info"></a>
                 </li>
                 <li class="liContact" ng-class="isPage && currentPage == 'contact' ? 'active' : ''">
                     <a href="#contact" class="li-item contact"></a>
@@ -104,11 +105,15 @@
                 </li>
             </ul>
         </nav>
-
+        <div class="spinner" ng-hide="currentBreadCrumbs">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
         <div class="inner-page" fix-inside-size>
+
             <style ng-if="item_info_width">
                 .item_info .scroll-viewport, .filterResault, .filter_search_result {
-                    height: {{item_info_width - 100}}px !important;
+                height: {{(item_info_width <= 783 ? item_info_width - 53 : item_info_width) - 100}}px !important;
                 }
                 .inner_sr .scroll-viewport{
                     height: {{item_info_width - 147}}px !important;
@@ -126,6 +131,13 @@
                 .pageBlock .scroll-viewport, .pageBlock .bottom{
                     height: {{item_info_width - 423}}px !important;
                 }
+                .pageBlock .contactUs .scroll-viewport{
+                    height: {{(item_info_width <= 783 ? item_info_width - 53 : item_info_width) - 100}}px !important;
+                }
+                .pageBlock .recommendedDiv > div,
+                .pageBlock .recommendedDiv .scroll-viewport{
+                    height: {{(item_info_width <= 783 ? item_info_width - 53 : item_info_width) - 100}}px !important;
+                }
             </style>
             <style ng-if="set_map_width">
                 .filter_search_result.map, #gmaps{
@@ -133,6 +145,15 @@
                 }
                 .filter_search_result.map.object, .filter_search_result.map.object #gmaps{
                     width: {{set_map_width - 177}}px !important;
+                }
+            </style>
+
+            <style ng-if="set_map_width == 0">
+                .filter_search_result.map{
+                    width: 0px !important;
+                }
+                .filter_search_result.map.object{
+                    width: 0px !important;
                 }
             </style>
 <!--
@@ -285,8 +306,8 @@
             <categoryhover></categoryhover>
 
             <div class="banner" ng-class="showHomeBanner ? 'collapsed' : ''" ng-show="showHomeBanner">
-                <span class="b-title">{{showHomeBanner.title}}</span>
-                <p class="b-text">{{showHomeBanner.content}}</p>
+                <span class="b-title" ng-bind-html="showHomeBanner.title | rawHtml"></span>
+                <p class="b-text" ng-bind-html="showHomeBanner.content | rawHtml"></p>
                 <div class="ng-hide b-adress">
                     <img src="images/icons/b-nav.png" />
                     <span>Tarsat 11 st. Tel-Aviv</span>

@@ -1,6 +1,7 @@
 <div>
     <div ng-show="showCategorySearchBlock" ng-class="showCategorySearchBlock ? 'collapsed' : ''" class="filterResault">
-        <span class="slogen">MAKING YOU <span>FEEL</span> LOCAL</span>
+        <a ng-href="{{backUrl}}" ng-if="backUrl" class="back-btn"></a>
+        <span class="slogen">Votre connexion à Israël – Tous nos services & informations réunis dans un même clic et dans votre langue.</span>
         <div class="frButtons">
             <a ng-click="showCategoriesSearchList()" ng-class="showCategoriesSearchBlockList ? 'active' : ''" class="filter-i"></a>
             <a class="filter-i-hover"></a>
@@ -10,7 +11,10 @@
     </div>
 
     <div ng-class="showCategorySearchBlock && showCategoriesSearchBlockList ? 'collapsed' : ''" ng-show="showCategorySearchBlock && showCategoriesSearchBlockList" class="filter_search_result">
-        <a ng-href="{{backUrl}}" ng-if="backUrl" class="back-btn"></a>
+        <div class="innerSpinner spinner" ng-hide="showCategoriesSearchBlockMap || category_search_result">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
         <span class="ts-title">Search by categorie {{currentItem.title}}</span>
         <div class="results-list" scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 429px">
             <div ng-repeat="(k, v) in category_search_result" class="text-separator">
@@ -20,7 +24,7 @@
                         <span class="smi-title">{{v.title}}</span>
                         <p  ng-if="v.content" ng-bind-html="v.content | rawHtml" class="smi-text"></p>
                         <div class="more-info-div">
-                            <a class="more-info" ng-href="{{'#/' + currentItem.id + '-' + v.id + '/' + currentItem.title + '/' + v.name + '/fromSearch-' + keywords}}" ng-click="closeCategories()">
+                            <a class="more-info" ng-href="{{'#/' + currentItem.id + '-' + v.id + '/' + currentItem.title + '/' + v.name + '/fromSearch-' + keywords.keywords}}" ng-click="closeCategories()">
                                 <img class="crown-i" ng-if="v.promoted" src="images/icons/crown.png" />
                                 More Info
                             </a>
@@ -28,8 +32,8 @@
                     </div>
                     <div class="clearfix"></div>
                 </div>
-                <a ng-href="{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/fromSearch-' + keywords}}" class="view-map">
-                    <img src="images/icons/g-nav.png" />
+                <a ng-href="{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/fromSearch-' + keywords.keywords}}" class="view-map">
+                    <div></div>
                     <span>View on map</span>
                 </a>
             </div>
@@ -39,6 +43,10 @@
     <div ng-class="showCategorySearchBlock && showCategoriesSearchBlockMap ? 'collapsed' : ''" ng-if="showCategorySearchBlock && showCategoriesSearchBlockMap" class="filter_search_result map" style="width: 1178px;min-height: 955px;">
         <a ng-href="{{backUrl}}" ng-if="backUrl" class="back-btn"></a>
         <div id="mapFrame">
+            <div class="innerSpinner spinner" ng-hide="categoryMapItemsLoaded">
+                <div class="double-bounce1"></div>
+                <div class="double-bounce2"></div>
+            </div>
             <category-map ng-if="showCategorySearchBlock"></category-map>
         </div>
     </div>

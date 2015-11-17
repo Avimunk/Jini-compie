@@ -1,29 +1,77 @@
 <div ng-if="pageBlock" class="pageBlock">
     <div ng-switch="currentPage">
         <div ng-switch-when="contact" ng-class="pageBlock && currentPage == 'contact' ? 'collapsed' : ''" class="contactUs">
-            <div>
-                <a href="#" class="back-btn black-b"></a>
-                <span class="inner-title">Contact Us</span>
-                <p class="inner-text">
-                    We know it is not so easy living in our beautiful land, especially when you are from a the corner.
-                </p>
-                <form class="c-error">
-                    <input type="text" placeholder="Name" name="Name"/>
-                    <span class="error-txt">Must enter name</span>
-                    <input type="text" placeholder="Phone" name="Phone"/>
-                    <span class="error-txt">error</span>
-                    <input type="text" placeholder="E-mail" name="E-mail"/>
-                    <span class="error-txt">error</span>
-                    <select>
-                        <option>Contact about</option>
-                        <option>Contact about</option>
-                        <option>Contact about</option>
-                    </select>
-                    <span class="error-txt">error</span>
-                    <textarea placeholder="Message"></textarea>
-                    <span class="error-txt">error</span>
-                    <input type="submit" class="gold-btn" value="SEND" />
-                </form>
+            <div scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 542px;">
+                <div class="inner">
+                    <a href="#/" class="back-btn black-b"></a>
+                    <span class="inner-title">{{pageContent.title}}</span>
+                    <p class="inner-text" ng-bind-html="pageContent.content | rawHtml"></p>
+                    <form>
+                        <input type="text" placeholder="Name" name="Name"/>
+                        <span class="error-txt">Must enter name</span>
+                        <input type="text" placeholder="Phone" name="Phone"/>
+                        <span class="error-txt">error</span>
+                        <input type="text" placeholder="E-mail" name="E-mail"/>
+                        <span class="error-txt">error</span>
+                        <select>
+                            <option>Contact about1</option>
+                            <option>Contact about2</option>
+                            <option>Contact about3</option>
+                        </select>
+                        <span class="error-txt">error</span>
+                        <textarea placeholder="Message"></textarea>
+                        <span class="error-txt">error</span>
+                        <input type="submit" class="gold-btn" value="SEND" />
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div ng-switch-when="recommended" ng-class="pageBlock && currentPage == 'recommended' ? 'collapsed' : ''" class="recommendedDiv imgNtext rd2">
+            <div scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 542px;height: 855px;">
+                <div>
+                    <a href="#/" class="back-btn"></a>
+                    <div class="top-no-img">
+                        <span class="inner-title">{{pageContent.title}}</span>
+                        <p class="inner-text" ng-bind-html="pageContent.subTitle | rawHtml"></p>
+                    </div>
+                    <div class="bottom">
+                        <div class="inner-b">
+                            <div class="text-separator" ng-repeat="item in pageContent.items">
+                                <div class="sm-imgText" ng-if="item.img">
+                                    <img ng-src="{{'images/small-images/' + item.img}}" />
+                                    <div class="inner-smi">
+                                        <span class="smi-title">{{item.title}}</span>
+                                        <p class="smi-text" ng-bind-html="item.content | rawHtml"></p>
+                                        <div class="more-info-div">
+                                            <a class="more-info" ng-href="{{item.url}}">More Info</a>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div ng-if="!item.img">
+                                    <span class="ts-title">{{item.title}}</span>
+                                    <p class="inner-text" ng-bind-html="item.content | rawHtml"></p>
+                                    <div class="more-info-div">
+                                        <a class="more-info" ng-href="{{item.url}}">More Info</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-switch-when="24news" ng-class="pageBlock && currentPage == '24news' ? 'collapsed' : ''" class="channel24 visionDiv imgNtext rd2">
+            <a href="#/" class="back-btn"></a>
+            <div class="top" ng-attr-style="{{pageContent.img ? 'background-image:url(/Jini3/images/'+ pageContent.img +')' : ''}}"></div>
+            <div class="bottom">
+                <div class="inner-b" scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;padding: 20px;">
+                    <div ng-repeat="item in pageContent.items">
+                        <span class="inner-title">{{item.title}}</span>
+                        <p class="inner-text" ng-bind-html="item.content | rawHtml"></p>
+                        <a class="black-btn" ng-href="{{item.url}}" target="_blank">Visit website</a>
+                    </div>
+                </div>
             </div>
         </div>
         <div ng-switch-default ng-class="pageBlock ? 'collapsed' : ''" class="imgNtext visionDiv">

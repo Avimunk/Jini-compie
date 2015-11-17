@@ -11,6 +11,7 @@ function CategoryController($rootScope, $scope, $stateParams, $state, $http) {
     switch($state.current.name)
     {
         case 'object':
+            $rootScope.objectMapUrl = '#/'+ $state.params.id + '-' + $state.params.id2 + ($state.params.map ? '' : '/map') + '/' + $state.params.title + '/' + $state.params.title2 + '/';
             var fromSearch = ($state.params.fromSearch ? '/search/' + ($state.params.fromSearch).replace('fromSearch-', '') : '')
             $rootScope.backUrl = '#/'+ $state.params.id +'/' + $state.params.title + fromSearch;
             break;

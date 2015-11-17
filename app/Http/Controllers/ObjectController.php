@@ -327,6 +327,7 @@ class ObjectController extends Controller {
                         }
 
                         $objects = $objects->toArray();
+                        $counter = 0;
                         foreach($categories as $k => $item)
                         {
                             foreach($objects as $v)
@@ -338,12 +339,13 @@ class ObjectController extends Controller {
                             }
 
                             $categories[$k]['itemsCount'] = count($categories[$k]['items']);
+                            $counter += $categories[$k]['itemsCount'];
                             $categories[$k]['items'] = array_slice($categories[$k]['items'], 0, 3);
 
                         }
                         return [
                             'data' => $categories,
-                            'count' => count($objects),
+                            'count' => $counter,
                         ];
                     }
                 }
@@ -369,7 +371,6 @@ dd($objects);
 
     public function getLocations() {
         $results = $this->getSearchPage();
-
         $data = array();
         $locations = array(
             'type' => 1,
@@ -386,6 +387,7 @@ dd($objects);
                             'geo_longitude' => $long,
                             'location' => '',
                             'title' => $result->title,
+                            'name' => $result->name,
                             'excerpt' => $result->excerpt
                         );
 

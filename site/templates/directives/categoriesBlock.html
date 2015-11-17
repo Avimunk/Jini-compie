@@ -1,6 +1,7 @@
 <div>
     <div ng-show="showCategoriesBlock" ng-class="showCategoriesBlock ? 'collapsed' : ''" class="filterResault">
-        <span class="slogen">MAKING YOU <span>FEEL</span> LOCAL</span>
+        <a ng-click="displayHandle.closeAll()" class="back-btn"></a>
+        <span class="slogen">Votre connexion à Israël – Tous nos services & informations réunis dans un même clic et dans votre langue.</span>
         <div class="frButtons">
             <a ng-click="showCategoriesList()" ng-class="showCategoriesBlockList ? 'active' : ''" class="filter-i"></a>
             <a class="filter-i-hover"></a>
@@ -10,7 +11,10 @@
     </div>
 
     <div ng-show="showCategoriesBlock && showCategoriesBlockList" ng-class="showCategoriesBlock && showCategoriesBlockList ? 'collapsed' : ''" class="filter_search_result">
-        <a ng-click="displayHandle.closeAll()" class="back-btn"></a>
+        <div class="innerSpinner spinner" ng-hide="showCategoriesBlockMap || sideCategories.data">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
         <span class="ts-title">Search by categorie {{currentItem.title}}</span>
         <div class="results-list" scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 429px">
             <div ng-repeat="(k, v) in sideCategories.data" class="text-separator">
@@ -29,16 +33,20 @@
                     <div class="clearfix"></div>
                 </div>
                 <a ng-href="{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/'}}" class="view-map">
-                    <img src="images/icons/g-nav.png" />
+                    <div></div>
                     <span>View on map</span>
                 </a>
             </div>
         </div>
     </div>
 
-    <div ng-if="showCategoriesBlock && showCategoriesBlockMap" ng-class="showCategoriesBlock && showCategoriesBlockMap ? 'collapsed' : ''" class="filter_search_result map" style="width: 1178px;min-height: 955px;">
+    <div ng-if="showCategoriesBlock && showCategoriesBlockMap" ng-class="showCategoriesBlock && showCategoriesBlockMap ? 'collapsed' : ''" class="filter_search_result map" ng-attr-style="{{closeMapImportant ? 'width:0 !important' : ''}}" style="width: 1178px;min-height: 955px;">
         <a ng-click="back()" class="back-btn"></a>
         <div id="mapFrame">
+            <div class="innerSpinner spinner" ng-hide="categoryMapItemsLoaded">
+                <div class="double-bounce1"></div>
+                <div class="double-bounce2"></div>
+            </div>
             <category-map ng-if="showCategoriesBlock"></category-map>
         </div>
     </div>

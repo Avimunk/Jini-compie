@@ -14,18 +14,43 @@ function SinglePageController($rootScope, $scope, $stateParams, $state, $http) {
     $rootScope.currentPage = pageName;
 
     var pages = {};
-    if(pageName != 'contact')
+    if(pages[pageName])
     {
-        if(pages[pageName])
-        {
-            $scope.pageContent = pages[pageName];
-        }
-        else
-        {
-            $http.get('/Jini3/data/pages/' + pageName + '.json')
-                .then(function(response){
-                    $scope.pageContent = pages[pageName] = response.data;
-                });
-        }
+        $scope.pageContent = pages[pageName];
+        console.log($scope.pageContent);
+    }
+    else
+    {
+        $http.get('/Jini3/data/pages/' + pageName + '.json')
+            .then(function(response){
+                $scope.pageContent = pages[pageName] = response.data;
+                console.log($scope.pageContent);
+            });
+    }
+
+    if(pageName == 'contact')
+    {
+
+        var fields = {
+            "name": 'required',
+            "phone": 'required',
+            "email": 'required',
+            "type": 'required',
+        };
+        $scope.contact = {};
+        $scope.validate = function(user){
+            if(!user.name)
+            {
+
+            }
+        };
+
+        $scope.save = function() {
+            if($scope.validate())
+            {
+                console.log('Valid!', user);
+                // Sand the email
+            }
+        };
     }
 };

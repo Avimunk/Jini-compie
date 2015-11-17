@@ -5,13 +5,14 @@ function SearchController($scope, $rootScope, $stateParams, $state) {
     console.log('SearchControllerLoaded. ID:')
 
     $rootScope.displayHandle.closeAll()
-    $rootScope.keywords = $stateParams.search;
+    $rootScope.keywords.keywords = $stateParams.search;
+    console.log("$rootScope.keywords",$rootScope.keywords.keywords)
     $scope.currentID = $stateParams.id || 0;
 
     $rootScope.backUrl = false;
     if($state.current.name == 'searchInCategory')
     {
-        $rootScope.backUrl = '#/search/' + $rootScope.keywords;
+        $rootScope.backUrl = '#/search/' + $rootScope.keywords.keywords;
     }
 
     if($scope.currentID)

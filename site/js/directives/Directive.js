@@ -34,7 +34,7 @@ angular.module('JINI.directives', [])
             templateUrl: 'templates/directives/categoriesBlockSearch.html',
         }
     })
-    .directive('categoryMap', ['$http', function($http) {
+    .directive('categoryMap', ['$http', '$rootScope', function($http, $rootScope) {
         // directive link function
         var mapData = [];
         var link = function(scope, element, attrs) {
@@ -60,6 +60,10 @@ angular.module('JINI.directives', [])
 
             // init the map
             function initMap() {
+                if(map !== void 0)
+                {
+
+                }
                 if (map === void 0) {
                     map = new google.maps.Map(element[0], mapOptions);
                 }
@@ -138,10 +142,12 @@ angular.module('JINI.directives', [])
             initMap();
 
             var categoryID = scope.currentItem.id;
-            console.log(scope.search, typeof scope.search);
-            var queryString = typeof scope.search != 'undefined' && typeof scope.search != 'function' ? scope.search : '';
+            console.log('scope.keywords.keywords' ,scope.keywords.keywords, typeof scope.keywords.keywords);
+            var queryString = typeof scope.keywords.keywords != 'undefined' && typeof scope.keywords.keywords != 'function' ? scope.keywords.keywords : '';
+            $rootScope.categoryMapItemsLoaded = false;
             if(mapData[categoryID + queryString])
             {
+                $rootScope.categoryMapItemsLoaded = true;
                 setMarkers(mapData[categoryID + queryString]);
             }
             else
@@ -152,6 +158,7 @@ angular.module('JINI.directives', [])
 
                         mapData[categoryID + queryString] = response.data;
                         console.log(mapData[categoryID + queryString]);
+                        $rootScope.categoryMapItemsLoaded = true;
                         setMarkers(mapData[categoryID + queryString]);
                     });
             }
@@ -172,8 +179,8 @@ angular.module('JINI.directives', [])
                         '<div class="top-pane" style="background-image: url(' + data.content_image + ');"></div>' +
                         '   <div class="main-pane">' +
                         '       <div class="row heading">' +
-                        '           <a href="#/'+ scope.currentItem.id +'-'+data.id+'/'+scope.currentItem.title+'/'+data.title+'" class="col-md-12">' +
-                        '               <h2 class="title">' + data.title.trunc(40,true) + '</h2>' +
+                        '           <a href="#/'+ scope.currentItem.id +'-'+data.id+'/'+scope.currentItem.title+'/'+data.name+'/" class="col-md-12">' +
+                        '               <h2 class="title">' + data.title.trunc(38,true) + '</h2>' +
                         '           </a>' +
                         '       </div>' +
                         '       <div class="row heading">' +
@@ -300,8 +307,8 @@ angular.module('JINI.directives', [])
                     '<div class="top-pane" style="background-image: url(' + scope.sideObject.content_image + ');"></div>' +
                     '   <div class="main-pane">' +
                     '       <div class="row heading">' +
-                    '           <a href="#/0-'+scope.sideObject.id+'/Home/'+scope.sideObject.title+'" class="col-md-12">' +
-                    '               <h2 class="title">' + scope.sideObject.title.trunc(40,true) + '</h2>' +
+                    '           <a href="#/0-'+scope.sideObject.id+'/Home/'+scope.sideObject.title+'/" class="col-md-12">' +
+                    '               <h2 class="title">' + scope.sideObject.title.trunc(38,true) + '</h2>' +
                     '           </a>' +
                     '       </div>' +
                     '       <div class="row heading">' +
@@ -334,20 +341,9 @@ angular.module('JINI.directives', [])
                 elem.bind('keydown', function(event) {
                     var code = event.keyCode || event.which;
                     if (code === 13) {
-                        if($rootScope.top_search_position && $rootScope.top_search_result.length)
-                        {
-                            item = $rootScope.top_search_result[$rootScope.top_search_position + 1];
-                            console.log(item)
-                            if(item)
-                            {
-                                var location = item.type == 'category' ? ('#/' + item.id + '/' + item.name) : ('#/' + item.category['id'] + '-' + item.id + '/' + item.category['name'] + '/' + item.name + '/')
-                                $location.path(location);
-                                return false;
-                            }
-                        }
                         $location.path('/search/' + elem.val());
                     }
-
+                    /*
                     if(!$rootScope.top_search_position)
                         $rootScope.top_search_position = 0;
 
@@ -368,6 +364,26 @@ angular.module('JINI.directives', [])
                             $rootScope.top_search_position = $rootScope.top_search_position + 1;
                         }
                     }
+
+                    if (code === 13) {
+                        console.log('sdfsdfsdf', $rootScope.top_search_position, $rootScope.top_search_result.length);
+
+                        var path = '/search/' + elem.val();
+                        if($rootScope.top_search_position && $rootScope.top_search_result.length)
+                        {
+                            item = $rootScope.top_search_result[$rootScope.top_search_position + 1];
+                            console.log('inScope',item)
+                            if(item)
+                            {
+                                var path = item.type == 'category' ? ('/' + item.id + '/' + item.name) : ('/' + item.category['id'] + '-' + item.id + '/' + item.category['name'] + '/' + item.name + '/')
+                                path = encodeURI(path);
+                                console.log('inScope2',path)
+                            }
+                        }
+                        console.log('inScope3',path)
+                        $location.path(path);
+                    }
+                    */
                 });
             }
         }
@@ -393,7 +409,12 @@ angular.module('JINI.directives', [])
                 $rootScope.$digest();
             });
 
-            $rootScope.item_info_width = elem[0].offsetHeight;
+            var height = elem[0].offsetHeight;
+            if(height > 730)
+                $rootScope.item_info_width = height;
+            else
+                $rootScope.item_info_width = height + 53;
+
             $rootScope.$digest();
             console.log($rootScope.item_info_width)
         }
