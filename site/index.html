@@ -113,7 +113,11 @@
 
             <style ng-if="item_info_width">
                 .item_info .scroll-viewport, .filterResault, .filter_search_result {
-                height: {{(item_info_width <= 783 ? item_info_width - 53 : item_info_width) - 100}}px !important;
+                    height: {{(item_info_width <= 783 ? item_info_width - 53 : item_info_width) - 100}}px !important;
+                }
+                .filter_search_result .results-list .scroll-viewport
+                {
+                height: {{(item_info_width <= 783 ? item_info_width - 53 : item_info_width) - 163}}px !important;
                 }
                 .inner_sr .scroll-viewport{
                     height: {{item_info_width - 147}}px !important;

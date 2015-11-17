@@ -191,7 +191,7 @@ class CategoryController extends AdminController {
     public function getDelete($id)
     {
         $object = Object::find($id);
-
+//dd($object);
         // Show the page
         return view('admin.category.delete', compact('object'));
     }

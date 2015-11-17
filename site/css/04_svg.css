@@ -1,16 +1,14 @@
 #svgContainer {
-    width: 680px;
-    height: 715px;
+    width: 620px;
+    right: 0;
+    left: 0;
+    /*-webkit-transition: all 0.3s;*/
+    margin: -390px auto;
+    border-left: 550px solid transparent;
+    box-sizing: content-box;
     position: absolute;
     overflow: hidden;
-    padding: 0 30px;
-    top: 0;
-    right: 0;
-    -webkit-transition: all .3s;
-}
-
-#svgContainer.closed {
-    margin-right: -600px;
+    z-index: 0;
 }
 
     #menu {
@@ -48,3 +46,181 @@
         #menu .item:hover .sector, #menu .item:focus .sector {
             opacity: 0.6;
         }
+
+
+@media screen and (max-width: 1500px){
+    .banner.collapsed
+    {
+        left: 115px !important;
+    }
+}
+
+@media screen and (max-width: 1310px){
+    #svgContainer
+    {
+        width: 580px !important;
+        margin: -340px auto !important;
+        border-left: 490px solid transparent !important;
+        height: 580px !important;
+    }
+    .imgNtext.collapsed, .categoryHover .scroll-overview, .contactUs.collapsed
+    {
+        width: 485px;
+    }
+    header .left form
+    {
+        margin-left: 50px !important;
+    }
+    .breadcrumbs
+    {
+        margin-left: 132px !important;
+    }
+    .search_results
+    {
+        left: 52px !important;
+    }
+    .pageBlock .scroll-overview
+    {
+        width: 450px !important;
+    }
+    .pageBlock .recommendedDiv > div,
+    .pageBlock .recommendedDiv .scroll-viewport,
+    .pageBlock .recommendedDiv .scroll-overview
+    {
+        width: 500px !important;
+    }
+
+    .banner.collapsed
+    {
+        left: 100px !important;
+        bottom: 30px;
+        height: 230px;
+        width: 430px;
+    }
+}
+
+@media screen and (max-width: 1210px){
+    #svgContainer
+    {
+        width: 520px !important;
+        margin: -310px auto !important;
+        border-left: 430px solid transparent !important;
+        height: 520px !important;
+    }
+    .imgNtext.collapsed, .categoryHover .scroll-overview, .contactUs.collapsed
+    {
+        width: 435px;
+    }
+    header .left form
+    {
+        width: 414px !important;
+        margin-left: 20px !important;
+    }
+    .breadcrumbs
+    {
+        margin-left: 104px !important;
+    }
+    .search_results
+    {
+        left: 24px !important;
+        width: 414px !important;
+    }
+    .search_results .inner_sr
+    {
+        width: 414px !important;
+    }
+    .pageBlock .scroll-overview
+    {
+        width: 400px !important;
+    }
+    .search_results .inner_sr .scroll-viewport
+    {
+        width: 379px !important;
+    }
+    .pageBlock .recommendedDiv > div,
+    .pageBlock .recommendedDiv .scroll-viewport,
+    .pageBlock .recommendedDiv .scroll-overview
+    {
+        width: 450px !important;
+    }
+    .sm-imgText img{
+        max-width: 135px !important;
+    }
+
+    .banner.collapsed {
+        left: 105px !important;
+        bottom: 25px;
+        height: 480px;
+        width: 230px;
+    }
+}
+
+@media screen and (max-width: 1080px){
+    #svgContainer
+    {
+        width: 480px !important;
+        margin: -290px auto !important;
+        border-left: 380px solid transparent !important;
+        height: 480px !important;
+    }
+
+    .imgNtext.collapsed, .categoryHover .scroll-overview, .contactUs.collapsed
+    {
+        width: 400px;
+    }
+
+    header .left form
+    {
+        width: 379px !important;
+        margin-left: 20px !important;
+    }
+    .breadcrumbs
+    {
+        margin-left: 104px !important;
+    }
+    .search_results
+    {
+        left: 2px !important;
+        width: 400px !important;
+    }
+
+    .search_results .inner_sr
+    {
+        width: 400px !important;
+    }
+
+    .pageBlock .scroll-viewport, .pageBlock .bottom
+    .pageBlock .recommendedDiv > div,
+    .pageBlock .recommendedDiv .scroll-viewport,
+    .pageBlock .recommendedDiv .scroll-overview
+    {
+        width: 400px !important;
+    }
+
+    .search_results .inner_sr .scroll-overview
+    {
+        width: 370px !important;
+    }
+
+    .pageBlock .scroll-overview,
+    .search_results .inner_sr .scroll-viewport
+    {
+        width: 365px !important;
+    }
+
+    .sm-imgText img {
+        max-width: 85px!important;
+    }
+
+    .banner.collapsed {
+        left: 105px !important;
+        bottom: 25px;
+        height: 480px;
+        width: 230px;
+    }
+
+}
+#svgContainer.closed {
+    margin-right: -600px !important;
+    border-left: 0px solid transparent !important;
+}

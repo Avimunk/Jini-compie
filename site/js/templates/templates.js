@@ -2,12 +2,6 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
   'use strict';
 
   $templateCache.put('templates/categories/8.html',
-    "<search-block></search-block>\r" +
-    "\n" +
-    "<categories-search-block></categories-search-block>\r" +
-    "\n" +
-    "<page-block></page-block>\r" +
-    "\n" +
     "\r" +
     "\n" +
     "<div id=\"svgContainer\" ng-attr-class=\"{{ showCategoriesBlock || showObjectBlock || showCategorySearchBlock ? 'closed' : ''}}\" ng-mouseover=\"closeOnMouseover()\">\r" +
@@ -66,7 +60,14 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "\r" +
     "\n" +
-    "</div>"
+    "</div>\r" +
+    "\n" +
+    "<search-block></search-block>\r" +
+    "\n" +
+    "<categories-search-block></categories-search-block>\r" +
+    "\n" +
+    "<page-block></page-block>\r" +
+    "\n"
   );
 
 
@@ -234,7 +235,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                            <a class=\"more-info\" ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/' + currentItem.title + '/' + v.name + '/fromSearch-' + keywords.keywords}}\" ng-click=\"closeCategories()\">\r" +
     "\n" +
-    "                                <img class=\"crown-i\" ng-if=\"v.promoted\" src=\"images/icons/crown.png\" />\r" +
+    "                                <img class=\"crown-i\" ng-if=\"v.promoted == 1\" src=\"images/icons/crown.png\" />\r" +
     "\n" +
     "                                More Info\r" +
     "\n" +
@@ -474,7 +475,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                        -->\r" +
     "\n" +
-    "                        <p ng-bind-html=\"sideObject.content | rawHtml\"></p>\r" +
+    "                        <p ng-bind-html=\"sideObject.content | rawHtml\" class=\"objectContent\"></p>\r" +
     "\n" +
     "                        <p ng-repeat=\"(k,v) in a track by $index\">\r" +
     "\n" +

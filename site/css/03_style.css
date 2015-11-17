@@ -1017,7 +1017,7 @@ header{
 					td.ii-text.second{
 						padding-left: 22px;
 					}
-					.item-services{
+					.objectContent table{
 						width: 100%;
 						margin-bottom: 45px;
 					}
@@ -1028,12 +1028,12 @@ header{
 							width: 110px;
 							text-align: center;
 						}
-						.item-services th{
+						.objectContent table th{
 							padding: 0 0 18px 0;
 							border-bottom: 1px solid #000;
 							font-weight: 400;
 						}
-						.item-services td{
+						.objectContent table td{
 							padding: 15px 0;
 							border-bottom: 1px solid #000;
 						}
@@ -1439,6 +1439,7 @@ header{
 				background-image: url('../images/icons/home.png');
 			}
 
+
 			#svgContainer{
 				height: 680px !important;
 				padding: 30px !important;
@@ -1510,7 +1511,10 @@ header{
 				  }
 			}
 
-.pull-left span{ line-height:23px;}
+	.pull-left span{
+		line-height:23px;
+		float: left;
+	}
 
 	.main-pane h2 {
 		padding: 12px 0px;
@@ -1526,3 +1530,9 @@ header{
 		padding-left: 20px;
 		font-size: 16px;
 	}
+
+	.map-more-info{
+		float: right;
+		line-height: 23px;
+	}
+

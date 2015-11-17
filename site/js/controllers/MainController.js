@@ -39,6 +39,12 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             if(digest)
                 $rootScope.$digest();
         }
+        else if(width >= 1627)
+        {
+            $rootScope.set_map_width = 1000;
+            if(digest)
+                $rootScope.$digest();
+        }
     };
     $rootScope.setMapWidth(false);
 

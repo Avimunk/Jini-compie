@@ -34,7 +34,7 @@ angular.module('JINI.directives', [])
             templateUrl: 'templates/directives/categoriesBlockSearch.html',
         }
     })
-    .directive('categoryMap', ['$http', '$rootScope', function($http, $rootScope) {
+    .directive('categoryMap', ['$http', '$sce', '$rootScope', function($http,$sce, $rootScope) {
         // directive link function
         var mapData = [];
         var link = function(scope, element, attrs) {
@@ -168,7 +168,7 @@ angular.module('JINI.directives', [])
                 for (var i = 0; i < content.data.length; i++){
                     var data = content.data[i];
 
-                    if (data.promoted == 1) {
+                    if (data.promoted == '1') {
                         iconUrl = '/Jini3/public/img/icons/map_pin_promoted_xs.png';
                     }
                     else {
@@ -185,11 +185,13 @@ angular.module('JINI.directives', [])
                         '       </div>' +
                         '       <div class="row heading">' +
                         '           <div class="col-md-12">' +
-                        '               <div class="content">' + data.excerpt.trunc(85,true) + '</div>' +
+                        '               <div class="content">' + $sce.trustAsHtml((data.excerpt).trunc(85,true)); + '</div>' +
+                        //'               <div class="content">' + (data.excerpt).trunc(85,true); + '</div>' +
                         '           </div>' +
                         '       </div>' +
                         '       <div class="row actions actions-pane">' +
                         '           <div class="pull-left"><span class="address">' + data.address_street + ' ' + data.address_city + '</span></div>' +
+                        '           <a class="more-info map-more-info" href="#/'+ scope.currentItem.id +'-'+data.id+'/'+scope.currentItem.title+'/'+data.name+'/">More Info</a>' +
                         '       </div>' +
                         '   </div>' +
                         '</div>' +
@@ -209,7 +211,7 @@ angular.module('JINI.directives', [])
             link: link
         };
     }])
-    .directive('objectMap', ['$http', function($http) {
+    .directive('objectMap', ['$http','$sce', function($http, $sce) {
         // directive link function
         var mapData = [];
         var link = function(scope, element, attrs) {
@@ -313,11 +315,12 @@ angular.module('JINI.directives', [])
                     '       </div>' +
                     '       <div class="row heading">' +
                     '           <div class="col-md-12">' +
-                    '               <div class="content">' + (scope.sideObject.excerpt + ' Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing').trunc(85,true) + '</div>' +
+                    '               <div class="content">' + $sce.trustAsHtml((scope.sideObject.excerpt).trunc(85,true)); + '</div>' +
                     '           </div>' +
                     '       </div>' +
                     '       <div class="row actions actions-pane">' +
                     '           <div class="pull-left"><span class="address">' + scope.sideObject.address_street + ' ' + scope.sideObject.address_city + '</span></div>' +
+                    '           <a class="more-info map-more-info" href="#/0-'+scope.sideObject.id+'/Home/'+scope.sideObject.title+'/">More Info</a>' +
                     '       </div>' +
                     '   </div>' +
                     '</div>' +
