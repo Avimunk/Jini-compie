@@ -1,4 +1,31 @@
 {
   "title": "Contactez-nous",
-  "content": "une question, un souci, n‘hésitez pas à nous contacter au… <br><a href='files/Reglement.pdf' target='_blank'>Règlement</a>"
+  "content": "une question, un souci, n‘hésitez pas à nous contacter au… <br><a href='files/Reglement.pdf' target='_blank'>Règlement</a>",
+  "form": {
+    "errors" : {
+      "title" : ""
+    },
+    "reasons" : [
+      {
+        "crm_id" : "5",
+        "content" : "Vous souhaitez parler à un de nos conseillers"
+      },
+      {
+        "crm_id" : "1",
+        "content" : "Comment s’inscrire sur le site ?"
+      },
+      {
+        "crm_id" : "2",
+        "content" : "Vous souhaitez plus d’informations concernant nos rubriques Service et Conciergerie."
+      },
+      {
+        "crm_id" : "3",
+        "content" : "Vous avez un problème d’ordre technique"
+      },
+      {
+        "crm_id" : "4",
+        "content" : "vous souhaitez une facture"
+      }
+    ]
+  }
 }

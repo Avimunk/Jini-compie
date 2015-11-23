@@ -405,13 +405,19 @@ header{
 				.contactUs .inner-text{
 					margin-bottom: 35px;
 				}
+				.contactUs form .form-group.ng-invalid {
+					position: relative;
+					/*margin-top: 14px;*/
+				}
 				.contactUs form .error-txt{
-					display: none;
+					/*display: none;*/
 					padding-left: 20px;
 					color: #ed272f;
 					margin-top: 0;
 					margin-bottom: 10px;
 					font-size: 12px;
+					position: absolute;
+					top: -14px;
 				}
 				.contactUs input{
 					font-family: 'Roboto', sans-serif;
@@ -505,7 +511,7 @@ header{
 		background: url(../images/v-img.png);
 		background-repeat: no-repeat;
 		background-size: cover;
-		background-position: top center;
+		background-position: center center;
 	}
 	.visionDiv .bottom{
 		/*overflow-y: scroll;*/

@@ -9,10 +9,19 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
     console.log('MainController');
 
     $rootScope.siteUrl = '/Jini3/#';
-    $rootScope.mediaUrl = 'http://ec2-52-27-196-120.us-west-2.compute.amazonaws.com/uploads/';
+    $rootScope.mediaUrl = 'http://jini.bob.org.il/jini3/public/uploads/';
 
     var history = [];
     $rootScope.$on('$locationChangeSuccess', function() {
+
+        // Zoom analytics
+        try {
+            console.log('try simulateNewPage')
+            __ZA.simulateNewPage();
+            check();
+        }
+        catch (e) {}
+
         $rootScope.isPage = false;
         history.push($location.$$path);
     });
@@ -126,8 +135,31 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                 break;
         }
     }
-    $rootScope.a = [];
-    $rootScope.a.length = 50;
+    //$rootScope.a = [];
+    //$rootScope.a.length = 50;
+    var categoryHoverTimeOut = false;
+    $rootScope.disableCategoryHover = function(id)
+    {
+        console.log('disableCategoryHover', id)
+        if(categoryHoverTimeOut)
+        {
+            clearTimeout(categoryHoverTimeOut);
+            categoryHoverTimeOut = false;
+        }
+    };
+
+    $rootScope.categoryHoverHelper = function(categoryData, fromParent){
+        console.log('categoryHoverHelper', categoryData.id, categoryHoverTimeOut)
+        if(categoryHoverTimeOut)
+        {
+            clearTimeout(categoryHoverTimeOut);
+            categoryHoverTimeOut = false;
+        }
+
+        categoryHoverTimeOut = setTimeout(function(){
+            $rootScope.leftBlocksHandler.categoryHover(categoryData, fromParent);
+        }, 300);
+    };
     $rootScope.leftBlocksHandler = {
         categoryHover: function(categoryData, fromParent)
         {
@@ -142,8 +174,9 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                 $rootScope.displayHandle.closeAll();
                 return false;
             }
-
+            console.log('phase 1');
             if(typeof fromParent == 'undefined' && justOpened)return false;
+            console.log('phase 2');
 
             if(mapTimeout)
                 clearTimeout(mapTimeout);
@@ -217,11 +250,16 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
 
     $rootScope.showCategoryHover = function(categoryData){
 
+        console.log('showCategoryHover', categoryData)
         $rootScope.showHomeBanner = false;
         var id = categoryData.id;
         if(sideCategoriesHover[id])
         {
+            if($rootScope.sideCategory == sideCategoriesHover[id])
+                return false;
+
             $rootScope.sideCategory = sideCategoriesHover[id];
+            $rootScope.$digest();
         }
         else
         {
@@ -236,6 +274,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             $http.get('/Jini3/public/categories/'+id+'/content')
                 .then(function(response){
                     $rootScope.sideCategory.content = sideCategoriesHover[id].content = response.data;
+                    $rootScope.$digest();
                 });
         }
     }

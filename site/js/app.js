@@ -9,13 +9,61 @@ angular.module('JINI', [
     'JINI.filters',
     'JINI.services',
     'JINI.templates',
+    'valdr'
 ])
 .config(Config)
 .run(Run);
 
-Config.$inject = ['$stateProvider', '$urlRouterProvider', '$localStorageProvider'];
+Config.$inject = ['$stateProvider', '$urlRouterProvider', '$localStorageProvider', 'valdrProvider', 'valdrMessageProvider'];
 
-function Config($stateProvider, $urlRouterProvider, $localStorageProvider) {
+function Config($stateProvider, $urlRouterProvider, $localStorageProvider, valdrProvider, valdrMessageProvider) {
+
+    valdrProvider.addConstraints({
+        'Contact': {
+            'name': {
+                'maxLength': {
+                    'number': 40,
+                    'message': 'Name length cannot be more then 40 letters'
+                },
+                'required': {
+                    'message': 'Name is required.'
+                },
+                'pattern' :{
+                    'value' : '/^.{2,}\s.{2,}$/',
+                    'message': 'Name must have at least 2 words'
+                }
+            },
+            'phone': {
+                'size': {
+                    'min': 7,
+                    'max': 20,
+                    'message': 'Phone number must be between 7 and 20 digits.'
+                },
+                'pattern' : {
+                    'value' : '/^[0-9]+$/',
+                    'message': 'Phone number can contains only digits'
+                }
+            },
+            'email': {
+                "email": {
+                    "message": "Must be a valid E-Mail address."
+                },
+                'required': {
+                    'message': 'E-Mail address is required.'
+                }
+            },
+            'reason': {
+                'required': {
+                    'message': '1You must select a reason'
+                },
+                'pattern' :{
+                    'value' : '/[1-5]/',
+                    'message': '2You must select a reason'
+                }
+            }
+        }
+    });
+    valdrMessageProvider.setTemplate('<span class="error-txt">{{ violation.message }}</span>');
 
     console.log('Config');
 
@@ -25,7 +73,7 @@ function Config($stateProvider, $urlRouterProvider, $localStorageProvider) {
     // Routes
     $stateProvider
         .state('home', {
-            cache: true,
+            cache: false,
             url: '/',
             controller: 'HomeController',
             templateUrl: 'templates/categories/8.html',
@@ -41,7 +89,7 @@ function Config($stateProvider, $urlRouterProvider, $localStorageProvider) {
             }
         })
         .state('searchInCategory', {
-            cache: true,
+            cache: false,
             url: '/{id:[1-9][0-9]*}/{title:.*?}/search{map:(?:/map)?}/{search:.+}',
             controller: 'SearchController',
             templateUrl: 'templates/categories/8.html',
@@ -57,7 +105,7 @@ function Config($stateProvider, $urlRouterProvider, $localStorageProvider) {
             }
         })
         .state('category', {
-            cache: true,
+            cache: false,
             url: '/{id:[1-9][0-9]*}/{title:.*}{fromSearch:(?:/fromSearch/.*)?}',
             controller: 'CategoryController',
             templateUrl: 'templates/categories/8.html',
@@ -89,7 +137,7 @@ function Config($stateProvider, $urlRouterProvider, $localStorageProvider) {
             }
         })
         .state('object', {
-            cache: true,
+            cache: false,
             url: '/{id:[0-9][0-9]*}-{id2:[1-9][0-9]*}{map:(?:/map)?}/{title:.*}/{title2:.*}/{fromSearch:(?:fromSearch-.*)?}',
             controller: 'CategoryController',
             templateUrl: 'templates/categories/8.html',
@@ -115,7 +163,7 @@ function Config($stateProvider, $urlRouterProvider, $localStorageProvider) {
             }
         })
         .state('search', {
-            cache: true,
+            cache: false,
             url: '/search/{search:.+}',
             controller: 'SearchController',
             templateUrl: 'templates/categories/8.html',

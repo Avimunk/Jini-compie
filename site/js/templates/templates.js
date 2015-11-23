@@ -46,7 +46,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "        <g id=\"itemsContainer\">\r" +
     "\n" +
-    "            <a ng-repeat=\"(k, v) in currentCategories\" ng-class=\"{{ currentID == k ? 'current' : ''}}\" ng-attr-data-category-id=\"{{k}}\" ng-init=\"$last ? fixPie() : ''\" ng-click=\"currentItem && currentItem.id == v.id ? openItem(currentItem) : ''\" ng-href=\"{{'#/' + k + '/' + v.name}}\" ng-mouseover=\"imageOn(v);leftBlocksHandler.categoryHover(v)\" class=\"item\" id=\"item-{{$index+1}}\" data-title=\"{{v.title}}\" data-featured-image=\"{{v.featuredImageUrl}}\" data-content-image=\"{{v.contentImageUrl}}\" role=\"link\" tabindex=\"0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\" \" xlink:title=\"{{v.title}}\" ng-attr-transform=\"{{pie[currentCategoriesLength].transform_a[$index]}}\" data-svg-origin=\"{{pie[currentCategoriesLength].global.svgOrigin}}\" ng-attr-style=\"{{ isFirst ? 'transform: matrix(0, 0, 0, 0, 250, 250);' : ''}}\">\r" +
+    "            <a ng-repeat=\"(k, v) in currentCategories\" ng-class=\"{{ currentID == k ? 'current' : ''}}\" ng-attr-data-category-id=\"{{k}}\" ng-init=\"$last ? fixPie() : ''\" ng-click=\"currentItem && currentItem.id == v.id ? openItem(currentItem) : ''\" ng-href=\"{{'#/' + k + '/' + v.name}}\" ng-mouseover=\"imageOn(v);categoryHoverHelper(v)\" ng-mouseout=\"disableCategoryHover(v.id)\" class=\"item\" id=\"item-{{$index+1}}\" data-title=\"{{v.title}}\" data-featured-image=\"{{v.featuredImageUrl}}\" data-content-image=\"{{v.contentImageUrl}}\" role=\"link\" tabindex=\"0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\" \" xlink:title=\"{{v.title}}\" ng-attr-transform=\"{{pie[currentCategoriesLength].transform_a[$index]}}\" data-svg-origin=\"{{pie[currentCategoriesLength].global.svgOrigin}}\" ng-attr-style=\"{{ isFirst ? 'transform: matrix(0, 0, 0, 0, 250, 250);' : ''}}\">\r" +
     "\n" +
     "                <path fill=\"none\" stroke=\"#111\" ng-attr-d=\"{{pie[currentCategoriesLength].global.d}}\" class=\"sector {{!isFirst ? 'opacity' : ''}}\"></path>\r" +
     "\n" +
@@ -527,37 +527,91 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                    <p class=\"inner-text\" ng-bind-html=\"pageContent.content | rawHtml\"></p>\r" +
     "\n" +
-    "                    <form>\r" +
+    "                    <div class=\"success\" ng-show=\"success\">\r" +
     "\n" +
-    "                        <input type=\"text\" placeholder=\"Name\" name=\"Name\"/>\r" +
+    "                        {{successText}}\r" +
     "\n" +
-    "                        <span class=\"error-txt\">Must enter name</span>\r" +
+    "                    </div>\r" +
     "\n" +
-    "                        <input type=\"text\" placeholder=\"Phone\" name=\"Phone\"/>\r" +
+    "                    <form ng-hide=\"success\" name=\"contactForm\" novalidate valdr-type=\"Contact\">\r" +
     "\n" +
-    "                        <span class=\"error-txt\">error</span>\r" +
+    "                        <div valdr-form-group>\r" +
     "\n" +
-    "                        <input type=\"text\" placeholder=\"E-mail\" name=\"E-mail\"/>\r" +
+    "                            <input\r" +
     "\n" +
-    "                        <span class=\"error-txt\">error</span>\r" +
+    "                                type=\"text\"\r" +
     "\n" +
-    "                        <select>\r" +
+    "                                placeholder=\"Name\"\r" +
     "\n" +
-    "                            <option>Contact about1</option>\r" +
+    "                                ng-model=\"contact.name\"\r" +
     "\n" +
-    "                            <option>Contact about2</option>\r" +
+    "                                name=\"name\"/>\r" +
     "\n" +
-    "                            <option>Contact about3</option>\r" +
+    "\r" +
     "\n" +
-    "                        </select>\r" +
+    "                        </div>\r" +
     "\n" +
-    "                        <span class=\"error-txt\">error</span>\r" +
+    "                        <div valdr-form-group>\r" +
     "\n" +
-    "                        <textarea placeholder=\"Message\"></textarea>\r" +
+    "                            <input\r" +
     "\n" +
-    "                        <span class=\"error-txt\">error</span>\r" +
+    "                                type=\"text\"\r" +
     "\n" +
-    "                        <input type=\"submit\" class=\"gold-btn\" value=\"SEND\" />\r" +
+    "                                placeholder=\"Phone\"\r" +
+    "\n" +
+    "                                ng-model=\"contact.phone\"\r" +
+    "\n" +
+    "                                name=\"phone\"/>\r" +
+    "\n" +
+    "                        </div>\r" +
+    "\n" +
+    "                        <div valdr-form-group>\r" +
+    "\n" +
+    "                            <input\r" +
+    "\n" +
+    "                                type=\"text\"\r" +
+    "\n" +
+    "                                placeholder=\"E-mail\"\r" +
+    "\n" +
+    "                                ng-model=\"contact.email\"\r" +
+    "\n" +
+    "                                name=\"email\"/>\r" +
+    "\n" +
+    "                        </div>\r" +
+    "\n" +
+    "                        <div valdr-form-group>\r" +
+    "\n" +
+    "                            <select\r" +
+    "\n" +
+    "                                ng-model=\"contact.reason\"\r" +
+    "\n" +
+    "                                name=\"reason\">\r" +
+    "\n" +
+    "                                <option ng-repeat=\"v in pageContent.form.reasons\" value=\"{{v.crm_id}}\">{{v.content}}</option>\r" +
+    "\n" +
+    "                            </select>\r" +
+    "\n" +
+    "                        </div>\r" +
+    "\n" +
+    "                        <div valdr-form-group>\r" +
+    "\n" +
+    "                            <textarea\r" +
+    "\n" +
+    "                                ng-model=\"contact.message\"\r" +
+    "\n" +
+    "                                name=\"message\"\r" +
+    "\n" +
+    "                                placeholder=\"Message\"></textarea>\r" +
+    "\n" +
+    "                        </div>\r" +
+    "\n" +
+    "                        <div class=\"error\" ng-if=\"!success && error\">\r" +
+    "\n" +
+    "                            {{error}}\r" +
+    "\n" +
+    "                        </div>\r" +
+    "\n" +
+    "                        <input type=\"submit\" class=\"gold-btn\" ng-click=\"validate(contactForm)\" value=\"SEND\" />\r" +
     "\n" +
     "                    </form>\r" +
     "\n" +
@@ -685,7 +739,8 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "    </div>\r" +
     "\n" +
-    "</div>"
+    "</div>\r" +
+    "\n"
   );
 
 

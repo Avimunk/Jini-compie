@@ -34,7 +34,7 @@ angular.module('JINI.directives', [])
             templateUrl: 'templates/directives/categoriesBlockSearch.html',
         }
     })
-    .directive('categoryMap', ['$http', '$sce', '$rootScope', function($http,$sce, $rootScope) {
+    .directive('categoryMap', ['$http', '$rootScope', function($http, $rootScope) {
         // directive link function
         var mapData = [];
         var link = function(scope, element, attrs) {
@@ -185,8 +185,7 @@ angular.module('JINI.directives', [])
                         '       </div>' +
                         '       <div class="row heading">' +
                         '           <div class="col-md-12">' +
-                        '               <div class="content">' + $sce.trustAsHtml((data.excerpt).trunc(85,true)); + '</div>' +
-                        //'               <div class="content">' + (data.excerpt).trunc(85,true); + '</div>' +
+                        '               <div class="content">' + decodeEntities(data.excerpt).trunc(85,true) + '</div>' +
                         '           </div>' +
                         '       </div>' +
                         '       <div class="row actions actions-pane">' +
@@ -211,7 +210,7 @@ angular.module('JINI.directives', [])
             link: link
         };
     }])
-    .directive('objectMap', ['$http','$sce', function($http, $sce) {
+    .directive('objectMap', ['$http', function($http) {
         // directive link function
         var mapData = [];
         var link = function(scope, element, attrs) {
@@ -315,7 +314,7 @@ angular.module('JINI.directives', [])
                     '       </div>' +
                     '       <div class="row heading">' +
                     '           <div class="col-md-12">' +
-                    '               <div class="content">' + $sce.trustAsHtml((scope.sideObject.excerpt).trunc(85,true)); + '</div>' +
+                    '               <div class="content">' + decodeEntities(scope.sideObject.excerpt).trunc(85,true) + '</div>' +
                     '           </div>' +
                     '       </div>' +
                     '       <div class="row actions actions-pane">' +
@@ -424,3 +423,25 @@ angular.module('JINI.directives', [])
     }])
 ;
 
+var decodeEntities = (function() {
+    // this prevents any overhead from creating the object each time
+    var element = document.createElement('div');
+
+    function decodeHTMLEntities (str) {
+        if(str && typeof str === 'string') {
+            // strip script/html tags
+            str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+            str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+            element.innerHTML = str;
+            str = element.textContent;
+            element.textContent = '';
+        }
+
+        return str;
+    }
+
+    return decodeHTMLEntities;
+})();
+function htmlEntities(str) {
+    return String(str).replace('', '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}

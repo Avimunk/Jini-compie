@@ -6,22 +6,49 @@
                     <a href="#/" class="back-btn black-b"></a>
                     <span class="inner-title">{{pageContent.title}}</span>
                     <p class="inner-text" ng-bind-html="pageContent.content | rawHtml"></p>
-                    <form>
-                        <input type="text" placeholder="Name" name="Name"/>
-                        <span class="error-txt">Must enter name</span>
-                        <input type="text" placeholder="Phone" name="Phone"/>
-                        <span class="error-txt">error</span>
-                        <input type="text" placeholder="E-mail" name="E-mail"/>
-                        <span class="error-txt">error</span>
-                        <select>
-                            <option>Contact about1</option>
-                            <option>Contact about2</option>
-                            <option>Contact about3</option>
-                        </select>
-                        <span class="error-txt">error</span>
-                        <textarea placeholder="Message"></textarea>
-                        <span class="error-txt">error</span>
-                        <input type="submit" class="gold-btn" value="SEND" />
+                    <div class="success" ng-show="success">
+                        {{successText}}
+                    </div>
+                    <form ng-hide="success" name="contactForm" novalidate valdr-type="Contact">
+                        <div valdr-form-group>
+                            <input
+                                type="text"
+                                placeholder="Name"
+                                ng-model="contact.name"
+                                name="name"/>
+
+                        </div>
+                        <div valdr-form-group>
+                            <input
+                                type="text"
+                                placeholder="Phone"
+                                ng-model="contact.phone"
+                                name="phone"/>
+                        </div>
+                        <div valdr-form-group>
+                            <input
+                                type="text"
+                                placeholder="E-mail"
+                                ng-model="contact.email"
+                                name="email"/>
+                        </div>
+                        <div valdr-form-group>
+                            <select
+                                ng-model="contact.reason"
+                                name="reason">
+                                <option ng-repeat="v in pageContent.form.reasons" value="{{v.crm_id}}">{{v.content}}</option>
+                            </select>
+                        </div>
+                        <div valdr-form-group>
+                            <textarea
+                                ng-model="contact.message"
+                                name="message"
+                                placeholder="Message"></textarea>
+                        </div>
+                        <div class="error" ng-if="!success && error">
+                            {{error}}
+                        </div>
+                        <input type="submit" class="gold-btn" ng-click="validate(contactForm)" value="SEND" />
                     </form>
                 </div>
             </div>

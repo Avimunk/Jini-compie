@@ -55,6 +55,8 @@ module.exports = function(grunt) {
 						'lib/ngstorage/ngStorage.min.js',
 						'lib/ng-tiny-scrollbar/ng-tiny-scrollbar.min.js',
 						'lib/helpers/helpers.js',
+						'lib/helpers/valdr.js',
+						'lib/helpers/valdr-message.js',
 					]
 				},
 				options: {
