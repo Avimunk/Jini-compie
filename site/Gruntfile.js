@@ -1,16 +1,5 @@
 module.exports = function(grunt) {
 	grunt.initConfig({
-		//sass: {
-        //    options: {
-        //        sourcemap: 'none'
-        //    },
-		//	app: {
-		//		files: {
-        //            'css/app.css': 'scss/app.scss',
-        //            'css/rtl-fix.css': 'scss/rtl-fix.scss',
-		//		}
-		//	},
-		//},
 		cssmin: {
 			app: {
 				files: [{
@@ -79,10 +68,6 @@ module.exports = function(grunt) {
 			}
 		},
         watch: {
-			//'app-sass': {
-			//	files: 'scss/*.scss',
-			//	tasks: ['sass:app', 'cssmin:app']
-			//},
 			'app-css': {
 				options: {
 					livereload: true,

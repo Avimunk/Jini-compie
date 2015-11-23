@@ -1,16 +1,27 @@
 angular.module('JINI.services', [])
-    //.factory('messages', ['$http', '$state', messages])
     .factory('pie', pie)
     .factory('fixPie', ['$document', fixPie])
-
     .factory('CategoryService', ['$http', '$state', '$rootScope', CategoryService])
     .factory('setScopeService', setScopeService)
-
     .factory('objectService', ['$http', objectService])
 ;
 
+/**
+ * Set the scope.
+ * @returns {{init: Function}}
+ */
 function setScopeService(){
     return {
+        /**
+         * This is the initial function for every route
+         *
+         * will set the categories and info about current item to the scope.
+         * @param $rootScope
+         * @param $state
+         * @param $stateParams
+         * @param categories
+         * @returns {boolean}
+         */
         init: function($rootScope, $state, $stateParams, categories){
             console.log('CALL: setScopeService')
 
@@ -20,20 +31,26 @@ function setScopeService(){
             // set the current breadcrumbs
             $rootScope.currentBreadCrumbs = categories.breadcrumbs[id];
 
-            //
+            // set the current parents array
             var currentParent = categories.parents[id];
 
+            // if no categories and no parents go to home
             if(categories.categories.length && typeof currentParent == 'undefined')
-                $state.go('home')
+                $state.go('home');
 
+            // set the categories to the scope.
             $rootScope.currentCategories = getCategoriesByParentArray(categories.categories, currentParent.slice());
             $rootScope.currentCategoriesLength = Object.keys($rootScope.currentCategories).length;
             console.log("$rootScope.currentCategories:", $rootScope.currentCategories);
+
+            // set the current item and item type to the scope.
             $rootScope.currentItem = getCurrentCategoryByParentArray(categories.categories, currentParent.slice());
             if(id != 0)
                 $rootScope.currentItem.type = 'category';
             console.log('$rootScope.currentItem',$rootScope.currentItem);
 
+
+            // Get the current parent data (for the back button)
             if(currentParent.length == 0)
                 $rootScope.parentID = null;
             else if(currentParent.length <= 1)
@@ -64,13 +81,30 @@ function setScopeService(){
                     }
                 }
             }
+
+            // fix categories with long titles
             $rootScope.currentCategories = splitCurrentCategoriesTitle($rootScope.currentCategories);
 
+            // return the function so the resolve can continue.
             return true;
         }
     }
 }
 
+/**
+ * Get the categories.
+ *
+ * if already have the category return it
+ * else http get it, store and return.
+ *
+ * if no such category state.go to home page.
+ *
+ * @param $http
+ * @param $state
+ * @param $rootScope
+ * @returns {{}}
+ * @constructor
+ */
 function CategoryService($http, $state, $rootScope) {
     var ca = {};
     ca.getCategories = function($stateParams){
@@ -83,16 +117,22 @@ function CategoryService($http, $state, $rootScope) {
         return ca.categoriesData = $http.get('/Jini3/public/categories/' + id + '/categories').then(function(response){
 
             if(typeof response.data.parents == 'undefined' || typeof response.data.parents[id] == 'undefined')
-                $state.go('home')
+                $state.go('home');
 
             $rootScope.isFirst = true;
             return response.data;
         });
-    }
-
+    };
     return ca;
 }
 
+/**
+ * Get the current object.
+ *
+ * if have it already return it
+ * else http get it, store and return.
+ * @param $http
+ */
 function objectService($http) {
     var obj = {};
     obj.objectData = [];
@@ -104,18 +144,19 @@ function objectService($http) {
             return obj.objectData[id];
 
         return obj.objectData[id] = $http.get('/Jini3/public/objects/' + id).then(function(response){
-            console.log(response.data)
-            //if(typeof response.data.parents == 'undefined' || typeof response.data.parents[id] == 'undefined')
-            //    $state.go('home')
-
-            //$rootScope.isFirst = true;
             return response.data;
         });
-    }
-
+    };
     return obj;
 }
 
+/**
+ * Fix the pie based on the current pie size
+ * rotate the circle and more.
+ *
+ * @param $document
+ * @returns {{init: Function, rotateCircle: Function, rotateImage: Function, openCircle: Function}}
+ */
 function fixPie($document){
     return {
         init: function(cl, isFirst){
@@ -222,6 +263,9 @@ function fixPie($document){
     }
 }
 
+/**
+ * Helper for the pie function 2 - 10 items position and more.
+ */
 function pie() {
 
     return {
@@ -444,6 +488,12 @@ function pie() {
     };
 }
 
+/**
+ * Split str to 2
+ * @param str
+ * @param delim
+ * @returns {*[]}
+ */
 function split2s(str, delim) {
     var p=str.indexOf(delim);
     if (p !== -1) {
@@ -453,10 +503,22 @@ function split2s(str, delim) {
     }
 }
 
+/**
+ * str replace all helper
+ * @param find
+ * @param replace
+ * @param str
+ * @returns {*}
+ */
 function replaceAll(find, replace, str) {
     return str.replace(new RegExp(find, 'g'), replace);
 }
 
+/**
+ * Split long category title helper
+ * @param currentCategories
+ * @returns {*}
+ */
 function splitCurrentCategoriesTitle(currentCategories){
 
     for(i in currentCategories)
@@ -465,14 +527,17 @@ function splitCurrentCategoriesTitle(currentCategories){
         title = replaceAll('-', '', title);
         var titleSplit = split2s(title, ' ');
         currentCategories[i].newTitle = titleSplit.length > 1 ? titleSplit : false;
-
     }
-
     return currentCategories;
 }
 
-function getCategoriesByParentArray(categories, parentArray)
-{
+/**
+ * Recursive helper to get menu categories by parent.
+ * @param categories
+ * @param parentArray
+ * @returns {*}
+ */
+function getCategoriesByParentArray(categories, parentArray) {
     if(parentArray.length != 0)
     {
             var id = parentArray[0];
@@ -480,12 +545,16 @@ function getCategoriesByParentArray(categories, parentArray)
             if(categories[id]['items_count'])
                 categories = getCategoriesByParentArray(categories[id]['items'], parentArray);
     }
-
     return categories;
 }
 
-function getCurrentCategoryByParentArray(categories, parentArray)
-{
+/**
+ * Recursive helper to get the current category.
+ * @param categories
+ * @param parentArray
+ * @returns {{id: *, title: *, contentImageUrl: *, items_count: boolean, contetnt: boolean}|*}
+ */
+function getCurrentCategoryByParentArray(categories, parentArray) {
     if(parentArray.length == 1)
     {
         currentCategory = {
@@ -498,9 +567,7 @@ function getCurrentCategoryByParentArray(categories, parentArray)
     }
     else if(parentArray.length == 0)
     {
-        currentCategory = {
-
-        }
+        currentCategory = {}
     }
     else
     {
@@ -508,24 +575,5 @@ function getCurrentCategoryByParentArray(categories, parentArray)
         parentArray.shift()
         currentCategory = getCurrentCategoryByParentArray(categories[id]['items'], parentArray)
     }
-
     return currentCategory;
-}
-
-function getCategoriesByParentArray2(categories, parentArray) {
-    if(parentArray.length != 0)
-    {
-        for(var j = 0; j < categories.length; j++) {
-
-            if(categories[j].id == parentArray[0]) {
-                parentArray.shift()
-                if(categories[j].items_count)
-                    categories = getCategoriesByParentArray(categories[j].items, parentArray);
-                else
-                    break;
-            }
-        }
-    }
-
-    return categories;
 }

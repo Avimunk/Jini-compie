@@ -4,9 +4,12 @@ angular.module('JINI.controllers')
 function CategoryController($rootScope, $scope, $stateParams, $state, $http) {
     console.log('CategoryControllerLoaded. ID:', $stateParams.id)
     console.log('CategoryController', $state.current)
+    // set the current is to the scope.
     $scope.currentID = $stateParams.id;
+    // clear the search.
     $rootScope.clearSearch();
 
+    // prepare the back url if its from search.
     $rootScope.backUrl = false;
     switch($state.current.name)
     {
@@ -24,11 +27,12 @@ function CategoryController($rootScope, $scope, $stateParams, $state, $http) {
             break;
     }
 
-
+    /**
+     * show object map on map page or disable it.
+     */
     $rootScope.showObjectBlockMap = false;
     if($stateParams.map)
     {
-        console.log('$stateParams.map', $stateParams.map);
         $rootScope.showObjectBlockMap = true;
     }
 };

@@ -1,4 +1,7 @@
 angular.module('JINI.directives', [])
+/**
+ * Category hover directive
+ */
     .directive('categoryhover', function(){
         return {
             restrict: 'EA',
@@ -6,6 +9,9 @@ angular.module('JINI.directives', [])
             templateUrl: 'templates/directives/categoryHover.html',
         }
     })
+/**
+ * Page block directive
+ */
     .directive('pageBlock', function(){
         return {
             restrict: 'EA',
@@ -13,6 +19,9 @@ angular.module('JINI.directives', [])
             templateUrl: 'templates/directives/pageBlock.html',
         }
     })
+/**
+ * Object directive
+ */
     .directive('objectblock', function(){
         return {
             restrict: 'EA',
@@ -20,6 +29,9 @@ angular.module('JINI.directives', [])
             templateUrl: 'templates/directives/objectBlock.html',
         }
     })
+/**
+ * Category list directive
+ */
     .directive('categoriesblock', function(){
         return {
             restrict: 'EA',
@@ -27,6 +39,9 @@ angular.module('JINI.directives', [])
             templateUrl: 'templates/directives/categoriesBlock.html',
         }
     })
+/**
+ * Category search page directive
+ */
     .directive('categoriesSearchBlock', function(){
         return {
             restrict: 'EA',
@@ -34,6 +49,12 @@ angular.module('JINI.directives', [])
             templateUrl: 'templates/directives/categoriesBlockSearch.html',
         }
     })
+/**
+ * Category map directive
+ *
+ * Init the google map,
+ * Get the http data for the current category and create markers.
+ */
     .directive('categoryMap', ['$http', '$rootScope', function($http, $rootScope) {
         // directive link function
         var mapData = [];
@@ -93,7 +114,6 @@ angular.module('JINI.directives', [])
                     if (infoBubble !== void 0) {
                         infoBubble.close();
                     }
-
                     infoBubble = new InfoBubble({
                         map: map,
                         content: marker.info,
@@ -117,25 +137,8 @@ angular.module('JINI.directives', [])
                         shadowStyle: 0,
                         closeSrc: '/Jini3/images/icons/close-white-bg.png',
                     });
-
-
                     infoBubble.open(map, marker);
-
-                    /*
-                    if (infoWindow !== void 0) {
-                        infoWindow.close();
-                    }
-                    // create new window
-                    var infoWindowOptions = {
-                        content: marker.info,
-                        maxWidth: 512,
-                        height: 264
-                    };
-                    infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-                    infoWindow.open(map, marker);
-                    */
                 });
-
             }
 
             // show the map and place some markers
@@ -200,7 +203,6 @@ angular.module('JINI.directives', [])
                 }
             }
 
-
         };
 
         return {
@@ -210,6 +212,12 @@ angular.module('JINI.directives', [])
             link: link
         };
     }])
+/**
+ * Object map directive
+ *
+ * Init the google map,
+ * Get the http data for the current object, create and open a marker on the map.
+ */
     .directive('objectMap', ['$http', function($http) {
         // directive link function
         var mapData = [];
@@ -289,7 +297,6 @@ angular.module('JINI.directives', [])
                 google.maps.event.addListener(marker, 'click', function() {
                     infoBubble.open(map, marker);
                 });
-
             }
 
             // show the map and place some markers
@@ -336,7 +343,11 @@ angular.module('JINI.directives', [])
             link: link
         };
     }])
-    .directive('enterSubmit', ['$location', '$rootScope', function ($location, $rootScope) {
+/**
+ * Submit the search field on enter click directive
+ * set the search page with current search on enter.
+ */
+    .directive('enterSubmit', ['$location', function ($location) {
         return {
             restrict: 'A',
             link: function (scope, elem, attrs) {
@@ -390,6 +401,9 @@ angular.module('JINI.directives', [])
             }
         }
     }])
+/**
+ * Search page directive
+ */
     .directive('searchBlock', function(){
         return {
             restrict: 'EA',
@@ -397,32 +411,38 @@ angular.module('JINI.directives', [])
             templateUrl: 'templates/directives/searchBlock.html',
         }
     })
+/**
+ * Fix the height of the elements directive.
+ * will fix the height for the scrollbars.
+ */
     .directive('fixInsideSize', ['$window', '$rootScope', function($window, $rootScope) {
         return function(scope, elem, attrs) {
 
             angular.element($window).bind('resize', function() {
                 var height = elem[0].offsetHeight;
                 if(height > 730)
-                    $rootScope.item_info_width = height;
+                    $rootScope.item_info_height = height;
                 else
-                    $rootScope.item_info_width = height + 53;
+                    $rootScope.item_info_height = height + 53;
 
-                console.log($rootScope.item_info_width);
+                console.log($rootScope.item_info_height);
                 $rootScope.$digest();
             });
 
             var height = elem[0].offsetHeight;
             if(height > 730)
-                $rootScope.item_info_width = height;
+                $rootScope.item_info_height = height;
             else
-                $rootScope.item_info_width = height + 53;
+                $rootScope.item_info_height = height + 53;
 
             $rootScope.$digest();
-            console.log($rootScope.item_info_width)
+            console.log($rootScope.item_info_height)
         }
     }])
 ;
-
+/**
+ * html decode for map popups.
+ */
 var decodeEntities = (function() {
     // this prevents any overhead from creating the object each time
     var element = document.createElement('div');
@@ -442,6 +462,3 @@ var decodeEntities = (function() {
 
     return decodeHTMLEntities;
 })();
-function htmlEntities(str) {
-    return String(str).replace('', '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}

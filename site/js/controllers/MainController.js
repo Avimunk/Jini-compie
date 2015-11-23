@@ -8,38 +8,64 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
 
     console.log('MainController');
 
+    /**
+     * Setters.
+     */
+    // site and media url's
     $rootScope.siteUrl = '/Jini3/#';
     $rootScope.mediaUrl = 'http://jini.bob.org.il/jini3/public/uploads/';
 
+    // the optional menu center image
+    $rootScope.centerImage = centerImage = '../img/menu-logo.png';
+
+    /**
+     * change the image to the current
+     * @param e element
+     */
+    $rootScope.imageOn = function(e){
+        $rootScope.centerImage = e.featuredImageUrl;
+    };
+
+    /**
+     * set back the default image
+     */
+    $rootScope.imageOff = function(){
+        $rootScope.centerImage = centerImage;
+    };
+
+    // every route change
+    // save the last page and do ZOOM Analytics
     var history = [];
     $rootScope.$on('$locationChangeSuccess', function() {
 
         // Zoom analytics
         try {
-            console.log('try simulateNewPage')
             __ZA.simulateNewPage();
-            check();
         }
         catch (e) {}
 
+        // History
         $rootScope.isPage = false;
         history.push($location.$$path);
     });
 
-    $rootScope.showHistory = function(){
-        console.log(history);
-    };
-
+    // Go back to previous page
     $rootScope.back = function () {
         var prevUrl = history.length > 1 ? history.splice(-2)[0] : "/";
         $location.path(prevUrl);
     };
 
+    // Fix the pie menu
     $rootScope.pie = pie;
     $rootScope.fixPie = function(){
         fixPie.init($rootScope.currentCategoriesLength, $rootScope.isFirst);
     };
 
+    /**
+     * fix the map width based on the current window width
+     * digest is optional
+     * @param digest
+     */
     $rootScope.setMapWidth = function(digest){
         var width = window.innerWidth;
         if(width < 1627 && width > 980)
@@ -55,44 +81,55 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                 $rootScope.$digest();
         }
     };
+    // on load fix the map width
     $rootScope.setMapWidth(false);
 
+    // On resize fix the map width
     angular.element($window).bind('resize', function() {
         $rootScope.setMapWidth(true);
     });
 
-    $rootScope.centerImage = '../img/menu-logo.png';
+    /**
+     * create objects for data storage
+     */
+        var sideCategoriesHover = [];
+        var sideCategoriesList = [];
+        var sideObjects = [];
 
-    $rootScope.imageOn = function(e){
-        $rootScope.centerImage = e.featuredImageUrl;
-    };
+    /**
+     * Init all show variables to false
+     */
+        $rootScope.showCategoryBlock = false;
+        $rootScope.showObjectBlock   = false;
+        $rootScope.showCategoriesBlock   = false;
 
-    $rootScope.imageOff = function(){
-        $rootScope.centerImage = '../img/menu-logo.png';
-    };
-
-    var sideCategoriesHover = [];
-    var sideCategoriesList = [];
-    var sideObjects = [];
-    $rootScope.showCategoryBlock = false;
-    $rootScope.showObjectBlock   = false;
-    $rootScope.showCategoriesBlock   = false;
-
-    //return false;
+    /**
+     * This function will change the view based on the item it recieved.
+     * if it is home page, category, regular item or list category.
+     * it will open the menu in the right place and show the left block with the right content.
+     *
+     * also will check that there is no change in the last 0.5 seconds or return false.
+     * @param item
+     * @param type
+     * @returns {boolean}
+     */
     var justOpened = false;
     $rootScope.openItem = function(item, type){
+        // if is a search page will close all and not enable to change the view on hover unless is an object
         if(($state.current.name == 'search' || $state.current.name == 'searchInCategory') && type != 'object')
         {
             console.log('in search page');
             $rootScope.displayHandle.closeAll();
             return false;
         }
+        // if its a signle content page will close all and not enable to change the view on hover unless is an object
         else if($state.current.name == 'singlePage' && type != 'object')
         {
             console.log('in single page');
             $rootScope.displayHandle.closeAll();
             return false;
         }
+        // clear all search and close all views.
         else
         {
             $rootScope.clearSearch();
@@ -104,17 +141,18 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         setTimeout(function(){justOpened = false;},500)
 
         console.log('openItem',item)
-        // Home page:
+
+        // Home page, so show the home content and return.
         if(!Object.keys(item).length)
         {
             $rootScope.leftBlocksHandler.homePageView();
-            //$rootScope.displayHandle.closeAll();
             return;
         }
 
+        // not home page, hide home banner / content
         $rootScope.showHomeBanner = false;
 
-        // all types:
+        // switch the optional types and show the right content
         switch(item.type)
         {
             case 'object':
@@ -134,10 +172,14 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                 }
                 break;
         }
-    }
-    //$rootScope.a = [];
-    //$rootScope.a.length = 50;
+    };
+
     var categoryHoverTimeOut = false;
+    /**
+     * disable the category last hover
+     * will disable the timeout from the "$rootScope.categoryHoverHelper" function
+     * @param id
+     */
     $rootScope.disableCategoryHover = function(id)
     {
         console.log('disableCategoryHover', id)
@@ -148,6 +190,12 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         }
     };
 
+    /**
+     * Get the category data and set timeout of 0.3 seconds to show it.
+     *
+     * @param categoryData
+     * @param fromParent
+     */
     $rootScope.categoryHoverHelper = function(categoryData, fromParent){
         console.log('categoryHoverHelper', categoryData.id, categoryHoverTimeOut)
         if(categoryHoverTimeOut)
@@ -160,36 +208,51 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             $rootScope.leftBlocksHandler.categoryHover(categoryData, fromParent);
         }, 300);
     };
+
+    /**
+     * Handle left block content
+     *
+     * @type {{categoryHover: Function, categoryList: Function, objectView: Function, homePageView: Function}}
+     */
     $rootScope.leftBlocksHandler = {
+
+        /**
+         * Show left category hover content.
+         * @param categoryData
+         * @param fromParent
+         * @returns {boolean}
+         */
         categoryHover: function(categoryData, fromParent)
         {
-            if($state.current.name == 'search' || $state.current.name == 'searchInCategory')
+            // cancel on search or single page
+            if($state.current.name == 'search' || $state.current.name == 'searchInCategory' || $state.current.name == 'singlePage')
             {
                 $rootScope.displayHandle.closeAll();
                 return false;
             }
-            else if($state.current.name == 'singlePage')
-            {
-                console.log('in single page');
-                $rootScope.displayHandle.closeAll();
+            // cancel if its just opened
+            if(typeof fromParent == 'undefined' && justOpened)
                 return false;
-            }
-            console.log('phase 1');
-            if(typeof fromParent == 'undefined' && justOpened)return false;
-            console.log('phase 2');
 
+            // Clear the map timeout.
             if(mapTimeout)
                 clearTimeout(mapTimeout);
 
-            $rootScope.displayHandle.showCategoryOrHomePage();
+            // show current.
+            $rootScope.displayHandle.showCategoryHover();
             $rootScope.showCategoryHover(categoryData);
 
         },
+
+        /**
+         * Show left category list
+         * @param categoryData
+         */
         categoryList: function(categoryData)
         {
+            // fix the map width
             if($rootScope.showCategoriesBlockMap)
             {
-                //$rootScope.set_map_width = 999;
                 $rootScope.setMapWidth();
             }
 
@@ -197,11 +260,16 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             $rootScope.showCategoryList(categoryData);
 
         },
+
+        /**
+         * Show left object data.
+         * @param objectData
+         */
         objectView: function(objectData)
         {
+            // fix object map width
             if($rootScope.showCategoriesBlockMap)
             {
-                //$rootScope.set_map_width = 999;
                 $rootScope.setMapWidth();
             }
 
@@ -209,6 +277,10 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             $rootScope.showObject(objectData);
 
         },
+
+        /**
+         * close others and show home banner
+         */
         homePageView: function()
         {
             $rootScope.displayHandle.closeAll();
@@ -216,14 +288,22 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         }
     }
 
+    /**
+     * Handle the display of items
+     * show the current and hide others.
+     *
+     * @type {{showCategoryHover: Function, showCategoryList: Function, showObject: Function, closeAll: Function}}
+     */
     $rootScope.displayHandle = {
-        showCategoryOrHomePage: function()
+        // Show category hover and hide others
+        showCategoryHover: function()
         {
-            console.log('showCategoryOrHomePage');
+            console.log('showCategoryHover');
             $rootScope.showCategoryBlock    = true;
             $rootScope.showCategoriesBlock  = false;
             $rootScope.showObjectBlock      = false;
         },
+        // Show category list and hide others
         showCategoryList: function()
         {
             console.log('showCategoryList');
@@ -234,6 +314,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             if(!$rootScope.showCategoriesBlockList && !$rootScope.showCategoriesBlockMap)
                 $rootScope.showCategoriesBlockList = true;
         },
+        // Show object and hide others
         showObject: function()
         {
             console.log('showObject');
@@ -241,6 +322,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             $rootScope.showCategoryBlock    = false;
             $rootScope.showObjectBlock      = true;
         },
+        // Close all
         closeAll: function()
         {
             console.log('closeAll');
@@ -248,10 +330,22 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         }
     }
 
+    /**
+     * Get the current category hover data
+     * and store it in the original array and set it to the scope.
+     *
+     * @param categoryData
+     * @returns {boolean}
+     */
     $rootScope.showCategoryHover = function(categoryData){
 
         console.log('showCategoryHover', categoryData)
+
+        // Disable the home banner
         $rootScope.showHomeBanner = false;
+
+        // if the current category fetched already return it
+        // else http get it.
         var id = categoryData.id;
         if(sideCategoriesHover[id])
         {
@@ -277,8 +371,15 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                     $rootScope.$digest();
                 });
         }
-    }
+    };
 
+    /**
+     * Get the list data for the current category
+     * and store it in the "sideCategoriesList" variable
+     * and set it to the scope.
+     *
+     * @param categoryData
+     */
     $rootScope.showCategoryList = function(categoryData){
         var id = categoryData.id;
         if(sideCategoriesList[id])
@@ -292,8 +393,15 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                     $rootScope.sideCategories = sideCategoriesList[id] = response;
                 });
         }
-    }
+    };
 
+    /**
+     * Get the current object data,
+     * store it to the local "sideObjects" variable
+     * and set it to the scope.
+     *
+     * @param objectData
+     */
     $rootScope.showObject = function(objectData){
         var id = objectData.id;
 
@@ -303,33 +411,48 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         else {
             sideObjects[id] = $rootScope.sideObject = objectData;
         }
-        setTimeout(function(){
-            $rootScope.$broadcast('rebuild:me');
-            console.log('rebuild:me');
-        },500);
 
-    }
+    };
 
+    /**
+     * Get a random home banner and set it to the scope.
+     */
     $rootScope.showHomePageBanner = function() {
         $http.get('/Jini3/data/home/banner.json')
             .then(function(response){
                 var items = response.data;
                 $rootScope.showHomeBanner = items[Math.floor(Math.random()*items.length)];
             });
-    }
+    };
 
+
+    /**
+     * Close the menu on mouse hover.
+     *
+     * if there is a search category page
+     * the menu will act differently,
+     * there is no open on hover.
+     *
+     * so its will check for the current page and act accordingly
+     * on map pages will reset the map width.
+     *
+     * also will close all hover options
+     * so that the menu will go back without hover options.
+     * @returns {boolean}
+     */
     var mapTimeout = false;
-    $rootScope.closeOnMouseover = function(){
+    $rootScope.closeMenuOnMouseover = function(){
         if(justOpened)
             return false;
 
+        // Category list page
         if($rootScope.showCategoriesBlock)
         {
+            // Map block is open.
             if($rootScope.showCategoriesBlockMap)
             {
                 $rootScope.set_map_width = 0;
                 mapTimeout = setTimeout(function(){
-                    console.log('timeout!');
                     $rootScope.displayHandle.closeAll();
                     $rootScope.$digest();
                 },300);
@@ -340,26 +463,30 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                 $rootScope.displayHandle.closeAll();
             }
         }
+        // Object page
         else if($rootScope.showObjectBlock)
         {
             if($rootScope.showObjectBlockMap)
             {
                 $rootScope.set_map_width = 0;
+                // Map block is open.
                 mapTimeout = setTimeout(function(){
-                    console.log('timeout!');
                     $rootScope.displayHandle.closeAll();
                     $rootScope.$digest();
                 },300);
 
             }
-        else
+            else
             {
                 $rootScope.displayHandle.closeAll();
             }
         }
+    };
 
-    }
-
+    /**
+     * Show the categories map view and hide the list view
+     * @returns {boolean}
+     */
     $rootScope.showCategoriesMap = function(){
         if(!$rootScope.showCategoriesBlock)
             return false;
@@ -369,7 +496,12 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
 
         $rootScope.showCategoriesBlockList = false;
         $rootScope.showCategoriesBlockMap  = true;
-    }
+    };
+
+    /**
+     * Show the categories list view and hide the map view
+     * @returns {boolean}
+     */
     $rootScope.showCategoriesList = function(){
         if(!$rootScope.showCategoriesBlock)
             return false;
@@ -379,8 +511,21 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
 
         $rootScope.showCategoriesBlockList = true;
         $rootScope.showCategoriesBlockMap  = false;
-    }
+    };
 
+
+    /**
+     * Search area:
+     *
+     * there are 3 search types.
+     * 1. regular (auto complete)
+     * 2. search page
+     * 3. category search page
+     */
+
+    /**
+     * create a few variables for the search options
+     */
     var topSearchUrl = '/Jini3/public/objects/search?query=',
     centerSearchUrl = '/Jini3/public/objects/searchPage?query=',
     interval1 = false,
@@ -391,143 +536,220 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
     timeout3,
     searches = {
         page: [],
-        regular: [],
+        regular: []
     };
+
+    // Create a few scope params for the searches.
     $rootScope.keywords = {};
     $rootScope.top_search_result = false;
     $rootScope.center_search_result = false;
     $rootScope.category_search_result = false;
 
+    /**
+     * DO the search based on the search type.
+     * @returns {boolean}
+     */
     $rootScope.search = function(){
 
-            if($state.current.name == 'search')
+        /**
+         * Search page
+         */
+        if($state.current.name == 'search')
+        {
+            /**
+             * Clear other search
+             */
+            if(timeout2)
+                clearTimeout(timeout2);
+            if(timeout3)
+                clearTimeout(timeout3);
+
+            // Clear current old searches.
+            if(interval1)
+                clearTimeout(timeout1);
+
+            /**
+             * Start to search on a timeout
+             *
+             * store the search and on the next time return the stored search.
+             */
+            var currentSearch = $rootScope.keywords.keywords;
+            interval1 = true;
+            timeout1 = setTimeout(function()
             {
-                if(timeout2)
-                    clearTimeout(timeout2);
-                if(timeout3)
-                    clearTimeout(timeout3);
-                if(interval1)
+                interval1 = false;
+                // empty other searches
+                $rootScope.center_search_result = $rootScope.top_search_result = null;
+
+                // Has the current search stored
+                if(searches.page[currentSearch])
                 {
-                    clearTimeout(timeout1);
+                    $rootScope.center_search_result = searches.page[currentSearch];
+                    if(!$rootScope.$$phase) $rootScope.$digest();
                 }
-                var currentSearch = $rootScope.keywords.keywords;
-                interval1 = true;
-                timeout1 = setTimeout(function(){
-
-                    interval1 = false;
-                    $rootScope.center_search_result = $rootScope.top_search_result = null;
-
-                    if(searches.page[currentSearch])
-                    {
-                        $rootScope.center_search_result = searches.page[currentSearch];
+                // http get the search
+                else
+                {
+                    $http.get(centerSearchUrl + currentSearch).then(function(resp){
+                        searches.page[currentSearch] = $rootScope.center_search_result = resp.data;
                         if(!$rootScope.$$phase) $rootScope.$digest();
-                    }
-                    else
-                    {
-                        $http.get(centerSearchUrl + currentSearch).then(function(resp){
-                            searches.page[currentSearch] = $rootScope.center_search_result = resp.data;
-                            if(!$rootScope.$$phase) $rootScope.$digest();
-                        });
-                    }
+                    });
+                }
 
+            }, 500);
 
-                }, 500);
+        }
+        /**
+         * Category search.
+         */
+        else if($state.current.name == 'searchInCategory')
+        {
+            /**
+             * Clear other search
+             */
+            if(timeout1)
+                clearTimeout(timeout1);
+            if(timeout3)
+                clearTimeout(timeout3);
 
-            }
-            else if($state.current.name == 'searchInCategory')
+            // Clear current old searches.
+            if(interval2)
+                clearTimeout(timeout2);
+
+            /**
+             * Start to search on a timeout
+             *
+             * store the search and on the next time return the stored search.
+             */
+            interval2 = true;
+            timeout2 = setTimeout(function()
             {
-                if(timeout1)
-                    clearTimeout(timeout1);
-                if(timeout3)
-                    clearTimeout(timeout3);
-                if(interval2)
+
+                interval2 = false;
+                // empty other searches
+                $rootScope.top_search_result = $rootScope.center_search_result = false;
+
+                // Has the current search stored
+                if(searches.page[$rootScope.keywords.keywords + '|' + $state.params.id])
                 {
-                    clearTimeout(timeout2);
+                    $rootScope.category_search_result = searches.page[$rootScope.keywords.keywords + '|' + $state.params.id];
+                    if(!$rootScope.$$phase) $rootScope.$digest();
                 }
-                interval2 = true;
-                timeout2 = setTimeout(function(){
-
-                    interval2 = false;
-                    $rootScope.top_search_result = $rootScope.center_search_result = false;
-
-                    if(searches.page[$rootScope.keywords.keywords + '|' + $state.params.id])
-                    {
-                        $rootScope.category_search_result = searches.page[$rootScope.keywords.keywords + '|' + $state.params.id];
+                // http get the search
+                else
+                {
+                    $http.get(centerSearchUrl + $rootScope.keywords.keywords + '&categoryid=' + $state.params.id).then(function(resp){
+                        searches.page[$rootScope.keywords.keywords + '|' + $state.params.id] = $rootScope.category_search_result = resp.data;
                         if(!$rootScope.$$phase) $rootScope.$digest();
-                    }
-                    else
-                    {
-                        $http.get(centerSearchUrl + $rootScope.keywords.keywords + '&categoryid=' + $state.params.id).then(function(resp){
-                            searches.page[$rootScope.keywords.keywords + '|' + $state.params.id] = $rootScope.category_search_result = resp.data;
-                            if(!$rootScope.$$phase) $rootScope.$digest();
-                        });
-                    }
+                    });
+                }
 
-                }, 500);
-            }
-            else
+            }, 500);
+        }
+        /**
+         * Regular search
+         */
+        else
+        {
+            /**
+             * Clear other search
+             */
+            if(timeout1)
+                clearTimeout(timeout1);
+            if(timeout2)
+                clearTimeout(timeout2);
+
+            // Clear current old searches.
+            if(interval3)
+                clearTimeout(timeout3);
+
+            /**
+             * Start to search on a timeout
+             *
+             * store the search and on the next time return the stored search.
+             */
+            interval3 = true;
+            timeout3 = setTimeout(function()
             {
-                //console.log($rootScope.keywords.keywords);
-                if(timeout1)
-                    clearTimeout(timeout1);
-                if(timeout2) {
-                    clearTimeout(timeout2);
-                }
-                if(interval3)
+                interval3 = false;
+                // Has the current search stored
+                if(searches.regular[$rootScope.keywords.keywords])
                 {
-                    clearTimeout(timeout3);
+                    $rootScope.top_search_result = searches.regular[$rootScope.keywords.keywords];
+                    if(!$rootScope.$$phase) $rootScope.$digest();
                 }
-                interval3 = true;
-                timeout3 = setTimeout(function(){
-                    interval3 = false;
-                    if(searches.regular[$rootScope.keywords.keywords])
-                    {
-                        $rootScope.top_search_result = searches.regular[$rootScope.keywords.keywords];
+                // http get the search
+                else
+                {
+                    $http.get(topSearchUrl + $rootScope.keywords.keywords).then(function(resp){
+                        searches.regular[$rootScope.keywords.keywords] = $rootScope.top_search_result = resp.data;
                         if(!$rootScope.$$phase) $rootScope.$digest();
-                    }
-                    else
-                    {
-                        $http.get(topSearchUrl + $rootScope.keywords.keywords).then(function(resp){
-                            searches.regular[$rootScope.keywords.keywords] = $rootScope.top_search_result = resp.data;
-                            if(!$rootScope.$$phase) $rootScope.$digest();
-                        });
-                    }
-                }, 500);
-            }
+                    });
+                }
+            }, 500);
+        }
         return false;
-    }
+    };
+
+    /**
+     * Clear the search
+     */
     $rootScope.clearSearch = function(){
         $rootScope.keywords.keywords = null;
         $rootScope.top_search_result = false;
-    }
+    };
+
+    /**
+     * Handle the X (search close button)
+     * @returns {boolean}
+     */
     $rootScope.closeSearchBtn = function(){
+        /**
+         * Regular search:
+         * clear the search.
+         */
         if($rootScope.top_search_result && $rootScope.top_search_result.length)
         {
-            console.log('here1!');
             $rootScope.clearSearch();
             return false;
         }
 
+        /**
+         * Search page:
+         * go back to the back url.
+         */
         if($rootScope.center_search_result && $rootScope.center_search_result.count)
-        {
-            console.log('here2!');
             $rootScope.back();
-        }
 
+        /**
+         * Category Search page:
+         * go back to regular search page
+         */
         if($rootScope.category_search_result)
-        {
-            console.log('here3!');
-            console.log('center_search_result', ('#/' + $state.params.id + '/' + encodeURI($state.params.title)));
             $location.path('/' + $state.params.id + '/' + encodeURI($state.params.title));
-        }
 
+        /**
+         * Any way clear the search twice
+         * if an http search will return
+         */
         $rootScope.clearSearch();
         setTimeout(function(){
             $rootScope.clearSearch();
         },300);
-    }
+    };
 
+    /**
+     * Change the search url on search field is change.
+     *
+     * @param isButtonClick
+     * @returns {boolean}
+     */
     $rootScope.changeUrl = function(isButtonClick){
+
+        /**
+         * Search page:
+         * if there is any search change the url to search again.
+         */
         if($state.current.name == 'search')
         {
             if($rootScope.keywords.keywords.length >= 1)
@@ -536,6 +758,10 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             }
 
         }
+        /**
+         * Category search page:
+         * if there is any search change the url to search again based on current view (map / list)
+         */
         else if($state.current.name == 'searchInCategory')
         {
             console.log('changeUrl -> searchInCategory',$state.params)
@@ -547,6 +773,11 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                     $location.path('/' + $state.params.id + '/' + $state.params.title + '/search/' + $rootScope.keywords.keywords)
             }
         }
+        /**
+         * Regular search (auto complete)
+         * if there was a button click reffer to the search page,
+         * else just search.
+         */
         else
         {
             if(isButtonClick)
@@ -555,8 +786,12 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                 $rootScope.search();
         }
         return false;
-    }
+    };
 
+    /**
+     * Change the url for category search on the map view
+     * @returns {boolean}
+     */
     $rootScope.showCategoriesSearchMap = function(){
         console.log('clicked!showCategoriesSeacrhMap');
         if(!$rootScope.showCategorySearchBlock)
@@ -566,10 +801,12 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             return true;
 
         $location.path('/' + $state.params.id + '/' + $state.params.title + '/search/map/' + $rootScope.keywords.keywords)
+    };
 
-        //$rootScope.showCategoriesSearchBlockList = false;
-        //$rootScope.showCategoriesSearchBlockMap  = true;
-    }
+    /**
+     * Change the url for category search on the list view
+     * @returns {boolean}
+     */
     $rootScope.showCategoriesSearchList = function(){
         console.log('clicked!showCategoriesList');
         if(!$rootScope.showCategorySearchBlock)
@@ -579,8 +816,5 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             return true;
 
         $location.path('/' + $state.params.id + '/' + $state.params.title + '/search/' + $rootScope.keywords.keywords);
-
-        //$rootScope.showCategoriesSearchBlockList = true;
-        //$rootScope.showCategoriesSearchBlockMap  = false;
-    }
+    };
 };

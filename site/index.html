@@ -19,16 +19,6 @@
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=visualization"></script>
     <script src="js/extensions.min.js"></script>
 
-    <!--
-    <script src="lib/angular/angular.min.js"></script>
-    <script src="lib/angular-animate/angular-animate.min.js"></script>
-    <script src="lib/angular-messages/angular-messages.min.js"></script>
-    <script src="lib/angular-sanitize/angular-sanitize.min.js"></script>
-    <script src="lib/angular-ui-router/release/angular-ui-router.min.js"></script>
-    <script src="lib/ngstorage/ngStorage.min.js"></script>
-    <script src="lib/ng-tiny-scrollbar/ng-tiny-scrollbar.min.js"></script>
-    -->
-
     <script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.16.0/TweenMax.min.js"></script>
     <script src="js/app.min.js"></script>
     <script src="lib/helpers/infobubble.js"></script>
@@ -36,17 +26,14 @@
 </head>
     <body ng-app="JINI" ng-controller="MainController">
     <!-- Start of Zoom Analytics Code -->
-    <script type="text/javascript">
-        var _zaVer=4,_zaq=_zaq||[];
-        (function() {
-            var w=window,d=document;w.__za_api=function(a){_zaq.push(a);if(typeof __ZA!='undefined'&&typeof __ZA.sendActions!='undefined')__ZA.sendActions(a);};
-            var e=d.createElement('script');e.type='text/javascript';e.async=true;e.src=('https:'==d.location.protocol?'https://d2xerlamkztbb1.cloudfront.net/':'http://wcdn.zoomanalytics.co/')+'19761426-7332/3/widget.js';
-            var ssc=d.getElementsByTagName('script')[0];ssc.parentNode.insertBefore(e,ssc);
-        })();
-        function check(){
-            alert('check');
-        }
-    </script>
+        <script type="text/javascript">
+            var _zaVer=4,_zaq=_zaq||[];
+            (function() {
+                var w=window,d=document;w.__za_api=function(a){_zaq.push(a);if(typeof __ZA!='undefined'&&typeof __ZA.sendActions!='undefined')__ZA.sendActions(a);};
+                var e=d.createElement('script');e.type='text/javascript';e.async=true;e.src=('https:'==d.location.protocol?'https://d2xerlamkztbb1.cloudfront.net/':'http://wcdn.zoomanalytics.co/')+'19761426-7332/3/widget.js';
+                var ssc=d.getElementsByTagName('script')[0];ssc.parentNode.insertBefore(e,ssc);
+            })();
+        </script>
     <!-- End of Zoom Analytics Code -->
 
         <div class="site-bg">
@@ -124,36 +111,36 @@
         </div>
         <div class="inner-page" fix-inside-size>
 
-            <style ng-if="item_info_width">
+            <style ng-if="item_info_height">
                 .item_info .scroll-viewport, .filterResault, .filter_search_result {
-                    height: {{(item_info_width <= 783 ? item_info_width - 53 : item_info_width) - 100}}px !important;
+                    height: {{(item_info_height <= 783 ? item_info_height - 53 : item_info_height) - 100}}px !important;
                 }
                 .filter_search_result .results-list .scroll-viewport
                 {
-                height: {{(item_info_width <= 783 ? item_info_width - 53 : item_info_width) - 163}}px !important;
+                    height: {{(item_info_height <= 783 ? item_info_height - 53 : item_info_height) - 163}}px !important;
                 }
                 .inner_sr .scroll-viewport{
-                    height: {{item_info_width - 147}}px !important;
+                    height: {{item_info_height - 147}}px !important;
                 }
                 .filter_search_result .results-list{
-                    height: {{item_info_width - 210}}px !important;
+                    height: {{item_info_height - 210}}px !important;
                 }
                 .categoryHover .bottom.img .results-list{
-                    height: {{item_info_width - 423}}px !important;
+                    height: {{item_info_height - 423}}px !important;
                 }
                 .categoryHover .bottom.noImg .results-list{
-                    height: {{item_info_width - 100}}px !important;
+                    height: {{item_info_height - 100}}px !important;
                 }
 
                 .pageBlock .scroll-viewport, .pageBlock .bottom{
-                    height: {{item_info_width - 423}}px !important;
+                    height: {{item_info_height - 423}}px !important;
                 }
                 .pageBlock .contactUs .scroll-viewport{
-                    height: {{(item_info_width <= 783 ? item_info_width - 53 : item_info_width) - 100}}px !important;
+                    height: {{(item_info_height <= 783 ? item_info_height - 53 : item_info_height) - 100}}px !important;
                 }
                 .pageBlock .recommendedDiv > div,
                 .pageBlock .recommendedDiv .scroll-viewport{
-                    height: {{(item_info_width <= 783 ? item_info_width - 53 : item_info_width) - 100}}px !important;
+                    height: {{(item_info_height <= 783 ? item_info_height - 53 : item_info_height) - 100}}px !important;
                 }
             </style>
             <style ng-if="set_map_width">
@@ -173,149 +160,7 @@
                     width: 0px !important;
                 }
             </style>
-<!--
-            <div style="display: none" class="openDiv imgNtext visionDiv">
-                <a href="#" class="back-btn"></a>
-                <div class="top">
-                </div>
-                <div class="bottom">
-                    <div class="inner-b">
-                        <span class="inner-title">Our vision</span>
-                        <p class="inner-text">
-                            We know it is not so easy living in our beautiful land, especially when you are from a different country with your own language and culture, bearing the hope of your new life waiting around the corner.
-                            <br />
-                            <br />
-                            We are a group of Israeli and French entrepreneurs who realized the difficulties of moving to Israel and going through the process of accumulating in the promise land. So we partnered together to create the whole package for you, aiding you to become a part of the Israeli society.
-                            We named our company JINI
 
-                            difficulties of moving to Israel and going through the process of accumulating in the promise land. So we partnered together to create the whole package for you, aiding you to become a part of the Israeli society.
-                            We named our company JINI
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div style="display: none" class="openDiv imgNtext recommendedDiv">
-                <a href="#" class="back-btn"></a>
-                <div class="top-no-img">
-                    <span class="inner-title">Recommended</span>
-                    <p class="inner-text">
-                        We know it is not so easy living in our beautiful land, especially when you are from a different country with your own language and culture, bearing the hope of your new life waiting around the corner.
-                    </p>
-                </div>
-                <div class="bottom">
-                    <div class="inner-b">
-                        <div class="text-separator">
-                            <img src="images/hotel-pool.png" />
-                            <span class="inner-imgLabel">A Room By The Sunset</span>
-                            <p class="inner-text">
-                                Apartment description by the owner or vertisers or something by the owner or vertisers or something Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
-                            </p>
-                        </div>
-                        <div class="text-separator">
-                            <span class="ts-title">A Room By The Sunset</span>
-                            <p class="inner-text">
-                                Apartment description by the owner or vertisers or something by the owner or vertisers or something Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div style="display: none" class="openDiv imgNtext recommendedDiv rd2">
-                <a href="#" class="back-btn"></a>
-                <div class="top-no-img">
-                    <span class="inner-title">Recommended</span>
-                    <p class="inner-text">
-                        We know it is not so easy living in our beautiful land, especially when you are from a different country with your own language and culture, bearing the hope of your new life waiting around the corner.
-                    </p>
-                </div>
-                <div class="bottom">
-                    <div class="inner-b">
-                        <div class="text-separator">
-                            <div class="sm-imgText">
-                                <img src="images/small-images/s-room-pool.png" />
-                                <div class="inner-smi">
-                                    <span class="smi-title">A Room By The Sunset</span>
-                                    <p class="smi-text">Apartment description by the owner or vertisers or something by the owner or vertisers or something...</p>
-                                    <div class="more-info-div">
-                                        <a class="more-info" href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
-                        <div class="text-separator">
-                            <div class="sm-imgText">
-                                <img src="images/small-images/s-room-pool.png" />
-                                <div class="inner-smi">
-                                    <span class="smi-title">A Room By The Sunset</span>
-                                    <p class="smi-text">Apartment description by the owner or vertisers or something by the owner or vertisers or something...</p>
-                                    <div class="more-info-div">
-                                        <a class="more-info" href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
-                        <div class="text-separator">
-                            <span class="ts-title">BEST SUMMER TOUR IN ISRAEL 2015</span>
-                            <p class="inner-text">
-                                Apartment description by the owner or vertisers or something by the owner or vertisers or something Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                            </p>
-                            <div class="more-info-div">
-                                <a class="more-info" href="#">More Info</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="openDiv contactUs">
-                <a href="#" class="back-btn black-b"></a>
-                <span class="inner-title">Contact Us</span>
-                <p class="inner-text">
-                    We know it is not so easy living in our beautiful land, especially when you are from a the corner.
-                </p>
-                <form class="c-error">
-                    <input type="text" placeholder="Name" name="Name"/>
-                    <span class="error-txt">Must enter name</span>
-                    <input type="text" placeholder="Phone" name="Phone"/>
-                    <span class="error-txt">error</span>
-                    <input type="text" placeholder="E-mail" name="E-mail"/>
-                    <span class="error-txt">error</span>
-                    <select>
-                        <option>Contact about</option>
-                        <option>Contact about</option>
-                        <option>Contact about</option>
-                    </select>
-                    <span class="error-txt">error</span>
-                    <textarea placeholder="Message"></textarea>
-                    <span class="error-txt">error</span>
-                    <input type="submit" class="gold-btn" value="SEND" />
-                </form>
-            </div>
-
-            <div style="display: none" class="openDiv imgNtext channel24">
-                <a href="#" class="back-btn"></a>
-                <div class="top">
-                </div>
-                <div class="bottom">
-                    <div class="inner-b">
-                        <span class="inner-title">Chanel i24</span>
-                        <p class="inner-text">
-                            We know it is not so easy living in our beautiful land, especially when you are from a different country with your own language and culture, bearing the hope of your new life waiting around the corner.
-                        </p>
-                        <a class="black-btn" href="#">Visit website</a>
-                        <span class="inner-title">LIVE</span>
-                        <p class="inner-text">
-                            We know it is not so easy living in our beautiful land, especially when you are from a different.
-                        </p>
-                        <a class="black-btn" href="#">Visit website</a>
-                    </div>
-                </div>
-            </div>
--->
             <div ui-view></div>
 
             <objectblock></objectblock>
