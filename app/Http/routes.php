@@ -18,6 +18,40 @@ Route::get('/a', function(){
     $user->save();
     dd($user);
 });*/
+
+Route::get('/contactToCRM', function(\Illuminate\Http\Request $request){
+    $options = array(
+        'firstname',
+        'lastname',
+        'telephone1',
+        'emailaddress1',
+        'description',
+        'leadsourcecode',
+        'contactreason',
+    );
+    $requestData = array();
+    foreach($request->all() AS $k => $v)
+        if(in_array($k, $options))
+            $requestData[$k] = urldecode($v);
+
+    if(count($requestData) != count($options))
+        return response('',403);
+
+    $url = 'https://secure.powerlink.co.il/web/webtocrm.aspx';
+    $requestData['uid'] = '06675580-1b05-4d10-aae9-dabb626a1e75';
+    $ch=curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, 1) ;
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $requestData);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    $result = curl_exec($ch);
+    curl_close($ch);
+
+    return response('');
+});
+
+
 Route::get('/', 'HomeController@index');
 Route::get('home', 'HomeController@index');
 Route::get('about', 'PagesController@about');

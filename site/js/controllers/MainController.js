@@ -368,7 +368,6 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             $http.get('/Jini3/public/categories/'+id+'/content')
                 .then(function(response){
                     $rootScope.sideCategory.content = sideCategoriesHover[id].content = response.data;
-                    $rootScope.$digest();
                 });
         }
     };

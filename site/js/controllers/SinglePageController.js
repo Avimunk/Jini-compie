@@ -62,6 +62,7 @@ function SinglePageController($rootScope, $scope, $state, $http) {
             // set a few data variables.
             var contact = $scope.contact;
             var url = 'https://secure.powerlink.co.il/web/webtocrm.aspx';
+            var url = '/Jini3/public/contactToCRM';
             var name = split2s(contact.name, ' ');
             var data = {
                 "firstname" : name[0],
@@ -71,20 +72,24 @@ function SinglePageController($rootScope, $scope, $state, $http) {
                 "description" : contact.message,
                 "leadsourcecode" : 1,
                 "contactreason" : contact.reason,
-                "ownerid" : "06675580-1b05-4d10-aae9-dabb626a1e75",
             };
 
+            url = url + "?" + Object.keys(data).map(function(prop) {
+                    return [prop, data[prop]].map(encodeURIComponent).join("=");
+                }).join("&")
             /**
              * Post the data to the crm
              *
              * show errors | success to the user
              */
-            $http.post(url, data).then(function(){ //Success!
-                $scope.suceess = true;
-                $scope.suceessText = 'The form was successfully submitted, we will contact you shortly';
+            $scope.response = {};
+            $http.get(url).then(function(){ //Success!
+                $scope.success = true;
+                $scope.successText = 'The form was successfully submitted, we will contact you shortly';
+                $scope.contact = {};
                 console.log('successfully submitted');
             },function(){ //Failed!
-                $scope.suceess = false;
+                $scope.success = false;
                 $scope.error = 'There was an error while sending the form, please try again later.';
                 console.log('form failed');
             });
