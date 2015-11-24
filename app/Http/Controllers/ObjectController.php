@@ -12,12 +12,14 @@ use Illuminate\Support\Facades\Input;
 class ObjectController extends Controller {
     private function processObject(&$object) {
         if ($featuredImageId = ObjectMeta::getValue($object->id, '_featured_image')) {
-            $object->featured_image  = Url('/uploads/' . getImageSrc($featuredImageId, 'medium'));
+            $object->featured_image  = getImageSrc($featuredImageId, 'medium');
+//            $object->featured_image  = Url('/uploads/' . getImageSrc($featuredImageId, 'medium'));
         }
 
 
         if ($contentImageId = ObjectMeta::getValue($object->id, '_content_image')) {
-            $object->content_image  = Url('/uploads/' . getImageSrc($contentImageId, 'medium'));
+            $object->content_image  = getImageSrc($contentImageId, 'medium');
+//            $object->content_image  = Url('/uploads/' . getImageSrc($contentImageId, 'medium'));
         }
 
         $object->excerpt = htmlentities( strlen($object->excerpt) > 50 ? substr($object->excerpt, 1, 50) . '...' : $object->excerpt );
@@ -33,7 +35,7 @@ class ObjectController extends Controller {
         $object->address_country= ObjectMeta::getValue($object->id, '_field_address-country' );
 
         if ( $french_speakers = ObjectMeta::getValue($object->id, '_field_french_speakers' ) ) {
-            $object->french_speakers= 'Franchophone';
+            $object->french_speakers= 'francophone';
         }
 
         $object->promoted= ObjectMeta::getValue($object->id, '_field_promoted' );
@@ -66,7 +68,7 @@ class ObjectController extends Controller {
             $objects = Object::whereNotIn('objects.type', ['object_type', 'image','category'])
                 ->where(function( $query ) use ( $search ) {
                     $query->where('objects.title', 'LIKE', '%' . $search . '%')
-                        ->orWhere('objects.name', 'LIKE', '%' . $search . '%');
+                        ->orWhere('objects.content', 'LIKE', '%' . $search . '%');
                 })
                 ->join('objects as obj', function ($join){
                     $join->on('obj.name', '=', DB::raw("concat( '_object_type_', objects.type )"));
@@ -82,10 +84,12 @@ class ObjectController extends Controller {
                 ->select(DB::raw("'$featuredImageUrl' AS featured_image"),'cat.id AS catID', 'cat.title AS catTitle', 'cat.name AS catName','obj.id AS objID', 'obj.name AS objName', 'objects.id', 'objects.excerpt', 'objects.parent_id', 'objects.name', 'objects.type', 'objects.title')
                 ->orderBy('objects.score','DESC')
             ;
+//            dd($objects->toSql());
             $objects = $objects->get();
             foreach ($objects as $object) {
                 $this->processObject($object);
             }
+//            dd($objects->toArray());
             return $objects;
             /*
             // Category Image
@@ -132,7 +136,7 @@ class ObjectController extends Controller {
                 $objects = Object::whereNotIn('type', ['object_type', 'image'])
                     ->where(function( $query ) use ( $search ) {
                         $query->where('title', 'LIKE', '%' . $search . '%')
-                            ->orWhere('name', 'LIKE', '%' . $search . '%');
+                            ->orWhere('content', 'LIKE', '%' . $search . '%');
                     })
                     ->select('id', 'parent_id', 'name', 'type', 'title')
                     ->orderBy('score','DESC')
@@ -202,7 +206,7 @@ class ObjectController extends Controller {
             $objects = Object::whereNotIn('objects.type', ['object_type', 'image','category'])
                     ->where(function( $query ) use ( $search ) {
                         $query->where('objects.title', 'LIKE', '%' . $search . '%')
-                            ->orWhere('objects.name', 'LIKE', '%' . $search . '%');
+                            ->orWhere('objects.content', 'LIKE', '%' . $search . '%');
                     })
                     ->join('objects as obj', function ($join){
                         $join->on('obj.name', '=', DB::raw("concat( '_object_type_', objects.type )"));
@@ -280,7 +284,7 @@ class ObjectController extends Controller {
                 $objects = Object::whereNotIn('objects.type', ['object_type', 'image','category'])
                     ->where(function( $query ) use ( $search ) {
                         $query->where('objects.title', 'LIKE', '%' . $search . '%')
-                            ->orWhere('objects.name', 'LIKE', '%' . $search . '%');
+                            ->orWhere('objects.content', 'LIKE', '%' . $search . '%');
                     })
                     ->join('objects as obj', function ($join){
                         $join->on('obj.name', '=', DB::raw("concat( '_object_type_', objects.type )"));
@@ -371,6 +375,7 @@ dd($objects);
 
     public function getLocations() {
         $results = $this->getSearchPage();
+//        dd($results->toArray());
         $data = array();
         $locations = array(
             'type' => 1,
@@ -407,6 +412,35 @@ dd($objects);
                         $data[] = $location;
                     }
                 }
+            }
+        }
+        $options = array();
+        foreach($data as &$item)
+        {
+            if(isset($options[$item['geo_latitude'].'_'.$item['geo_longitude']]))
+            {
+                $options[$item['geo_latitude'].'_'.$item['geo_longitude']] += 1;
+                $current = $options[$item['geo_latitude'].'_'.$item['geo_longitude']] - 1;
+                $lat = substr($item['geo_latitude'], -3);
+
+                if($lat + ($current * 10) < 1000)
+                {
+                    $lat = $lat + ($current * 10);
+                    $subLat = substr($item['geo_latitude'], 0, strlen($item['geo_latitude']) - 3);
+                    $item['geo_latitude'] = $subLat . $lat;
+                }
+                else
+                {
+                    $lat = substr($item['geo_latitude'], -4);
+                    $lat = $lat + ($current * 10);
+                    $subLat = substr($item['geo_latitude'], 0, strlen($item['geo_latitude']) - 4);
+                    $item['geo_latitude'] = $subLat . $lat;
+                }
+
+            }
+            else
+            {
+                $options[$item['geo_latitude'].'_'.$item['geo_longitude']] = 1;
             }
         }
 

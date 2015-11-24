@@ -4,6 +4,9 @@ angular.module('JINI.controllers')
 function SearchController($scope, $rootScope, $stateParams, $state) {
     console.log('SearchControllerLoaded. ID:')
 
+    // set back default image in the menu center
+    $rootScope.imageOff();
+
     // Close all other views.
     $rootScope.displayHandle.closeAll()
 

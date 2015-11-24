@@ -90,7 +90,7 @@ function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageP
         })
         .state('object', {
             cache: false,
-            url: '/{id:[0-9][0-9]*}-{id2:[1-9][0-9]*}{map:(?:/map)?}/{title:.*}/{title2:.*}/{fromSearch:(?:fromSearch-.*)?}',
+            url: '/{id:[0-9][0-9]*}-{id2:[1-9][0-9]*}{fromCategory:(?:/cat)?}{map:(?:/map)?}/{title:.*}/{title2:.*}/{fromSearch:(?:fromSearch-.*)?}',
             controller: 'CategoryController',
             templateUrl: 'templates/main/content.html',
             resolve: {

@@ -44,7 +44,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                <div class=\"sm-imgText\">\r" +
     "\n" +
-    "                    <img ng-src=\"{{mediaUrl + v.featured_image}}\" />\r" +
+    "                    <img ng-show=\"v.featured_image\" ng-src=\"{{v.featured_image ? mediaUrl + v.featured_image : ''}}\" />\r" +
     "\n" +
     "                    <div class=\"inner-smi\">\r" +
     "\n" +
@@ -54,9 +54,9 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                        <div class=\"more-info-div\">\r" +
     "\n" +
-    "                            <a class=\"more-info\" ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/' + currentItem.title + '/' + v.name + '/'}}\" ng-click=\"closeCategories()\">\r" +
+    "                            <a class=\"more-info\" ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/cat/' + currentItem.title + '/' + v.name + '/'}}\" ng-click=\"closeCategories()\">\r" +
     "\n" +
-    "                                <img class=\"crown-i\" ng-if=\"v.promoted\" src=\"images/icons/crown.png\" />\r" +
+    "                                <img class=\"crown-i\" ng-if=\"v.promoted == 1\" src=\"images/icons/crown.png\" />\r" +
     "\n" +
     "                                More Info\r" +
     "\n" +
@@ -70,7 +70,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                </div>\r" +
     "\n" +
-    "                <a ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/'}}\" class=\"view-map\">\r" +
+    "                <a ng-show=\"v.address_location_g != '' && v.address_location_k != ''\" ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/'}}\" class=\"view-map\">\r" +
     "\n" +
     "                    <div></div>\r" +
     "\n" +
@@ -153,7 +153,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                <div class=\"sm-imgText\">\r" +
     "\n" +
-    "                    <img ng-src=\"{{content_image ? content_image : mediaUrl + v.featured_image}}\" />\r" +
+    "                    <img ng-show=\"v.featured_image\" ng-src=\"{{v.featured_image ? mediaUrl + v.featured_image : ''}}\" />\r" +
     "\n" +
     "                    <div class=\"inner-smi\">\r" +
     "\n" +
@@ -179,7 +179,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                </div>\r" +
     "\n" +
-    "                <a ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/fromSearch-' + keywords.keywords}}\" class=\"view-map\">\r" +
+    "                <a ng-show=\"v.address_location_g != '' && v.address_location_k != ''\" ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/fromSearch-' + keywords.keywords}}\" class=\"view-map\">\r" +
     "\n" +
     "                    <div></div>\r" +
     "\n" +
@@ -259,7 +259,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                <a ng-click=\"displayHandle.closeAll()\" class=\"close-btn\"></a>\r" +
     "\n" +
-    "                <div class=\"ii-top\" ng-attr-style=\"{{ sideObject.content_image ? 'background-image: url(' + sideObject.content_image + ');' : ''}}\">\r" +
+    "                <div class=\"ii-top\" ng-attr-style=\"{{ sideObject.content_image ? 'background-image: url(' + mediaUrl + sideObject.content_image + ');' : ''}}\">\r" +
     "\n" +
     "                    <div class=\"img-top-titles\">\r" +
     "\n" +
@@ -275,7 +275,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                    <div class=\"text-separator first\">\r" +
     "\n" +
-    "                        <a class=\"map-btn {{showObjectBlockMap ? 'active' : ''}}\" ng-href=\"{{objectMapUrl}}\">\r" +
+    "                        <a  ng-show=\"sideObject.address_location_g != '' && sideObject.address_location_k != ''\" class=\"map-btn {{showObjectBlockMap ? 'active' : ''}}\" ng-href=\"{{objectMapUrl}}\">\r" +
     "\n" +
     "                            <div></div>\r" +
     "\n" +
@@ -770,7 +770,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "        <g id=\"itemsContainer\">\r" +
     "\n" +
-    "            <a ng-repeat=\"(k, v) in currentCategories\" ng-class=\"{{ currentID == k ? 'current' : ''}}\" ng-attr-data-category-id=\"{{k}}\" ng-init=\"$last ? fixPie() : ''\" ng-click=\"currentItem && currentItem.id == v.id ? openItem(currentItem) : ''\" ng-href=\"{{'#/' + k + '/' + v.name}}\" ng-mouseover=\"imageOn(v);categoryHoverHelper(v)\" ng-mouseout=\"disableCategoryHover(v.id)\" class=\"item\" id=\"item-{{$index+1}}\" data-title=\"{{v.title}}\" data-featured-image=\"{{v.featuredImageUrl}}\" data-content-image=\"{{v.contentImageUrl}}\" role=\"link\" tabindex=\"0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\" \" xlink:title=\"{{v.title}}\" ng-attr-transform=\"{{pie[currentCategoriesLength].transform_a[$index]}}\" data-svg-origin=\"{{pie[currentCategoriesLength].global.svgOrigin}}\" ng-attr-style=\"{{ isFirst ? 'transform: matrix(0, 0, 0, 0, 250, 250);' : ''}}\">\r" +
+    "            <a ng-repeat=\"(k, v) in currentCategories\" ng-class=\"{{ currentID == k ? 'current' : ''}}\" ng-attr-data-category-id=\"{{k}}\" ng-init=\"$last ? fixPie() : ''\" ng-click=\"currentItem && currentItem.id == v.id ? openItem(currentItem) : ''\" ng-href=\"{{'#/' + k + '/' + v.name}}\" ng-mouseover=\"imageOn(v);categoryHoverHelper(v)\" ng-mouseout=\"disableCategoryHover(v.id)\" class=\"item\" id=\"item-{{$index+1}}\" data-title=\"{{v.title}}\" data-featured-image=\"{{v.featuredImageUrl}}\" data-content-image=\"{{v.contentImageUrl}}\" role=\"link\" tabindex=\"0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\" \" ng-attr-transform=\"{{pie[currentCategoriesLength].transform_a[$index]}}\" data-svg-origin=\"{{pie[currentCategoriesLength].global.svgOrigin}}\" ng-attr-style=\"{{ isFirst ? 'transform: matrix(0, 0, 0, 0, 250, 250);' : ''}}\">\r" +
     "\n" +
     "                <path fill=\"none\" stroke=\"#111\" ng-attr-d=\"{{pie[currentCategoriesLength].global.d}}\" class=\"sector {{!isFirst ? 'opacity' : ''}}\"></path>\r" +
     "\n" +

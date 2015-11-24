@@ -19,20 +19,20 @@
         <div class="results-list" scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 429px">
             <div ng-repeat="(k, v) in sideCategories.data" class="text-separator">
                 <div class="sm-imgText">
-                    <img ng-src="{{mediaUrl + v.featured_image}}" />
+                    <img ng-show="v.featured_image" ng-src="{{v.featured_image ? mediaUrl + v.featured_image : ''}}" />
                     <div class="inner-smi">
                         <span class="smi-title">{{v.title}}</span>
                         <p  ng-if="v.content" ng-bind-html="v.content | rawHtml" class="smi-text"></p>
                         <div class="more-info-div">
-                            <a class="more-info" ng-href="{{'#/' + currentItem.id + '-' + v.id + '/' + currentItem.title + '/' + v.name + '/'}}" ng-click="closeCategories()">
-                                <img class="crown-i" ng-if="v.promoted" src="images/icons/crown.png" />
+                            <a class="more-info" ng-href="{{'#/' + currentItem.id + '-' + v.id + '/cat/' + currentItem.title + '/' + v.name + '/'}}" ng-click="closeCategories()">
+                                <img class="crown-i" ng-if="v.promoted == 1" src="images/icons/crown.png" />
                                 More Info
                             </a>
                         </div>
                     </div>
                     <div class="clearfix"></div>
                 </div>
-                <a ng-href="{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/'}}" class="view-map">
+                <a ng-show="v.address_location_g != '' && v.address_location_k != ''" ng-href="{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/'}}" class="view-map">
                     <div></div>
                     <span>View on map</span>
                 </a>

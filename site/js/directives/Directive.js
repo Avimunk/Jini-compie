@@ -151,6 +151,13 @@ angular.module('JINI.directives', [])
             if(mapData[categoryID + queryString])
             {
                 $rootScope.categoryMapItemsLoaded = true;
+
+                // if there is no items in the map go back to list view
+                if(mapData[categoryID + queryString].data.length == 0)
+                {
+                    $rootScope.showCategoriesList();
+                    return false;
+                }
                 setMarkers(mapData[categoryID + queryString]);
             }
             else
@@ -158,6 +165,13 @@ angular.module('JINI.directives', [])
                 $http.get('/Jini3/public/objects/locations?categoryid=' + categoryID + (queryString ? '&query=' + queryString : ''))
                     .then(function(response){
                         console.log('getMapData',response.data)
+
+                        // if there is no items in the map go back to list view
+                        if(response.data.data.length == 0)
+                        {
+                            $rootScope.showCategoriesList();
+                            return false;
+                        }
 
                         mapData[categoryID + queryString] = response.data;
                         console.log(mapData[categoryID + queryString]);
@@ -182,7 +196,7 @@ angular.module('JINI.directives', [])
                         '<div class="top-pane" style="background-image: url(' + data.content_image + ');"></div>' +
                         '   <div class="main-pane">' +
                         '       <div class="row heading">' +
-                        '           <a href="#/'+ scope.currentItem.id +'-'+data.id+'/'+scope.currentItem.title+'/'+data.name+'/" class="col-md-12">' +
+                        '           <a href="#/'+ scope.currentItem.id +'-'+data.id+'/cat/'+scope.currentItem.title+'/'+data.name+'/" class="col-md-12">' +
                         '               <h2 class="title">' + data.title.trunc(38,true) + '</h2>' +
                         '           </a>' +
                         '       </div>' +
@@ -193,7 +207,7 @@ angular.module('JINI.directives', [])
                         '       </div>' +
                         '       <div class="row actions actions-pane">' +
                         '           <div class="pull-left"><span class="address">' + data.address_street + ' ' + data.address_city + '</span></div>' +
-                        '           <a class="more-info map-more-info" href="#/'+ scope.currentItem.id +'-'+data.id+'/'+scope.currentItem.title+'/'+data.name+'/">More Info</a>' +
+                        '           <a class="more-info map-more-info" href="#/'+ scope.currentItem.id +'-'+data.id+'/cat/'+scope.currentItem.title+'/'+data.name+'/">More Info</a>' +
                         '       </div>' +
                         '   </div>' +
                         '</div>' +
@@ -353,7 +367,7 @@ angular.module('JINI.directives', [])
             link: function (scope, elem, attrs) {
                 elem.bind('keydown', function(event) {
                     var code = event.keyCode || event.which;
-                    if (code === 13) {
+                    if (code === 13 && elem.val() != '') {
                         $location.path('/search/' + elem.val());
                     }
                     /*

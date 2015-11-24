@@ -19,7 +19,7 @@
         <div class="results-list" scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 429px">
             <div ng-repeat="(k, v) in category_search_result" class="text-separator">
                 <div class="sm-imgText">
-                    <img ng-src="{{content_image ? content_image : mediaUrl + v.featured_image}}" />
+                    <img ng-show="v.featured_image" ng-src="{{v.featured_image ? mediaUrl + v.featured_image : ''}}" />
                     <div class="inner-smi">
                         <span class="smi-title">{{v.title}}</span>
                         <p  ng-if="v.content" ng-bind-html="v.content | rawHtml" class="smi-text"></p>
@@ -32,7 +32,7 @@
                     </div>
                     <div class="clearfix"></div>
                 </div>
-                <a ng-href="{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/fromSearch-' + keywords.keywords}}" class="view-map">
+                <a ng-show="v.address_location_g != '' && v.address_location_k != ''" ng-href="{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/fromSearch-' + keywords.keywords}}" class="view-map">
                     <div></div>
                     <span>View on map</span>
                 </a>

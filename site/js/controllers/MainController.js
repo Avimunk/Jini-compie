@@ -2,9 +2,9 @@ angular.module('JINI.controllers')
 .controller('MainController', MainController);
 
 
-MainController.$inject = ['$state', '$rootScope', 'pie', 'fixPie', '$http', '$location', '$scope', '$window'];
+MainController.$inject = ['$state', '$rootScope', 'pie', 'fixPie', '$http', '$location', '$scope', '$window', '$timeout'];
 
-function MainController($state, $rootScope, pie, fixPie, $http, $location, $scope, $window) {
+function MainController($state, $rootScope, pie, fixPie, $http, $location, $scope, $window, $timeout) {
 
     console.log('MainController');
 
@@ -36,6 +36,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
     // every route change
     // save the last page and do ZOOM Analytics
     var history = [];
+    var searchLast = '';
     $rootScope.$on('$locationChangeSuccess', function() {
 
         // Zoom analytics
@@ -46,7 +47,11 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
 
         // History
         $rootScope.isPage = false;
+        //console.log('history', $location.$$path, history);
         history.push($location.$$path);
+
+        if($location.$$path.indexOf('search') == -1)
+            searchLast = $location.$$path;
     });
 
     // Go back to previous page
@@ -380,6 +385,9 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
      * @param categoryData
      */
     $rootScope.showCategoryList = function(categoryData){
+        // remove old data so the loader will show again
+        $rootScope.sideCategories = false;
+
         var id = categoryData.id;
         if(sideCategoriesList[id])
         {
@@ -510,6 +518,24 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
 
         $rootScope.showCategoriesBlockList = true;
         $rootScope.showCategoriesBlockMap  = false;
+
+        // trigger resize to fix scroller display
+        $rootScope.doResize(300);
+    };
+
+    /**
+     * Window will trigger resize handler
+     * @param timeout
+     */
+    $rootScope.doResize = function(timeout){
+        if(typeof timeout != 'number')
+            timeout = 0;
+        $timeout(
+            function(){
+                var w = angular.element($window);
+                w.triggerHandler('resize');
+            },
+        timeout);
     };
 
 
@@ -615,6 +641,9 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             if(interval2)
                 clearTimeout(timeout2);
 
+            // remove old search so the loader will show again
+            $rootScope.category_search_result = false;
+
             /**
              * Start to search on a timeout
              *
@@ -623,7 +652,6 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             interval2 = true;
             timeout2 = setTimeout(function()
             {
-
                 interval2 = false;
                 // empty other searches
                 $rootScope.top_search_result = $rootScope.center_search_result = false;
@@ -717,15 +745,22 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
          * Search page:
          * go back to the back url.
          */
-        if($rootScope.center_search_result && $rootScope.center_search_result.count)
-            $rootScope.back();
+        if($rootScope.center_search_result && $rootScope.center_search_result.count || $state.current.name == 'search')
+        {
+            $location.path(searchLast);
+            //$rootScope.back();
+            return false;
+        }
 
         /**
          * Category Search page:
          * go back to regular search page
          */
-        if($rootScope.category_search_result)
+        if($rootScope.category_search_result || $state.current.name == 'searchInCategory')
+        {
             $location.path('/' + $state.params.id + '/' + encodeURI($state.params.title));
+            return false;
+        }
 
         /**
          * Any way clear the search twice
@@ -752,10 +787,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         if($state.current.name == 'search')
         {
             if($rootScope.keywords.keywords.length >= 1)
-            {
                 $location.path('/search/' + $rootScope.keywords.keywords)
-            }
-
         }
         /**
          * Category search page:
@@ -779,8 +811,10 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
          */
         else
         {
-            if(isButtonClick)
-                $location.path('/search/' + $rootScope.keywords.keywords);
+            if(isButtonClick){
+                if($rootScope.keywords != null && $rootScope.keywords.keywords != null)
+                    $location.path('/search/' + $rootScope.keywords.keywords);
+            }
             else
                 $rootScope.search();
         }

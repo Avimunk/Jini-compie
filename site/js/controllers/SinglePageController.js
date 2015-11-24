@@ -4,6 +4,9 @@ angular.module('JINI.controllers')
 function SinglePageController($rootScope, $scope, $state, $http) {
     console.log('SinglePageControllerLoaded', $state.params.name)
 
+    // set back default image in the menu center
+    $rootScope.imageOff();
+
     // clear the old searches
     $rootScope.clearSearch();
 

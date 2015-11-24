@@ -1119,14 +1119,14 @@ header{
 			border-radius: 0;
 			background: none;
 			left: 0px !important;
-			width: 7px;
+			width: 10px;
 			right: initial;
 		}
 		.item_info .scroll-thumb {
 			background-color: rgba(128, 128, 128, 0.51);
 			border-radius: 0;
 			left: 0px;
-			width: 7px;
+			width: 10px;
 		}
 
 		.categoryHover .bottom.img .scroll-viewport {
@@ -1144,7 +1144,7 @@ header{
 			border-radius: 0;
 			background: none;
 			left: 0px !important;
-			width: 7px;
+			width: 10px;
 			right: initial;
 		}
 		.categoryHover .scroll-overview {
@@ -1156,7 +1156,7 @@ header{
 			background-color: rgba(128, 128, 128, 0.51);
 			border-radius: 0;
 			left: 0px;
-			width: 7px;
+			width: 10px;
 		}
 
 		.filter_search_result .results-list .scroll-viewport {
@@ -1167,7 +1167,7 @@ header{
 			border-radius: 0;
 			background: none;
 			left: 0px !important;
-			width: 7px;
+			width: 10px;
 			right: initial;
 		}
 		.filter_search_result .results-list .scroll-overview {
@@ -1178,7 +1178,7 @@ header{
 			background-color: rgba(128, 128, 128, 0.51);
 			border-radius: 0;
 			left: 0px;
-			width: 7px;
+			width: 10px;
 		}
 
 		.search_autoComplete .scroll-viewport {
@@ -1189,7 +1189,7 @@ header{
 			border-radius: 0;
 			background: none;
 			left: -18px !important;
-			width: 7px;
+			width: 10px;
 			right: initial;
 		}
 		.search_autoComplete .scroll-overview {
@@ -1200,7 +1200,7 @@ header{
 			background-color: rgba(128, 128, 128, 0.51);
 			border-radius: 0;
 			left: 1px;
-			width: 7px;
+			width: 10px;
 		}
 
 		.inner_sr .scroll-viewport {
@@ -1211,7 +1211,7 @@ header{
 			border-radius: 0;
 			background: none;
 			left: 0 !important;
-			width: 7px;
+			width: 10px;
 			right: initial;
 		}
 		.inner_sr .scroll-overview {
@@ -1222,7 +1222,7 @@ header{
 			background-color: rgba(128, 128, 128, 0.51);
 			border-radius: 0;
 			left: 1px;
-			width: 7px;
+			width: 10px;
 		}
 
 		.pageBlock .scroll-viewport {
@@ -1233,7 +1233,7 @@ header{
 			border-radius: 0;
 			background: none;
 			left: 0 !important;
-			width: 7px;
+			width: 10px;
 			right: initial;
 		}
 		.pageBlock .scroll-overview {
@@ -1244,7 +1244,7 @@ header{
 			background-color: rgba(128, 128, 128, 0.51);
 			border-radius: 0;
 			left: 1px;
-			width: 7px;
+			width: 10px;
 		}
 
 		.pageBlock .contactUs .scroll-viewport {
@@ -1255,7 +1255,7 @@ header{
 			border-radius: 0;
 			background: none;
 			left: 0 !important;
-			width: 7px;
+			width: 10px;
 			right: initial;
 		}
 		.pageBlock .contactUs .scroll-overview {
@@ -1266,7 +1266,7 @@ header{
 			background-color: rgba(128, 128, 128, 0.51);
 			border-radius: 0;
 			left: 1px;
-			width: 7px;
+			width: 10px;
 		}
 
 		.pageBlock .recommendedDiv .scroll-viewport {
@@ -1277,7 +1277,7 @@ header{
 			border-radius: 0;
 			background: none;
 			left: 0 !important;
-			width: 7px;
+			width: 10px;
 			right: initial;
 		}
 		.pageBlock .recommendedDiv .scroll-overview {
@@ -1288,7 +1288,7 @@ header{
 			background-color: rgba(128, 128, 128, 0.51);
 			border-radius: 0;
 			left: 1px;
-			width: 7px;
+			width: 10px;
 		}
 
 
