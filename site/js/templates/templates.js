@@ -224,7 +224,17 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "    <a  ng-click=\"displayHandle.closeAll()\" class=\"back-btn\"></a>\r" +
     "\n" +
-    "    <div ng-if=\"sideCategory.img\" class=\"top\" ng-attr-style=\"{{sideCategory.img ? 'background-image: url(' + mediaUrl + sideCategory.img + ');' : ''}}\">\r" +
+    "    <div lazy-img='{{mediaUrl + sideCategory.img}}' ng-if=\"sideCategory.img\" class=\"top\">\r" +
+    "\n" +
+    "        <!--ng-attr-style=\"{{sideCategory.img ? 'background-image: url(' + mediaUrl + sideCategory.img + ');' : ''}}\" -->\r" +
+    "\n" +
+    "        <div class=\"innerSpinner spinner\" style=\"display: none\">\r" +
+    "\n" +
+    "            <div class=\"double-bounce1\"></div>\r" +
+    "\n" +
+    "            <div class=\"double-bounce2\"></div>\r" +
+    "\n" +
+    "        </div>\r" +
     "\n" +
     "    </div>\r" +
     "\n" +
@@ -259,7 +269,17 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                <a ng-click=\"displayHandle.closeAll()\" class=\"close-btn\"></a>\r" +
     "\n" +
-    "                <div class=\"ii-top\" ng-attr-style=\"{{ sideObject.content_image ? 'background-image: url(' + mediaUrl + sideObject.content_image + ');' : ''}}\">\r" +
+    "                <div class=\"ii-top\" lazy-img=\"{{ sideObject.content_image ? mediaUrl + sideObject.content_image : ''}}\">\r" +
+    "\n" +
+    "                    <!--  ng-attr-style=\"{{ sideObject.content_image ? 'background-image: url(' + mediaUrl + sideObject.content_image + ');' : ''}}\" -->\r" +
+    "\n" +
+    "                    <div class=\"innerSpinner spinner\" style=\"display: none\">\r" +
+    "\n" +
+    "                        <div class=\"double-bounce1\"></div>\r" +
+    "\n" +
+    "                        <div class=\"double-bounce2\"></div>\r" +
+    "\n" +
+    "                    </div>\r" +
     "\n" +
     "                    <div class=\"img-top-titles\">\r" +
     "\n" +
@@ -625,7 +645,11 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "            <a href=\"#/\" class=\"back-btn\"></a>\r" +
     "\n" +
-    "            <div class=\"top\" ng-attr-style=\"{{pageContent.img ? 'background-image:url(/Jini3/images/'+ pageContent.img +')' : ''}}\"></div>\r" +
+    "            <div class=\"top\" lazy-img=\"{{pageContent.img ? '/Jini3/images/'+ pageContent.img : ''}}\" ng-if=\"pageContent.img\" >\r" +
+    "\n" +
+    "                <!--  ng-attr-style=\"{{pageContent.img ? 'background-image:url(/Jini3/images/'+ pageContent.img +')' : ''}}\" -->\r" +
+    "\n" +
+    "            </div>\r" +
     "\n" +
     "            <div class=\"bottom\">\r" +
     "\n" +
@@ -651,7 +675,11 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "            <a href=\"#/\" class=\"back-btn\"></a>\r" +
     "\n" +
-    "            <div class=\"top\" ng-attr-style=\"{{pageContent.img ? 'background-image:url(/Jini3/images/'+ pageContent.img +')' : ''}}\"></div>\r" +
+    "            <div class=\"top\" lazy-img=\"{{pageContent.img ? '/Jini3/images/'+ pageContent.img : ''}}\" ng-if=\"pageContent.img\" >\r" +
+    "\n" +
+    "                <!--  ng-attr-style=\"{{pageContent.img ? 'background-image:url(/Jini3/images/'+ pageContent.img +')' : ''}}\" -->\r" +
+    "\n" +
+    "            </div>\r" +
     "\n" +
     "            <div class=\"bottom\">\r" +
     "\n" +
@@ -756,7 +784,9 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "            <symbol ng-init=\"currentItem && $first ? openItem(currentItem) : ''\" ng-repeat=\"(k, v) in currentCategories\"  class=\"icon icon-\" id=\"icon-{{$index+1}}\" viewBox=\"0 0 40 40\">\r" +
     "\n" +
-    "                <text ng-if=\"currentCategoriesLength == 2\" fill=\"#222\" dx=\"-30\" y=\"0\" dy=\"-115px\" text-anchor=\"middle\" font-size=\"22px\">{{v.title}}</text>\r" +
+    "                <text ng-if=\"currentCategoriesLength == 2\" fill=\"#222\" dx=\"-30\" y=\"0\" dy=\"-95px\" text-anchor=\"middle\" font-size=\"22px\">{{v.newTitle ? v.newTitle[0] : v.title}}</text>\r" +
+    "\n" +
+    "                <text ng-if=\"currentCategoriesLength == 2 && v.newTitle\" fill=\"#222\" dx=\"-30\" y=\"0\" dy=\"-120px\" text-anchor=\"middle\" font-size=\"22px\">{{v.newTitle[1]}}</text>\r" +
     "\n" +
     "                <text ng-if=\"currentCategoriesLength != 2\" fill=\"#222\" x=\"50%\" dx=\"0\" y=\"50%\" dy=\"0px\" text-anchor=\"middle\" font-size=\"16px\">{{v.newTitle ? v.newTitle[0] : v.title}}</text>\r" +
     "\n" +

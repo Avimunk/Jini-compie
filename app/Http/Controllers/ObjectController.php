@@ -83,6 +83,7 @@ class ObjectController extends Controller {
                 ->where('object_meta.meta_value', $categoryId)
                 ->select(DB::raw("'$featuredImageUrl' AS featured_image"),'cat.id AS catID', 'cat.title AS catTitle', 'cat.name AS catName','obj.id AS objID', 'obj.name AS objName', 'objects.id', 'objects.excerpt', 'objects.parent_id', 'objects.name', 'objects.type', 'objects.title')
                 ->orderBy('objects.score','DESC')
+                ->orderBy('objects.title','ASC')
             ;
 //            dd($objects->toSql());
             $objects = $objects->get();
@@ -140,8 +141,10 @@ class ObjectController extends Controller {
                     })
                     ->select('id', 'parent_id', 'name', 'type', 'title')
                     ->orderBy('score','DESC')
+                    ->orderBy('title','ASC')
                     ->take(50)
                     ->get();
+
                 $objects->each(function($v){
                     if($v->type != 'category')
                     {
@@ -221,6 +224,7 @@ class ObjectController extends Controller {
                     ->where('object_meta.meta_value', $categoryId)
                     ->select(DB::raw("'$featuredImageUrl' AS featured_image"),'cat.id AS catID', 'cat.title AS catTitle', 'cat.name AS catName','obj.id AS objID', 'obj.name AS objName', 'objects.id', 'objects.excerpt', 'objects.parent_id', 'objects.name', 'objects.type', 'objects.title')
                     ->orderBy('objects.score','DESC')
+                    ->orderBy('objects.title','ASC')
                 ;
             $objects = $objects->get();
             foreach ($objects as $object) {
@@ -291,6 +295,7 @@ class ObjectController extends Controller {
                     })
                     ->select('obj.id AS objID', 'obj.name AS objName', 'objects.id', 'objects.excerpt', 'objects.parent_id', 'objects.name', 'objects.type', 'objects.title')
                     ->orderBy('objects.score','DESC')
+                    ->orderBy('objects.title','ASC')
 //                    ->take(10)
                     ->get();
 

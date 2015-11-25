@@ -90,7 +90,9 @@
         </div>
         <div ng-switch-when="24news" ng-class="pageBlock && currentPage == '24news' ? 'collapsed' : ''" class="channel24 visionDiv imgNtext rd2">
             <a href="#/" class="back-btn"></a>
-            <div class="top" ng-attr-style="{{pageContent.img ? 'background-image:url(/Jini3/images/'+ pageContent.img +')' : ''}}"></div>
+            <div class="top" lazy-img="{{pageContent.img ? '/Jini3/images/'+ pageContent.img : ''}}" ng-if="pageContent.img" >
+                <!--  ng-attr-style="{{pageContent.img ? 'background-image:url(/Jini3/images/'+ pageContent.img +')' : ''}}" -->
+            </div>
             <div class="bottom">
                 <div class="inner-b" scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;padding: 20px;">
                     <div ng-repeat="item in pageContent.items">
@@ -103,7 +105,9 @@
         </div>
         <div ng-switch-default ng-class="pageBlock ? 'collapsed' : ''" class="imgNtext visionDiv">
             <a href="#/" class="back-btn"></a>
-            <div class="top" ng-attr-style="{{pageContent.img ? 'background-image:url(/Jini3/images/'+ pageContent.img +')' : ''}}"></div>
+            <div class="top" lazy-img="{{pageContent.img ? '/Jini3/images/'+ pageContent.img : ''}}" ng-if="pageContent.img" >
+                <!--  ng-attr-style="{{pageContent.img ? 'background-image:url(/Jini3/images/'+ pageContent.img +')' : ''}}" -->
+            </div>
             <div class="bottom">
                 <div class="inner-b" scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;padding: 20px;">
                     <span class="inner-title">{{pageContent.title}}</span>

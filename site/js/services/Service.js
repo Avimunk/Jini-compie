@@ -495,11 +495,17 @@ function pie() {
  * @returns {*[]}
  */
 function split2s(str, delim) {
-    var p=str.indexOf(delim);
-    if (p !== -1) {
-        return [str.substring(0,p), str.substring(p+1)];
-    } else {
+    var split = str.trim().split(" ");
+    console.log(split);
+    if(split.length <= 1)
+    {
         return [str];
+    }
+    else
+    {
+        var first = split;
+        var last = split.splice(Math.ceil(split.length / 2), Math.floor(split.length / 2));
+        return [first.join(' '), last.join(' ')];
     }
 }
 
@@ -523,8 +529,9 @@ function splitCurrentCategoriesTitle(currentCategories){
 
     for(i in currentCategories)
     {
-        var title = replaceAll('/', '', currentCategories[i].title);
-        title = replaceAll('-', '', title);
+        //var title = replaceAll('/', '', currentCategories[i].title);
+        //title = replaceAll('-', '', title);
+        var title = currentCategories[i].title;
         var titleSplit = split2s(title, ' ');
         currentCategories[i].newTitle = titleSplit.length > 1 ? titleSplit : false;
     }

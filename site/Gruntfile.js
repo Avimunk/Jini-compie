@@ -46,6 +46,7 @@ module.exports = function(grunt) {
 						'lib/helpers/helpers.js',
 						'lib/helpers/valdr.js',
 						'lib/helpers/valdr-message.js',
+						'lib/helpers/angular-lazy-img.min.js',
 					]
 				},
 				options: {

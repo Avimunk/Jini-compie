@@ -1,6 +1,11 @@
 <div ng-show="showCategoryBlock" ng-class="showCategoryBlock ? 'collapsed' : ''" class="openDiv imgNtext visionDiv categoryHover">
     <a  ng-click="displayHandle.closeAll()" class="back-btn"></a>
-    <div ng-if="sideCategory.img" class="top" ng-attr-style="{{sideCategory.img ? 'background-image: url(' + mediaUrl + sideCategory.img + ');' : ''}}">
+    <div lazy-img='{{mediaUrl + sideCategory.img}}' ng-if="sideCategory.img" class="top">
+        <!--ng-attr-style="{{sideCategory.img ? 'background-image: url(' + mediaUrl + sideCategory.img + ');' : ''}}" -->
+        <div class="innerSpinner spinner" style="display: none">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
     </div>
     <div scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%" class="bottom {{sideCategory.img ? 'img' : 'noImg'}}" >
         <div class="inner-b">

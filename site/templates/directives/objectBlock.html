@@ -4,7 +4,12 @@
             <div class="in-scroller-content">
                 <a ng-href="{{backUrl}}" ng-if="backUrl" class="back-t">Back to list view</a>
                 <a ng-click="displayHandle.closeAll()" class="close-btn"></a>
-                <div class="ii-top" ng-attr-style="{{ sideObject.content_image ? 'background-image: url(' + mediaUrl + sideObject.content_image + ');' : ''}}">
+                <div class="ii-top" lazy-img="{{ sideObject.content_image ? mediaUrl + sideObject.content_image : ''}}">
+                    <!--  ng-attr-style="{{ sideObject.content_image ? 'background-image: url(' + mediaUrl + sideObject.content_image + ');' : ''}}" -->
+                    <div class="innerSpinner spinner" style="display: none">
+                        <div class="double-bounce1"></div>
+                        <div class="double-bounce2"></div>
+                    </div>
                     <div class="img-top-titles">
                         <span class="inner-title">{{ sideObject.title }}</span>
                         <span class="profession">{{ sideObject.occupation }}</span>

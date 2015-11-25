@@ -83,6 +83,7 @@ html, body{
 			color: #fff;
 		}
 	.back-btn{
+		z-index: 1;
 		cursor: pointer;
 		display: block;
 		width: 35px;
@@ -507,11 +508,29 @@ header{
 					display: block;
 				}
 	/* VISION */
-	.visionDiv .top{
-		background: url(../images/v-img.png);
-		background-repeat: no-repeat;
-		background-size: cover;
-		background-position: center center;
+	.imgLoading .innerSpinner{
+		display: block !important;
+	}
+	.imgLoading .innerSpinner .double-bounce1,
+	.imgLoading .innerSpinner .double-bounce2
+	{
+		background-color: #AFAFAF !important;
+	}
+	.imgLoading{
+		background: none !important;
+		position: relative;
+	}
+
+	.item_info_img .ii-top.imgLoading .img-top-titles{
+		color: #000;
+	}
+
+	.visionDiv .top, .item_info_img .ii-top{
+		/*background: url(../images/v-img.png);*/
+		/*background: url(https://rawgit.com/BenBBear/ionic-cache-src/master/img/loader.gif);*/
+		background-repeat: no-repeat !important;
+		background-size: cover !important;
+		background-position: center center !important;
 	}
 	.visionDiv .bottom{
 		/*overflow-y: scroll;*/
@@ -1542,3 +1561,7 @@ header{
 		line-height: 23px;
 	}
 
+/* Nechemya - lazy load */
+.categoryHover .top img{
+	height: inherit;
+}

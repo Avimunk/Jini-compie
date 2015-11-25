@@ -9,7 +9,8 @@ angular.module('JINI', [
     'JINI.filters',
     'JINI.services',
     'JINI.templates',
-    'valdr'
+    'valdr',
+    'angularLazyImg'
 ])
 .config(Config)
 .run(Run);
