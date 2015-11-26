@@ -259,7 +259,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
   $templateCache.put('templates/directives/objectBlock.html',
     "<div>\r" +
     "\n" +
-    "    <div class=\"item_info {{showObjectBlock ? 'collapsed' : ''}}\" ng-class=\"sideObject.content_image ? 'item_info_img' : ''\" ng-show=\"showObjectBlock\">\r" +
+    "    <div class=\"item_info {{showObjectBlock ? 'collapsed' : ''}}\" ng-class=\"sideObject._content_image ? 'item_info_img' : ''\" ng-show=\"showObjectBlock\">\r" +
     "\n" +
     "        <div scrollbar=\"{autoUpdate: true,wheelSpeed : 20}\" style=\"max-height: 100%;width: 542px\" >\r" +
     "\n" +
@@ -269,7 +269,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                <a ng-click=\"displayHandle.closeAll()\" class=\"close-btn\"></a>\r" +
     "\n" +
-    "                <div class=\"ii-top\" lazy-img=\"{{ sideObject.content_image ? mediaUrl + sideObject.content_image : ''}}\">\r" +
+    "                <div class=\"ii-top\" lazy-img=\"{{ sideObject._content_image ? mediaUrl + sideObject._content_image : ''}}\">\r" +
     "\n" +
     "                    <!--  ng-attr-style=\"{{ sideObject.content_image ? 'background-image: url(' + mediaUrl + sideObject.content_image + ');' : ''}}\" -->\r" +
     "\n" +
@@ -293,35 +293,39 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                <div class=\"ii-content\">\r" +
     "\n" +
-    "                    <div class=\"text-separator first\">\r" +
+    "                    <div ng-show=\"sideObject.map\" class=\"text-separator map\">\r" +
     "\n" +
-    "                        <a  ng-show=\"sideObject.address_location_g != '' && sideObject.address_location_k != ''\" class=\"map-btn {{showObjectBlockMap ? 'active' : ''}}\" ng-href=\"{{objectMapUrl}}\">\r" +
+    "                        <a class=\"map-btn {{showObjectBlockMap ? 'active' : ''}}\" ng-href=\"{{objectMapUrl}}\">\r" +
     "\n" +
     "                            <div></div>\r" +
     "\n" +
     "                        </a>\r" +
     "\n" +
+    "                    </div>\r" +
+    "\n" +
+    "                    <div ng-class=\"{'first' : !sideObject.map}\" class=\"text-separator\">\r" +
+    "\n" +
+    "                        <p ng-bind-html=\"sideObject.content | rawHtml\" class=\"objectContent\"></p>\r" +
+    "\n" +
     "                        <div class=\"clearfix\"></div>\r" +
     "\n" +
-    "                        <div class=\"i-contact-info\">\r" +
+    "                        <div ng-show=\"sideObject.hasContact || sideObject.hasContactAddress\" class=\"i-contact-info\">\r" +
     "\n" +
     "                            <div class=\"info-title\"></div>\r" +
     "\n" +
     "                            <table>\r" +
     "\n" +
-    "                                <tr>\r" +
+    "                                <tr ng-show=\"sideObject.hasContact\">\r" +
     "\n" +
     "                                    <td class=\"ii-text first\">{{ sideObject.phone }}</td>\r" +
     "\n" +
-    "                                    <td class=\"ii-text second\">{{ sideObject.address_street + ' ' + sideObject.address_city }}</td>\r" +
+    "                                    <td class=\"ii-text second\">{{ sideObject.email }}</td>\r" +
     "\n" +
     "                                </tr>\r" +
     "\n" +
-    "                                <tr>\r" +
+    "                                <tr ng-show=\"sideObject.hasContactAddress\">\r" +
     "\n" +
-    "                                    <td class=\"ii-text first\">{{ sideObject.email }}</td>\r" +
-    "\n" +
-    "                                    <td class=\"ii-text second\">{{ sideObject.french_speakers }}</td>\r" +
+    "                                    <td class=\"ii-text\">{{ sideObject.address.address + ' ' + sideObject.address.city }}</td>\r" +
     "\n" +
     "                                </tr>\r" +
     "\n" +
@@ -329,111 +333,101 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                        </div>\r" +
     "\n" +
-    "                        <div class=\"i-more-info\">\r" +
+    "                        <div class=\"i-more-info\" ng-show=\"sideObject.more\">\r" +
     "\n" +
-    "                            <!--\r" +
+    "\r" +
     "\n" +
     "                            <div class=\"info-title more\"></div>\r" +
     "\n" +
-    "                            <div class=\"row\">\r" +
+    "                            <table class=\"more\">\r" +
     "\n" +
-    "                                <span class=\"ii-text\">$$$</span>\r" +
+    "                                <tr ng-repeat=\"item in sideObject.more\">\r" +
     "\n" +
-    "                            </div>\r" +
+    "                                    <td data-type=\"{{item.type}}\" class=\"ii-text\">{{item.key}}:</td>\r" +
     "\n" +
-    "                            <table>\r" +
+    "                                    <td ng-if=\"item.type == 'checkbox'\" class=\"ii-text second\">{{item.value ? 'v' : 'x'}}</td>\r" +
     "\n" +
-    "                                <tr>\r" +
+    "                                    <td ng-if=\"item.type == 'text'\" class=\"ii-text second\">{{item.value}}</td>\r" +
     "\n" +
-    "                                    <td class=\"ii-text\">Mon-Thu</td>\r" +
+    "                                    <td ng-if=\"item.type == 'tel'\" class=\"ii-text second\"><a ng-href=\"tel:{{item.value}}\">{{item.value}}</a></td>\r" +
     "\n" +
-    "                                    <td class=\"ii-text second\">10:00-19:00</td>\r" +
-    "\n" +
-    "                                </tr>\r" +
-    "\n" +
-    "                                <tr>\r" +
-    "\n" +
-    "                                    <td class=\"ii-text\">Fri</td>\r" +
-    "\n" +
-    "                                    <td class=\"ii-text second\">10:30-13:00</td>\r" +
+    "                                    <td ng-if=\"item.type == 'wysiwyg'\" ng-bind-html=\"item.value | rawHtml\" class=\"ii-text second\"></td>\r" +
     "\n" +
     "                                </tr>\r" +
     "\n" +
     "                            </table>\r" +
     "\n" +
-    "                            -->\r" +
+    "\r" +
     "\n" +
     "                        </div>\r" +
     "\n" +
     "                    </div>\r" +
     "\n" +
-    "                    <div class=\"text-separator\">\r" +
+    "\r" +
     "\n" +
-    "                        <!--\r" +
+    "                    <!--\r" +
     "\n" +
-    "                        <table class=\"item-services\">\r" +
+    "                        <div class=\"text-separator\">\r" +
     "\n" +
-    "                            <tr>\r" +
+    "\r" +
     "\n" +
-    "                                <th class=\"first-col\"></th>\r" +
+    "                            <table class=\"item-services\">\r" +
     "\n" +
-    "                                <th class=\"middle-col\">Title A</th>\r" +
+    "                                <tr>\r" +
     "\n" +
-    "                                <th class=\"middle-col\">Title B</th>\r" +
+    "                                    <th class=\"first-col\"></th>\r" +
     "\n" +
-    "                                <th></th>\r" +
+    "                                    <th class=\"middle-col\">Title A</th>\r" +
     "\n" +
-    "                            </tr>\r" +
+    "                                    <th class=\"middle-col\">Title B</th>\r" +
     "\n" +
-    "                            <tr>\r" +
+    "                                    <th></th>\r" +
     "\n" +
-    "                                <td>parking</td>\r" +
+    "                                </tr>\r" +
     "\n" +
-    "                                <td><span class=\"bullet\"></span></td>\r" +
+    "                                <tr>\r" +
     "\n" +
-    "                                <td></td>\r" +
+    "                                    <td>parking</td>\r" +
     "\n" +
-    "                                <td></td>\r" +
+    "                                    <td><span class=\"bullet\"></span></td>\r" +
     "\n" +
-    "                            </tr>\r" +
+    "                                    <td></td>\r" +
     "\n" +
-    "                            <tr>\r" +
+    "                                    <td></td>\r" +
     "\n" +
-    "                                <td>livraison</td>\r" +
+    "                                </tr>\r" +
     "\n" +
-    "                                <td></td>\r" +
+    "                                <tr>\r" +
     "\n" +
-    "                                <td><span class=\"bullet\"></span></td>\r" +
+    "                                    <td>livraison</td>\r" +
     "\n" +
-    "                                <td></td>\r" +
+    "                                    <td></td>\r" +
     "\n" +
-    "                            </tr>\r" +
+    "                                    <td><span class=\"bullet\"></span></td>\r" +
     "\n" +
-    "                            <tr>\r" +
+    "                                    <td></td>\r" +
     "\n" +
-    "                                <td>Koupat Holim</td>\r" +
+    "                                </tr>\r" +
     "\n" +
-    "                                <td><span class=\"bullet\"></span></td>\r" +
+    "                                <tr>\r" +
     "\n" +
-    "                                <td><span class=\"bullet\"></span></td>\r" +
+    "                                    <td>Koupat Holim</td>\r" +
     "\n" +
-    "                                <td></td>\r" +
+    "                                    <td><span class=\"bullet\"></span></td>\r" +
     "\n" +
-    "                            </tr>\r" +
+    "                                    <td><span class=\"bullet\"></span></td>\r" +
     "\n" +
-    "                        </table>\r" +
+    "                                    <td></td>\r" +
     "\n" +
-    "                        -->\r" +
+    "                                </tr>\r" +
     "\n" +
-    "                        <p ng-bind-html=\"sideObject.content | rawHtml\" class=\"objectContent\"></p>\r" +
+    "                            </table>\r" +
     "\n" +
-    "                        <p ng-repeat=\"(k,v) in a track by $index\">\r" +
+    "\r" +
     "\n" +
-    "                            asda-{{k}}<br>\r" +
+    "                        </div>\r" +
     "\n" +
-    "                        </p>\r" +
-    "\n" +
-    "                    </div>\r" +
+    "                    -->\r" +
     "\n" +
     "                </div>\r" +
     "\n" +

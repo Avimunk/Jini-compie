@@ -1,10 +1,10 @@
 <div>
-    <div class="item_info {{showObjectBlock ? 'collapsed' : ''}}" ng-class="sideObject.content_image ? 'item_info_img' : ''" ng-show="showObjectBlock">
+    <div class="item_info {{showObjectBlock ? 'collapsed' : ''}}" ng-class="sideObject._content_image ? 'item_info_img' : ''" ng-show="showObjectBlock">
         <div scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 542px" >
             <div class="in-scroller-content">
                 <a ng-href="{{backUrl}}" ng-if="backUrl" class="back-t">Back to list view</a>
                 <a ng-click="displayHandle.closeAll()" class="close-btn"></a>
-                <div class="ii-top" lazy-img="{{ sideObject.content_image ? mediaUrl + sideObject.content_image : ''}}">
+                <div class="ii-top" lazy-img="{{ sideObject._content_image ? mediaUrl + sideObject._content_image : ''}}">
                     <!--  ng-attr-style="{{ sideObject.content_image ? 'background-image: url(' + mediaUrl + sideObject.content_image + ');' : ''}}" -->
                     <div class="innerSpinner spinner" style="display: none">
                         <div class="double-bounce1"></div>
@@ -16,77 +16,74 @@
                     </div>
                 </div>
                 <div class="ii-content">
-                    <div class="text-separator first">
-                        <a  ng-show="sideObject.address_location_g != '' && sideObject.address_location_k != ''" class="map-btn {{showObjectBlockMap ? 'active' : ''}}" ng-href="{{objectMapUrl}}">
+                    <div ng-show="sideObject.map" class="text-separator map">
+                        <a class="map-btn {{showObjectBlockMap ? 'active' : ''}}" ng-href="{{objectMapUrl}}">
                             <div></div>
                         </a>
+                    </div>
+                    <div ng-class="{'first' : !sideObject.map}" class="text-separator">
+                        <p ng-bind-html="sideObject.content | rawHtml" class="objectContent"></p>
                         <div class="clearfix"></div>
-                        <div class="i-contact-info">
+                        <div ng-show="sideObject.hasContact || sideObject.hasContactAddress" class="i-contact-info">
                             <div class="info-title"></div>
                             <table>
-                                <tr>
+                                <tr ng-show="sideObject.hasContact">
                                     <td class="ii-text first">{{ sideObject.phone }}</td>
-                                    <td class="ii-text second">{{ sideObject.address_street + ' ' + sideObject.address_city }}</td>
+                                    <td class="ii-text second">{{ sideObject.email }}</td>
                                 </tr>
-                                <tr>
-                                    <td class="ii-text first">{{ sideObject.email }}</td>
-                                    <td class="ii-text second">{{ sideObject.french_speakers }}</td>
+                                <tr ng-show="sideObject.hasContactAddress">
+                                    <td class="ii-text">{{ sideObject.address.address + ' ' + sideObject.address.city }}</td>
                                 </tr>
                             </table>
                         </div>
-                        <div class="i-more-info">
-                            <!--
+                        <div class="i-more-info" ng-show="sideObject.more">
+
                             <div class="info-title more"></div>
-                            <div class="row">
-                                <span class="ii-text">$$$</span>
-                            </div>
-                            <table>
-                                <tr>
-                                    <td class="ii-text">Mon-Thu</td>
-                                    <td class="ii-text second">10:00-19:00</td>
-                                </tr>
-                                <tr>
-                                    <td class="ii-text">Fri</td>
-                                    <td class="ii-text second">10:30-13:00</td>
+                            <table class="more">
+                                <tr ng-repeat="item in sideObject.more">
+                                    <td data-type="{{item.type}}" class="ii-text">{{item.key}}:</td>
+                                    <td ng-if="item.type == 'checkbox'" class="ii-text second">{{item.value ? 'v' : 'x'}}</td>
+                                    <td ng-if="item.type == 'text'" class="ii-text second">{{item.value}}</td>
+                                    <td ng-if="item.type == 'tel'" class="ii-text second"><a ng-href="tel:{{item.value}}">{{item.value}}</a></td>
+                                    <td ng-if="item.type == 'wysiwyg'" ng-bind-html="item.value | rawHtml" class="ii-text second"></td>
                                 </tr>
                             </table>
-                            -->
+
                         </div>
                     </div>
-                    <div class="text-separator">
-                        <!--
-                        <table class="item-services">
-                            <tr>
-                                <th class="first-col"></th>
-                                <th class="middle-col">Title A</th>
-                                <th class="middle-col">Title B</th>
-                                <th></th>
-                            </tr>
-                            <tr>
-                                <td>parking</td>
-                                <td><span class="bullet"></span></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>livraison</td>
-                                <td></td>
-                                <td><span class="bullet"></span></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>Koupat Holim</td>
-                                <td><span class="bullet"></span></td>
-                                <td><span class="bullet"></span></td>
-                                <td></td>
-                            </tr>
-                        </table>
-                        -->
-                        <p ng-bind-html="sideObject.content | rawHtml" class="objectContent"></p>
-                        <p ng-repeat="(k,v) in a track by $index">
-                            asda-{{k}}<br>
-                        </p>
-                    </div>
+
+                    <!--
+                        <div class="text-separator">
+
+                            <table class="item-services">
+                                <tr>
+                                    <th class="first-col"></th>
+                                    <th class="middle-col">Title A</th>
+                                    <th class="middle-col">Title B</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td>parking</td>
+                                    <td><span class="bullet"></span></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>livraison</td>
+                                    <td></td>
+                                    <td><span class="bullet"></span></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Koupat Holim</td>
+                                    <td><span class="bullet"></span></td>
+                                    <td><span class="bullet"></span></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+
+                        </div>
+                    -->
                 </div>
             </div>
         </div>

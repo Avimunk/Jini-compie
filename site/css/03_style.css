@@ -1028,6 +1028,10 @@ header{
 						background: #fff;
 						width: 90px;
 					}
+					.info-title.more:before{
+						content: 'More info';
+						width: 73px;
+					}
 				.i-contact-info{
 					width: 100%;
     				clear: both;
@@ -1039,6 +1043,10 @@ header{
 					.i-more-info table{
 						margin-top: 30px;
 					}
+						.i-more-info table td:first-child{
+							vertical-align: top;
+							font-weight: bold;
+						}
 					td.ii-text.second{
 						padding-left: 22px;
 					}
@@ -1097,6 +1105,14 @@ header{
 			}
 				.item_info_img .ii-content .text-separator.first{
 					border-top:0;
+				}
+				.text-separator.map {
+					padding: 5px 0;
+					height: 43px;
+				}
+				.text-separator.first {
+					border-top:none;
+					padding-top: 20px;
 				}
 
 

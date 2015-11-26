@@ -14,6 +14,9 @@ function CategoryController($rootScope, $scope, $stateParams, $state, $http) {
     switch($state.current.name)
     {
         case 'object':
+
+            $rootScope.$emit('lazyImg:refresh');
+
             $rootScope.objectMapUrl = '#/'+ $state.params.id + '-' + $state.params.id2 + ($state.params.map ? '' : '/map') + '/' + $state.params.title + '/' + $state.params.title2 + '/';
             var fromSearch = ($state.params.fromSearch ? '/search/' + ($state.params.fromSearch).replace('fromSearch-', '') : '')
             if(fromSearch)

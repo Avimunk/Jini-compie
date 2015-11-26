@@ -285,15 +285,15 @@ angular.module('JINI.directives', [])
                 infoBubble = new InfoBubble({
                     map: map,
                     content: marker.info,
-                    position: new google.maps.LatLng(parseFloat(scope.sideObject.address_location_g) + 0.035, scope.sideObject.address_location_k),
+                    position: new google.maps.LatLng(parseFloat(scope.sideObject.address.location_g) + 0.035, scope.sideObject.address.location_k),
 
                     padding: 0,
                     backgroundColor: 'white',
                     borderColor: 'transparent',
                     backgroundClassName: 'infoBubbleBlock',
 
-                    minHeight: scope.sideObject.content_image ? '370' : '130',
-                    maxHeight: scope.sideObject.content_image ? '370' : '130',
+                    minHeight: scope.sideObject._content_image ? '370' : '130',
+                    maxHeight: scope.sideObject._content_image ? '370' : '130',
                     minWidth: '450',
                     maxWidth: '450',
 
@@ -315,18 +315,18 @@ angular.module('JINI.directives', [])
 
             // show the map and place some markers
             initMap();
-            if(scope.sideObject.address_location_g && scope.sideObject.address_location_k)
+            if(scope.sideObject.map)
             {
                 console.log('mapItem')
-                if (scope.sideObject.promoted == 1) {
+                if (scope.sideObject.score >= 1) {
                     iconUrl = '/Jini3/public/img/icons/map_pin_promoted_xs.png';
                 }
                 else {
                     iconUrl = '/Jini3/public/img/icons/map_pin_xs.png';
                 }
 
-                var html = '<div class="marker-popup' + (!scope.sideObject.content_image ? ' no-content-image' : ' content-image') +'">' +
-                    '<div class="top-pane" style="background-image: url(' + scope.sideObject.content_image + ');"></div>' +
+                var html = '<div class="marker-popup' + (!scope.sideObject._content_image ? ' no-content-image' : ' content-image') +'">' +
+                    '<div class="top-pane" style="background-image: url(' + scope.sideObject._content_image + ');"></div>' +
                     '   <div class="main-pane">' +
                     '       <div class="row heading">' +
                     '           <a href="#/0-'+scope.sideObject.id+'/Home/'+scope.sideObject.title+'/" class="col-md-12">' +
@@ -339,14 +339,14 @@ angular.module('JINI.directives', [])
                     '           </div>' +
                     '       </div>' +
                     '       <div class="row actions actions-pane">' +
-                    '           <div class="pull-left"><span class="address">' + scope.sideObject.address_street + ' ' + scope.sideObject.address_city + '</span></div>' +
+                    '           <div class="pull-left"><span class="address">' + scope.sideObject.address.address + ' ' + scope.sideObject.address.city + '</span></div>' +
                     '           <a class="more-info map-more-info" href="#/0-'+scope.sideObject.id+'/Home/'+scope.sideObject.title+'/">More Info</a>' +
                     '       </div>' +
                     '   </div>' +
                     '</div>' +
                     '</div>';
 
-                setMarker(new google.maps.LatLng(scope.sideObject.address_location_g, scope.sideObject.address_location_k), html, iconUrl);
+                setMarker(new google.maps.LatLng(scope.sideObject.address.location_g, scope.sideObject.address.location_k), html, iconUrl);
             }
         };
 

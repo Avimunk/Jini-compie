@@ -40,13 +40,233 @@ class ObjectController extends Controller {
 
         $object->promoted= ObjectMeta::getValue($object->id, '_field_promoted' );
     }
+
+    private function processObject2(&$object, $getAll = true)
+    {
+        $objectData = ObjectMeta::where('object_id' , '=', $object->id)->orWhere('object_id' , '=', $object->objectTypeID)->get();
+
+        $objectFinal = $object->toArray();
+        if($getAll)
+        {
+            $objectTypeData = $objectData->filter(function($v) use($object){
+                if($v->object_id == $object->objectTypeID)
+                    return true;
+
+                return false;
+            });
+            foreach($objectTypeData as $item)
+            {
+                // Get categories
+                if($item->meta_key == '_category_id')
+                {
+                    if(isset($objectFinal['categories']))
+                        $objectFinal['categories'][] = $item->meta_value;
+                    else
+                        $objectFinal['categories'] = array(
+                            $item->meta_value
+                        );
+                    continue;
+                }
+
+                // Get fields
+                if(strpos($item->meta_key, '_field_') === 0)
+                {
+                    $content = unserialize($item->meta_value);
+                    if(isset($objectFinal['fields']))
+                        $objectFinal['fields'][$content['name']] = $content;
+                    else
+                        $objectFinal['fields'] = array(
+                            $content['name'] => $content
+                        );
+                }
+            }
+        }
+
+        $objectData = $objectData->filter(function($v) use($object){
+            if($v->object_id == $object->id)
+                return true;
+
+            return false;
+        });
+        $objectFinal['map'] = true;
+        foreach($objectData as $item)
+        {
+            $itemKey = $item->meta_key;
+            $itemVal = $item->meta_value;
+
+            // Address
+            if(strpos($itemKey, '_field_address') === 0)
+            {
+                // Get the current key
+                $key = str_replace(array('_field_address-'), '', $itemKey);
+
+                // check if map exists
+                if(($key == 'location-g' || $key == 'location-k'))
+                {
+                    if($itemVal == '')
+                        $objectFinal['map'] = false;
+
+                    $key = str_replace('-', '_', $key);
+                }
+
+                // add the current address data to the array
+                if(isset($objectFinal['address']))
+                    $objectFinal['address'][$key] = $itemVal;
+                else
+                    $objectFinal['address'] = array(
+                        $key => $itemVal
+                    );
+                continue;
+            }
+
+            // Images
+            if($itemKey == '_content_image' || $itemKey == '_featured_image')
+            {
+                $objectFinal[$itemKey] = getImageSrc($itemVal, 'medium');
+
+                continue;
+            }
+
+            if($getAll)
+            {
+                // Set phone
+                if($itemKey == '_field_phone')
+                {
+                    $objectFinal['phone'] = $itemVal;
+                    continue;
+                }
+
+                // Set email
+                if($itemKey == '_field_email')
+                {
+                    $objectFinal['phone'] = $itemVal;
+                    continue;
+                }
+
+                /* Get more info */
+                if($itemKey == '_field_occupation')
+                {
+                    if(isset($objectFinal['more']))
+                    {
+                        array_unshift($objectFinal['more'], array(
+                            'type'  => 'text',
+                            'key'   => 'Occupation',
+                            'value' => $itemVal,
+                        ));
+                    }
+                    else
+                    {
+                        $objectFinal['more'] = array(
+                            array(
+                                'type'  => 'text',
+                                'key'   => 'Occupation',
+                                'value' => $itemVal,
+                            )
+                        );
+                    }
+
+                    continue;
+                }
+
+                if($itemKey == '_field_french_speakers')
+                {
+                    if(isset($objectFinal['more']))
+                    {
+                        array_unshift($objectFinal['more'], array(
+                            'type'  => 'checkbox',
+                            'key'   => 'francophone',
+                            'value' => (bool) $itemVal,
+                        ));
+                    }
+                    else
+                    {
+                        $objectFinal['more'] = array(
+                            array(
+                                'type'  => 'checkbox',
+                                'key'   => 'francophone',
+                                'value' => (bool) $itemVal,
+                            )
+                        );
+                    }
+
+                    continue;
+                }
+
+                // extra fields
+                if(strpos($itemKey, '_field_') === 0)
+                {
+                    $key = str_replace('_field_', '', $itemKey);
+                    if(isset($objectFinal['fields'][$key]))
+                    {
+                        $current = $objectFinal['fields'][$key];
+                        $type = $current['type'];
+                        $label = $current['label'];
+
+                        $ignoreTypes = array(
+                            'select',
+                            'radio',
+                            'boolean',
+                            'map',
+                        );
+                        if(in_array($type, $ignoreTypes))
+                            continue;
+
+                        if(isset($objectFinal['more']))
+                        {
+                            $objectFinal['more'][] = array(
+                                'type'  => $type,
+                                'key'   => $label,
+                                'value' => $type == 'checkbox' ? (bool) $itemVal : $itemVal,
+                            );
+                        }
+                        else
+                        {
+                            $objectFinal['more'] = array(
+                                array(
+                                    'type'  => $type,
+                                    'key'   => $label,
+                                    'value' => $type == 'checkbox' ? (bool) $itemVal : $itemVal,
+                                )
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
+
+        if($getAll)
+        {
+            $objectFinal['hasContact']          = (bool) (isset($objectFinal['email']) && $objectFinal['email']) || (isset($objectFinal['phone']) && $objectFinal['phone']);
+            $objectFinal['hasContactAddress']   = (bool) isset($objectFinal['address']) && ((isset($objectFinal['address']['address']) && $objectFinal['address']['address']) ||(isset($objectFinal['address']['city']) && $objectFinal['address']['city']));
+            $objectFinal['hasMore']             = (bool) isset($objectFinal['more']);
+        }
+        unset($objectFinal['fields']);
+        $object = $objectFinal;
+    }
     
     public function get($id) {
-        if ( $object = Object::select( array( 'objects.id', 'objects.name', 'objects.title', 'objects.excerpt', 'objects.content' ) )
-            ->where('id', $id)
-            ->first() ) {
-            $this->processObject($object);
+        $object = Object::select(
+                array(
+                    'objects.id',
+                    'obj.id AS objectTypeID',
+                    'objects.type',
+                    'objects.name',
+                    'objects.title',
+                    'objects.excerpt',
+                    'objects.content',
+                    'objects.score'
+                )
+            )
+            ->join('objects as obj', function ($join){
+                $join->on('obj.name', '=', DB::raw("concat( '_object_type_', objects.type )"));
+            })
+            ->where('objects.id', $id)
+            ->first();
 
+        if ($object)
+        {
+            $this->processObject2($object);
             return $object;
         }
     }
