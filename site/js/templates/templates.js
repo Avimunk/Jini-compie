@@ -56,7 +56,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                            <a class=\"more-info\" ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/cat/' + currentItem.title + '/' + v.name + '/'}}\" ng-click=\"closeCategories()\">\r" +
     "\n" +
-    "                                <img class=\"crown-i\" ng-if=\"v.promoted == 1\" src=\"images/icons/crown.png\" />\r" +
+    "                                <img class=\"crown-i\" ng-if=\"v.score >= 1\" src=\"images/icons/crown.png\" />\r" +
     "\n" +
     "                                More Info\r" +
     "\n" +
@@ -165,7 +165,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                            <a class=\"more-info\" ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/' + currentItem.title + '/' + v.name + '/fromSearch-' + keywords.keywords}}\" ng-click=\"closeCategories()\">\r" +
     "\n" +
-    "                                <img class=\"crown-i\" ng-if=\"v.promoted == 1\" src=\"images/icons/crown.png\" />\r" +
+    "                                <img class=\"crown-i\" ng-if=\"v.score >= 1\" src=\"images/icons/crown.png\" />\r" +
     "\n" +
     "                                More Info\r" +
     "\n" +
@@ -794,7 +794,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "        <g id=\"itemsContainer\">\r" +
     "\n" +
-    "            <a ng-repeat=\"(k, v) in currentCategories\" ng-class=\"{{ currentID == k ? 'current' : ''}}\" ng-attr-data-category-id=\"{{k}}\" ng-init=\"$last ? fixPie() : ''\" ng-click=\"currentItem && currentItem.id == v.id ? openItem(currentItem) : ''\" ng-href=\"{{'#/' + k + '/' + v.name}}\" ng-mouseover=\"imageOn(v);categoryHoverHelper(v)\" ng-mouseout=\"disableCategoryHover(v.id)\" class=\"item\" id=\"item-{{$index+1}}\" data-title=\"{{v.title}}\" data-featured-image=\"{{v.featuredImageUrl}}\" data-content-image=\"{{v.contentImageUrl}}\" role=\"link\" tabindex=\"0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\" \" ng-attr-transform=\"{{pie[currentCategoriesLength].transform_a[$index]}}\" data-svg-origin=\"{{pie[currentCategoriesLength].global.svgOrigin}}\" ng-attr-style=\"{{ isFirst ? 'transform: matrix(0, 0, 0, 0, 250, 250);' : ''}}\">\r" +
+    "            <a ng-repeat=\"(k, v) in currentCategories\" ng-class=\"{{ currentID == k ? 'current' : ''}}\" ng-attr-data-category-id=\"{{k}}\" ng-init=\"$last ? fixPie() : ''\" ng-click=\"currentItem && currentItem.id == v.id ? openItem(currentItem) : ''\" ng-href=\"{{v.url ? '#/' + k + '-' + v.url.id + '/' + v.name + '/' + v.url.name + '/' : '#/' + k + '/' + v.name}}\" ng-mouseover=\"imageOn(v);categoryHoverHelper(v)\" ng-mouseout=\"disableCategoryHover(v.id)\" class=\"item\" id=\"item-{{$index+1}}\" data-title=\"{{v.title}}\" data-featured-image=\"{{v.featuredImageUrl}}\" data-content-image=\"{{v.contentImageUrl}}\" role=\"link\" tabindex=\"0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\" \" ng-attr-transform=\"{{pie[currentCategoriesLength].transform_a[$index]}}\" data-svg-origin=\"{{pie[currentCategoriesLength].global.svgOrigin}}\" ng-attr-style=\"{{ isFirst ? 'transform: matrix(0, 0, 0, 0, 250, 250);' : ''}}\">\r" +
     "\n" +
     "                <path fill=\"none\" stroke=\"#111\" ng-attr-d=\"{{pie[currentCategoriesLength].global.d}}\" class=\"sector {{!isFirst ? 'opacity' : ''}}\"></path>\r" +
     "\n" +

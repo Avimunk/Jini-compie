@@ -301,12 +301,13 @@ class ObjectController extends Controller {
                     $join->on('cat.id', '=', 'object_meta.meta_value');
                 })
                 ->where('object_meta.meta_value', $categoryId)
-                ->select(DB::raw("'$featuredImageUrl' AS featured_image"),'cat.id AS catID', 'cat.title AS catTitle', 'cat.name AS catName','obj.id AS objID', 'obj.name AS objName', 'objects.id', 'objects.excerpt', 'objects.parent_id', 'objects.name', 'objects.type', 'objects.title')
+                ->select(DB::raw("'$featuredImageUrl' AS featured_image"),'cat.id AS catID', 'cat.title AS catTitle', 'cat.name AS catName','obj.id AS objID', 'obj.name AS objName', 'objects.id', 'objects.excerpt', 'objects.parent_id', 'objects.name', 'objects.type', 'objects.title', 'objects.score')
                 ->orderBy('objects.score','DESC')
                 ->orderBy('objects.title','ASC')
             ;
 //            dd($objects->toSql());
             $objects = $objects->get();
+
             foreach ($objects as $object) {
                 $this->processObject($object);
             }
@@ -359,7 +360,7 @@ class ObjectController extends Controller {
                         $query->where('title', 'LIKE', '%' . $search . '%')
                             ->orWhere('content', 'LIKE', '%' . $search . '%');
                     })
-                    ->select('id', 'parent_id', 'name', 'type', 'title')
+                    ->select('id', 'parent_id', 'name', 'type', 'title', 'score')
                     ->orderBy('score','DESC')
                     ->orderBy('title','ASC')
                     ->take(50)
@@ -442,7 +443,7 @@ class ObjectController extends Controller {
                         $join->on('cat.id', '=', 'object_meta.meta_value');
                     })
                     ->where('object_meta.meta_value', $categoryId)
-                    ->select(DB::raw("'$featuredImageUrl' AS featured_image"),'cat.id AS catID', 'cat.title AS catTitle', 'cat.name AS catName','obj.id AS objID', 'obj.name AS objName', 'objects.id', 'objects.excerpt', 'objects.parent_id', 'objects.name', 'objects.type', 'objects.title')
+                    ->select(DB::raw("'$featuredImageUrl' AS featured_image"),'cat.id AS catID', 'cat.title AS catTitle', 'cat.name AS catName','obj.id AS objID', 'obj.name AS objName', 'objects.id', 'objects.excerpt', 'objects.parent_id', 'objects.name', 'objects.type', 'objects.title', 'objects.score')
                     ->orderBy('objects.score','DESC')
                     ->orderBy('objects.title','ASC')
                 ;
@@ -618,7 +619,8 @@ dd($objects);
                             'location' => '',
                             'title' => $result->title,
                             'name' => $result->name,
-                            'excerpt' => $result->excerpt
+                            'excerpt' => $result->excerpt,
+                            'score' => $result->score,
                         );
 
                         if ($contentImageId = ObjectMeta::getValue($result->id, '_content_image')) {

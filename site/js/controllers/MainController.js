@@ -388,15 +388,31 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         // remove old data so the loader will show again
         $rootScope.sideCategories = false;
 
+        console.log('$rootScope.showCategoryList', categoryData);
         var id = categoryData.id;
         if(sideCategoriesList[id])
         {
+            console.log(sideCategoriesList[id].data.length);
+            if(sideCategoriesList[id].data.length == 1)
+            {
+                var item = sideCategoriesList[id].data[0];
+                //console.log('$rootScope.showCategoryList', item, sideCategoriesList[id]);
+                $rootScope.displayHandle.closeAll();
+                $location.path('/' + id + '-' + item.id + '/' + item.name + '/' + item.catName + '/');
+            }
             $rootScope.sideCategories = sideCategoriesList[id];
         }
         else
         {
             $http.get('/Jini3/public/objects/search?categoryid='+ id +'&index=100')
                 .then(function(response){
+                    var item = response.data;
+                    if(item.length == 1)
+                    {
+                        item = item[0];
+                        $rootScope.displayHandle.closeAll();
+                        $location.path('/' + id + '-' + item.id + '/' + item.name + '/' + item.catName + '/');
+                    }
                     $rootScope.sideCategories = sideCategoriesList[id] = response;
                 });
         }

@@ -183,20 +183,6 @@ class CategoryController extends Controller {
     public function getCategories($id = null) {
         //Config::set('laravel-debugbar::config.enabled', false);
 
-        /*
-        $categories = Object::where('objects.type', 'category')
-            ->where('parent_id', $id)
-            ->select(array('objects.id', 'objects.title', 'objects.name'))
-            ->get();
-
-        $response = $categories;
-
-        foreach ($categories as $category) {
-
-            $this->processCategory($category);
-        }
-        */
-
         $this->fetchCategories();
 
         foreach ($this->items as $category) {
@@ -216,9 +202,41 @@ class CategoryController extends Controller {
         $this->itemsParents[0] = [];
         $categories = $this->itemArray();
         $this->items2 = $this->items->getDictionary();
+
+        /*
+        $time11 = microtime(true);
+        foreach($this->items2 as $k => &$v)
+        {
+            if($v->items_count)
+                continue;
+
+            $objects = Object::whereNotIn('objects.type', ['object_type', 'image','category'])
+                ->join('objects as obj', function ($join){
+                    $join->on('obj.name', '=', DB::raw("concat( '_object_type_', objects.type )"));
+                })
+                ->join('object_meta', function ($join){
+                    $join->on('object_meta.object_id', '=', 'obj.id')
+                        ->where('object_meta.meta_key', '=', '_category_id');
+                })
+                ->join('objects as cat', function ($join){
+                    $join->on('cat.id', '=', 'object_meta.meta_value');
+                })
+                ->where('object_meta.meta_value', $k)
+                ->select('objects.id', 'objects.name')
+                ->limit(2)
+            ;
+
+            if($objects->count() != 1)
+                continue;
+
+            $v->url = $objects->first()->toArray();
+        }
+        $time22 = microtime(true);
+        */
+
         $categories2 = $this->itemArray2();
         $this->itemsParents2[0] = [];
-//dd($this->itemsParents2, $categories2);
+
         $breadCrumbs = [];
         $breadCrumbs[0] = [];
         foreach($this->itemsParents as $itemID => $arr)
@@ -234,12 +252,14 @@ class CategoryController extends Controller {
                 ];
             }
         }
-//dd($id);
+
         $currentItem = !$id ? false : [
             'id'    => $id,
             'title' => $this->items->getDictionary()[$id]['title'],
             'contentImageUrl'   => $this->items->getDictionary()[$id]['contentImageUrl'],
         ];
+
+//        echo "script execution time: ".($time22-$time11); //value in seconds
 
         return response()->json( [
             'categories'  => $categories2,

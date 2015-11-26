@@ -185,7 +185,7 @@ angular.module('JINI.directives', [])
                 for (var i = 0; i < content.data.length; i++){
                     var data = content.data[i];
 
-                    if (data.promoted == '1') {
+                    if (data.score >= 1) {
                         iconUrl = '/Jini3/public/img/icons/map_pin_promoted_xs.png';
                     }
                     else {

@@ -25,7 +25,7 @@
                         <p  ng-if="v.content" ng-bind-html="v.content | rawHtml" class="smi-text"></p>
                         <div class="more-info-div">
                             <a class="more-info" ng-href="{{'#/' + currentItem.id + '-' + v.id + '/cat/' + currentItem.title + '/' + v.name + '/'}}" ng-click="closeCategories()">
-                                <img class="crown-i" ng-if="v.promoted == 1" src="images/icons/crown.png" />
+                                <img class="crown-i" ng-if="v.score >= 1" src="images/icons/crown.png" />
                                 More Info
                             </a>
                         </div>
