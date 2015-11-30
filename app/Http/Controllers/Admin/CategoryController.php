@@ -87,10 +87,12 @@ class CategoryController extends AdminController {
 
         if ($imageObjectId = $object->getValue('_featured_image')) {
             $featuredImage = getImageSrc($imageObjectId, 'thumbnail');
+            $featuredImage = 'cropped/' . getTheImageSize($featuredImage, '_featured_image');
         }
 
         if ($imageObjectId = $object->getValue('_content_image')) {
             $contentImage = getImageSrc($imageObjectId, 'thumbnail');
+            $contentImage = 'cropped/' . getTheImageSize($contentImage, '_content_image');
         }
 
         $toolTip = $object->getValue('_tooltip');
@@ -174,6 +176,15 @@ class CategoryController extends AdminController {
         }
         if($request->get('score'))
             $object->score = $request->get('score');
+
+        if($request->get('url'))
+            $object->url = $request->get('url');
+
+        if($request->get('target'))
+            $object->target = '_blank';
+        else
+            $object->target = '_self';
+
         $object->save();
 
         $object->setValue('_tooltip', $request->toolTip);

@@ -150,7 +150,7 @@ class CategoryController extends Controller {
         if(!$this->items)
             $this->items = Object::where('objects.type', 'category')
                 ->leftJoin('objects as parent', 'parent.id', '=', 'objects.parent_id')
-                ->select(array('objects.id', 'objects.title', 'objects.name', 'objects.parent_id', 'parent.parent_id as grandParentID'))
+                ->select(array('objects.id', 'objects.title', 'objects.name', 'objects.parent_id', 'objects.url', 'objects.target', 'parent.parent_id as grandParentID'))
                 ->get();
             return $this->items;
     }
@@ -187,14 +187,18 @@ class CategoryController extends Controller {
 
         foreach ($this->items as $category) {
             if ($contentImageId = ObjectMeta::getValue($category->id, '_content_image')) {
-                if ($contentImageUrl = getImageSrc($contentImageId, 'medium') ) {
-                    $category['contentImageUrl'] = $contentImageUrl;
+                if ($contentImageUrl = getImageSrc($contentImageId) ) {
+//                if ($contentImageUrl = getImageSrc($contentImageId, 'medium') ) {
+                    $category['contentImageUrl'] = 'cropped/' . getTheImageSize($contentImageUrl, '_content_image');
+//                    $category['contentImageUrl'] = $contentImageUrl;
                 }
             }
 
             if ($featuredImageId = ObjectMeta::getValue($category->id, '_featured_image')) {
-                if ($featuredImageUrl = getImageSrc($featuredImageId, 'small')) {
-                    $category['featuredImageUrl'] = $featuredImageUrl;
+                if ($featuredImageUrl = getImageSrc($featuredImageId)) {
+//                if ($featuredImageUrl = getImageSrc($featuredImageId, 'small')) {
+                    $category['featuredImageUrl'] = 'cropped/' . getTheImageSize($featuredImageUrl, '_featured_image');
+//                    $category['featuredImageUrl'] = $featuredImageUrl;
                 }
             }
         }

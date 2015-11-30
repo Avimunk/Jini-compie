@@ -48,4 +48,6 @@ return [
     'categories' => 'Categories',
     'score' => 'Scoring',
     'no_score' => 'None',
+    'url' => 'Override category url. (leave blank for original)',
+    'target' => 'Open category link in new window?',
 ];

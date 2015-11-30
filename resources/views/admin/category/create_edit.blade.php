@@ -60,6 +60,20 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group {{{ $errors->has('url') ? 'error' : '' }}}">
+                        <div class="col-md-12">
+                            <label class="control-label" for="url">{{ trans("admin/admin.url") }}</label>
+                            <input class="form-control" type="text" name="url" id="url" value="{{ $object->url }}">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="control-label" for="target"> {{ trans("admin/admin.target") }}</label>
+                            <input name="target" id="target" type="checkbox" value="1" {{ $object->target == '_blank' ? 'checked' : '' }}>
+
+                        </div>
+                    </div>
+
+
+
                     <div class="form-group {{{ $errors->has('parent_id') ? 'error' : '' }}}">
                         <div class="col-md-12">
                             <label class="control-label" for="parent_id">{{
@@ -112,7 +126,7 @@
                             <label class="control-label" for="featuredImage">{{
                                 trans("admin/admin.featured_image") }}</label>
                             @if (!empty($featuredImage))
-                            <img src="{{ URL::to('/uploads/' . $featuredImage) }}" />
+                            <img style="max-width: 300px" src="{{ URL::to('/uploads/' . $featuredImage) }}" />
                             @endif
                             <input name="featuredImage" type="file" class="uploader" id="featuredImage" value="Upload" />
                         </div>
@@ -124,7 +138,7 @@
                             <label class="control-label" for="contentImage">{{
                                 trans("admin/admin.content_image") }}</label>
                             @if (!empty($contentImage))
-                            <img src="{{ URL::to('/uploads/' . $contentImage) }}" />
+                            <img style="max-width: 300px" src="{{ URL::to('/uploads/' . $contentImage) }}" />
                             @endif
                             <input name="contentImage" type="file" class="uploader" id="contentImage" value="Upload" />
                         </div>

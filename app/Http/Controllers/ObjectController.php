@@ -12,13 +12,15 @@ use Illuminate\Support\Facades\Input;
 class ObjectController extends Controller {
     private function processObject(&$object) {
         if ($featuredImageId = ObjectMeta::getValue($object->id, '_featured_image')) {
-            $object->featured_image  = getImageSrc($featuredImageId, 'medium');
+//            $object->featured_image  = getImageSrc($featuredImageId, 'medium');
+            $object->featured_image = 'cropped/' . getTheImageSize(getImageSrc($featuredImageId), '_featured_image');
 //            $object->featured_image  = Url('/uploads/' . getImageSrc($featuredImageId, 'medium'));
         }
 
 
         if ($contentImageId = ObjectMeta::getValue($object->id, '_content_image')) {
-            $object->content_image  = getImageSrc($contentImageId, 'medium');
+//            $object->content_image  = getImageSrc($contentImageId, 'medium');
+            $object->content_image = 'cropped/' . getTheImageSize(getImageSrc($contentImageId), '_content_image');
 //            $object->content_image  = Url('/uploads/' . getImageSrc($contentImageId, 'medium'));
         }
 
@@ -122,7 +124,8 @@ class ObjectController extends Controller {
             // Images
             if($itemKey == '_content_image' || $itemKey == '_featured_image')
             {
-                $objectFinal[$itemKey] = getImageSrc($itemVal, 'medium');
+                $objectFinal[$itemKey] = 'cropped/' . getTheImageSize(getImageSrc($itemVal), $itemKey);
+//                $objectFinal[$itemKey] = getImageSrc($itemVal, 'medium');
 
                 continue;
             }
@@ -282,7 +285,8 @@ class ObjectController extends Controller {
             // Category Image
             $featuredImageUrl = '';
             if ($categoryFeaturedImageId = ObjectMeta::getValue($categoryId, '_featured_image')) {
-                $featuredImageUrl = getImageSrc($categoryFeaturedImageId, 'thumbnail');
+//                $featuredImageUrl = getImageSrc($categoryFeaturedImageId, 'thumbnail');
+                $featuredImageUrl = 'cropped/' . getTheImageSize(getImageSrc($categoryFeaturedImageId), '_featured_image');
             }
 
             $objects = Object::whereNotIn('objects.type', ['object_type', 'image','category'])
@@ -424,7 +428,8 @@ class ObjectController extends Controller {
             // Category Image
             $featuredImageUrl = '';
             if ($categoryFeaturedImageId = ObjectMeta::getValue($categoryId, '_featured_image')) {
-                $featuredImageUrl = getImageSrc($categoryFeaturedImageId, 'thumbnail');
+//                $featuredImageUrl = getImageSrc($categoryFeaturedImageId, 'thumbnail');
+                $featuredImageUrl = 'cropped/' . getTheImageSize(getImageSrc($categoryFeaturedImageId), '_featured_image');
             }
 
             $objects = Object::whereNotIn('objects.type', ['object_type', 'image','category'])

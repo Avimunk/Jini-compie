@@ -479,11 +479,13 @@ class ObjectController extends AdminController {
 
         if (isset($object)) {
             if ($imageObjectId = $object->getValue('_featured_image')) {
-                $featuredImage = getImageSrc($imageObjectId, 'thumbnail');
+                $featuredImage = getImageSrc($imageObjectId);
+                $featuredImage = 'cropped/' . getTheImageSize($featuredImage, '_featured_image');
             }
 
             if ($imageObjectId = $object->getValue('_content_image')) {
-                $contentImage = getImageSrc($imageObjectId, 'thumbnail');
+                $contentImage = getImageSrc($imageObjectId);
+                $contentImage = 'cropped/' . getTheImageSize($contentImage, '_content_image');
             }
 
             //d

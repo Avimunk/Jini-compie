@@ -19,6 +19,264 @@ Route::get('/a', function(){
     dd($user);
 });*/
 
+/* Tiny png */
+Route::get('/tinypng', function(){
+
+    $refreshThisPage = false;
+    if (isset($_GET['action'])) {
+        $action = $_GET['action'];
+        if ($action == 'getfiles') {
+            ini_set('memory_limit', '1G');
+            if (isset($_GET['path'])) {
+                $path = $_GET['path'];
+            } else {
+                die("PATH was not included");
+            }
+            $round = ((integer) \App\ResizesTinypng::max('round')) + 1;
+
+            $files_arr = getAllImageFilesInPath($path, false);
+            foreach ($files_arr as $files) {
+                $file = true;//$files['file'];
+                $real_path = $files['real_path'];
+                $filename = $files['filename'];
+                $timeAdded = time();
+                $error = $files['error'];
+                if (!$file) {
+                    var_dump('failed', $files);
+//                $error = $files['error'] . " - Unable to open remote file (image not supported)";
+                    insertIntoTableResizes($round, $filename, $real_path, 0, $error, 0, $timeAdded);
+//                die();
+                    continue;
+                } else {
+                    //...Do something with every file
+//                $error = $files['error'];
+                    insertIntoTableResizes($round, $filename, $real_path, 0, $error, 0, $timeAdded);
+                }
+            }
+            die("COMPLETE");
+        }
+        if ($action == 'tinyfiles') {
+            if (isset($_GET['round'])) {
+                $round = $_GET['round'];
+            } else {
+                die("ROUND was not included");
+            }
+            $counter = 0;
+            $results_table = selectByRoundNumber($round);
+            if (!empty($results_table)) {
+                //echo '<meta http-equiv="refresh" content="10">';
+                foreach($results_table as $res_row)
+                {
+                    $refreshThisPage = true;
+                    $counter++;
+                    $result_array = array(
+                        'id' => intval($res_row['id']),
+                        'round' => intval($res_row['round']),
+                        'filename' => $res_row['file_name'],
+                        'path' => $res_row['path'], //path to image
+                        'runTiny' => intval($res_row['run_tiny']),
+                        'error' => $res_row['error'],
+                        'timeTiny' => intval($res_row['time_tiny']),
+                        'timeAdded' => intval($res_row['created_at'])
+                    );
+                    $row_obj = array_to_object($result_array);
+                    $error_message = "N";
+
+                    //START >> tinify images
+                    $tmp_path = str_replace(getcwd() . '/', "", $row_obj->path);//GET SERVER PATH
+                    $save_path = str_replace($row_obj->filename, "", $tmp_path);//OVERRIDE CURRENT LOCATION
+                    $flag = tinifyImage($row_obj->path, $save_path);
+                    if ($flag === false) {
+                        if ($error_message == "N") {
+                            $error_message = "Y - Compression failed";
+                        } else {
+                            $error_message .= " - Compression failed";
+                        }
+                    }
+                    //END << tinify image
+
+                    //UPDATE DB
+                    updateTableResizes($row_obj->id, $row_obj->round, $row_obj->filename, $row_obj->path, 1, $error_message, time(), $row_obj->timeAdded);
+
+                    if ($counter == 3) {
+                        break;
+                    }
+                }
+            }
+            $totalAll7 = countAllByRoundNumber($round);
+            $total_success = countSuccessfulByRoundNumber($round);
+            $total_failed = countFailedByRoundNumber($round);
+            $badFiles = array();
+            if (!empty($total_failed)) {
+                $failed_results = selectFailedByRoundNumber($round);
+                foreach($failed_results as $row)
+                {
+                    $result_array = array(
+                        'id' => intval($row['id']),
+                        'filename' => $row['file_name'],
+                        'error' => $row['error'],
+                    );
+                    $badFiles[] = $result_array;
+                }
+            }
+            echo '<p style="color: black; font-size: large; font-family: Arial, Helvetica, sans-serif;">TOTAL: <strong>' . $totalAll7 . '</strong></p>';
+            echo '<hr>';
+            echo '<p style="color: green; font-size: large; font-family: Arial, Helvetica, sans-serif;">SUCCESSFUL: <strong>' . $total_success . '</strong></p>';
+            echo '<hr>';
+            echo '<p style="color: red;  font-size: large; font-family: Arial, Helvetica, sans-serif;">FAILED:  <strong>' . $total_failed . '</strong></p>';
+            if (!empty($badFiles)) {
+                echo '<br>';
+                $index = 0;
+                foreach ($badFiles as $item) {
+                    $index++;
+                    echo '<div style="color: cornflowerblue; font-family: Arial, Helvetica, sans-serif;">'
+                        . '<div style="float: left; padding: 20px 10px 5px 5px;">'
+                        . '<span> #' . $index . '</span>'
+                        . '</div>'
+                        . '<div style="float: left;">'
+                        . '<span>ID: </span>' . $item['id'] . '<br>'
+                        . '<span>File name: </span>' . $item['filename'] . '<br>'
+                        . '<span>Error message: </span>' . $item['error']
+                        . '</div>'
+                        . '</div>';
+                    echo '<br>';
+                }
+            }
+
+        }
+    }
+
+    if($refreshThisPage)
+        die('<meta http-equiv="refresh" content="2">');
+    else
+        die('Done!');
+});
+
+/* Crop and resize images */
+Route::get('/crop', function(){
+
+    ini_set('memory_limit', '1G');
+
+    $results = \App\ObjectMeta::where('object_meta.meta_key', '_file_path')
+        ->join('object_meta AS om', function($join){
+            $join->on('object_meta.object_id', '=', 'om.object_id')
+                ->where('om.meta_key', '=', '_image_info');
+        })
+        ->join('object_meta AS om2', 'object_meta.object_id', '=', 'om2.meta_value')
+        ->join('objects as obj', 'obj.id', '=', 'om2.object_id')
+        ->select('object_meta.object_id', 'object_meta.meta_value AS path', 'om2.meta_key AS type', 'om2.object_id AS parentObjectID', 'obj.type AS parentObjectType')
+        ->groupBy('path')
+        ->get()
+    ;
+//    dd($results->get()->toArray());
+
+    if(isset($_GET['type']) && $_GET['type'] == 'content')
+    {
+        $content = $results->reject(function(&$v){
+            $v->info = unserialize($v->info);
+            return $v->type == '_featured_image';
+        });
+
+        ini_set('max_execution_time', 300);
+
+        $failed = array();
+        foreach($content as $image)
+        {
+            $x = autoCrop(0, $image->path, $image->type);
+//            echo $image->path . '<br>';
+//            echo $image->type . '<br>';
+//            var_dump($x);
+            if($x === false)
+            {
+                $failed[] = $image->toArray();
+            }
+//            echo '<hr>';
+        }
+
+        if($failed)
+        {
+            echo '<table style="border-color: #048108 !important;border-spacing: 0;" border="1" cellpadding="0">';
+            echo '<thead style="background: #048108; color: white; font-weight: bold;">';
+            echo '<tr>';
+            echo '<td>Type</td>';
+            echo '<td>Image type</td>';
+            echo '<td>Image path</td>';
+            echo '<td>Object ID</td>';
+            echo '</tr>';
+            echo '</thead>';
+            echo '<tbody>';
+            foreach($failed as $item)
+            {
+                echo '<tr>';
+                echo '<td>'.($item['parentObjectType'] == 'category' ? 'Category' : 'Object '. '(type: '.$item['parentObjectType'].')').'</td>';
+                echo '<td style="text-align: center">'.($item['type'] == '_featured_image' ? 'Featured' : 'Content').'</td>';
+                echo '<td>'.$item['path'].'</td>';
+                echo '<td style="text-align: center"><a href="'.url('admin/'.($item['parentObjectType'] == 'category' ? 'categories' : 'objects')."/{$item['parentObjectID']}/edit").'">'.$item['parentObjectID'].'</a></td>';
+                echo '</tr>';
+            }
+            echo '</tbody>';
+            echo '<table>';
+        }
+        echo '<style>td{padding: 2px 5px;}</style><pre>';
+        die('Done!');
+    }
+
+    if(isset($_GET['type']) && $_GET['type'] == 'featured')
+    {
+        $featured = $results->filter(function(&$v){
+            return $v->type == '_featured_image';
+        });
+
+        ini_set('max_execution_time', 300);
+
+        $failed = array();
+        foreach($featured as $image)
+        {
+            $x = autoCrop(0, $image->path, $image->type);
+//            echo $image->path . '<br>';
+//            echo $image->type . '<br>';
+//            var_dump($x);
+            if($x === false)
+            {
+                $failed[] = $image->toArray();
+            }
+
+//            echo '<hr>';
+        }
+
+        if($failed)
+        {
+            echo '<table style="border-color: #048108 !important;border-spacing: 0;" border="1" cellpadding="0">';
+                echo '<thead style="background: #048108; color: white; font-weight: bold;">';
+                    echo '<tr>';
+                        echo '<td>Type</td>';
+                        echo '<td>Image type</td>';
+                        echo '<td>Image path</td>';
+                        echo '<td>Object ID</td>';
+                    echo '</tr>';
+                echo '</thead>';
+                echo '<tbody>';
+            foreach($failed as $item)
+            {
+                echo '<tr>';
+                    echo '<td>'.($item['parentObjectType'] == 'category' ? 'Category' : 'Object '. '(type: '.$item['parentObjectType'].')').'</td>';
+                    echo '<td style="text-align: center">'.($item['type'] == '_featured_image' ? 'Featured' : 'Content').'</td>';
+                    echo '<td>'.$item['path'].'</td>';
+                    echo '<td style="text-align: center"><a href="'.url('admin/'.($item['parentObjectType'] == 'category' ? 'categories' : 'objects')."/{$item['parentObjectID']}/edit").'">'.$item['parentObjectID'].'</a></td>';
+                echo '</tr>';
+            }
+              echo '</tbody>';
+            echo '<table>';
+        }
+        echo '<style>td{padding: 2px 5px;}</style><pre>';
+//        print_r($failed);
+        die('Done!');
+    }
+
+    die('type required!');
+
+});
+
 Route::get('/contactToCRM', function(\Illuminate\Http\Request $request){
     $options = array(
         'firstname',

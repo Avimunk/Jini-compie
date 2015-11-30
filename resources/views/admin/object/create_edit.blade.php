@@ -108,7 +108,7 @@
                                 <label class="control-label" for="featuredImage">{{
                                     trans("admin/admin.featured_image") }}</label>
                                 @if (!empty($featuredImage))
-                                <img src="{{ URL::to('/uploads/' . $featuredImage) }}" />
+                                <img style="max-width: 300px" src="{{ URL::to('/uploads/' . $featuredImage) }}" />
                                 @endif
                                 <input name="featuredImage" type="file" class="uploader" id="featuredImage" value="Upload" />
                             </div>
@@ -120,7 +120,7 @@
                                 <label class="control-label" for="contentImage">{{
                                     trans("admin/admin.content_image") }}</label>
                                 @if (!empty($contentImage))
-                                <img src="{{ URL::to('/uploads/' . $contentImage) }}" />
+                                <img style="max-width: 300px" src="{{ URL::to('/uploads/' . $contentImage) }}" />
                                 @endif
                                 <input name="contentImage" type="file" class="uploader" id="contentImage" value="Upload" />
                             </div>
