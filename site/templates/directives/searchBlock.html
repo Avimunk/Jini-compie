@@ -4,24 +4,24 @@
         <div class="double-bounce2"></div>
     </div>
     <div class="top_strip">
-        <span ng-show="center_search_result.count" class="numOfRes"><span class="bold">{{center_search_result.count}}</span> Results for {{keywords.keywords}}</span>
-        <span ng-show="!center_search_result.count && keywords.keywords.length" class="numOfRes">No results for {{keywords.keywords}}</span>
-        <span ng-show="!center_search_result.count && !keywords.keywords.length" class="numOfRes">Please type something to start</span>
+        <span ng-show="center_search_result.count" class="numOfRes"><span class="bold">{{center_search_result.count}}</span> Résultats pour {{keywords.keywords}}</span>
+        <span ng-show="!center_search_result.count && keywords.keywords.length" class="numOfRes">Aucun résultat trouvé pour {{keywords.keywords}}</span>
+        <span ng-show="!center_search_result.count && !keywords.keywords.length" class="numOfRes">S'il vous plaît taper quelque chose pour commencer</span>
         <div class="clearfix"></div>
     </div>
     <div class="inner_sr" scrollbar="{autoUpdate: true,wheelSpeed : 20, reFetchOnScroll:true, fetchType: 'searchPage'}" nextUrl="{{searchPageOffsetCount}}" style="max-height: 100%;width: 435px">
         <div ng-repeat="(catID, catData) in center_search_result.data" class="search_word_sec">
-            <a ng-href="{{'#/' + catID + '/' + catData.name + '/search/' + keywords.keywords}}" class="sws-title">{{catData.title | cut:true:23:' ...'}}</a>
-            <span class="numOfRes">{{catData.itemsCount}} results</span>
+            <a ng-href="{{'#/' + catData.id + '/' + catData.name + '/search/' + keywords.keywords}}" class="sws-title">{{catData.title | cut:true:23:' ...'}}</a>
+            <span class="numOfRes">{{catData.itemsCount}} résultat</span>
             <div class="category-breadcrumbs">
-                <span ng-if="!$last" ng-repeat="(k, v) in allBreadCrumbs[catID]">
+                <span ng-if="!$last" ng-repeat="(k, v) in allBreadCrumbs[catData.id]">
                     <!--{{v.title}}-->
                     <a ng-href="{{'#/' + v.id + '/' + v.url}}">{{v.title}}</a>
-                    <span ng-if="allBreadCrumbs[catID].length - 2 != $index">/</span>
+                    <span ng-if="allBreadCrumbs[catData.id].length - 2 != $index">/</span>
                 </span>
             </div>
             <div ng-repeat="item in catData.items" class="text-separator">
-                <a ng-href="{{'#/' + catID + '-' + item.id + '/' + catData.title + '/' + item.name + '/fromSearch-' + keywords.keywords}}" class="smi-title">{{item.title | cut:true:35:' ...'}}</a>
+                <a ng-href="{{'#/' + catData.id + '-' + item.id + '/' + catData.title + '/' + item.name + '/fromSearch-' + keywords.keywords}}" class="smi-title">{{item.title | cut:true:35:' ...'}}</a>
                 <p class="smi-text" ng-if="item.excerpt" ng-bind-html="item.excerpt | cut:true:150:' ...' | rawHtml">Apartment description by the owner or advertiser Apartment description by the owner or advertiser...</p>
             </div>
 

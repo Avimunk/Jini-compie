@@ -84,6 +84,7 @@ class ObjectController extends Controller {
             }
         }
 
+//        dd($objectFinal);
         $objectData = $objectData->filter(function($v) use($object){
             if($v->object_id == $object->id)
                 return true;
@@ -91,6 +92,7 @@ class ObjectController extends Controller {
             return false;
         });
         $objectFinal['map'] = true;
+//        dd($objectData->toArray());
         foreach($objectData as $item)
         {
             $itemKey = $item->meta_key;
@@ -208,7 +210,7 @@ class ObjectController extends Controller {
                         $ignoreTypes = array(
                             'select',
                             'radio',
-                            'boolean',
+//                            'boolean',
                             'map',
                         );
                         if(in_array($type, $ignoreTypes))
@@ -279,7 +281,7 @@ class ObjectController extends Controller {
         $index = Input::get('index') ?: 0;
         $search = Input::get('query');
         $offset = (integer) Input::get('offset');
-        $limit = 5;
+        $limit = 10;
 
         $objects = null;
 
@@ -318,6 +320,27 @@ class ObjectController extends Controller {
 
             foreach ($objects as $object) {
                 $this->processObject($object);
+            }
+
+            foreach($objects as &$object)
+            {
+                unset($object['address']);
+                unset($object['address_city']);
+                unset($object['address_country']);
+                unset($object['address_street']);
+                unset($object['catID']);
+                unset($object['catName']);
+                unset($object['catTitle']);
+                unset($object['email']);
+                unset($object['objID']);
+                unset($object['objName']);
+                unset($object['occupation']);
+                unset($object['parent_id']);
+                unset($object['phone']);
+                unset($object['promoted']);
+                unset($object['type']);
+                if($featuredImageUrl == $object['featured_image'])
+                    unset($object['featured_image']);
             }
 //            dd($objects->toArray());
             return [
@@ -423,13 +446,13 @@ class ObjectController extends Controller {
         return $objects;
     }
 
-    public function getSearchPage() {
+    public function getSearchPage($fromLocation = false) {
 
         $categoryId = Input::get('categoryid');
         $index = Input::get('index') ?: 0;
         $search = Input::get('query');
         $offset = (integer) Input::get('offset');
-        $limit = 5;
+        $limit = 10;
 
         $objects = null;
 
@@ -460,13 +483,44 @@ class ObjectController extends Controller {
                     ->select(DB::raw("'$featuredImageUrl' AS featured_image"),'cat.id AS catID', 'cat.title AS catTitle', 'cat.name AS catName','obj.id AS objID', 'obj.name AS objName', 'objects.id', 'objects.excerpt', 'objects.parent_id', 'objects.name', 'objects.type', 'objects.title', 'objects.score')
                     ->orderBy('objects.score','DESC')
                     ->orderBy('objects.title','ASC')
-                    ->take($limit)
-                    ->skip($offset)
                 ;
+
+            if(!$fromLocation)
+            {
+                $objects->take($limit)
+                        ->skip($offset)
+                    ;
+            }
             $objects = $objects->get();
             foreach ($objects as $object) {
                 $this->processObject($object);
             }
+            if(!$fromLocation)
+            {
+                foreach($objects as &$object)
+                {
+                    unset($object['address']);
+                    unset($object['address_city']);
+                    unset($object['address_country']);
+                    unset($object['address_street']);
+                    unset($object['catID']);
+                    unset($object['catName']);
+                    unset($object['catTitle']);
+                    unset($object['email']);
+                    unset($object['objID']);
+                    unset($object['objName']);
+                    unset($object['occupation']);
+                    unset($object['parent_id']);
+                    unset($object['phone']);
+                    unset($object['promoted']);
+                    unset($object['type']);
+                    if($featuredImageUrl == $object['featured_image'])
+                        unset($object['featured_image']);
+
+                    $object['excerpt'] = substr($object['excerpt'], 0, 200);
+                }
+            }
+
             return [
                 'items' => $objects,
                 'offset' => count($objects) >= $limit ? $offset + $limit : 0,
@@ -583,6 +637,7 @@ class ObjectController extends Controller {
                             {
                                 if(in_array($v['objID'], $item['parents']))
                                 {
+                                    $v['excerpt'] = substr($v['excerpt'], 0, 200);
                                     $categories[$k]['items'][] = $v;
                                 }
                             }
@@ -601,7 +656,7 @@ class ObjectController extends Controller {
                         return [
                             'data' => $categories,
                             'count' => $counter,
-                            'offset' => $counter >= $limit ? $offset + $limit : 0,
+                            'offset' => count($categories) >= $limit ? $offset + $limit : 0,
                         ];
                     }
                 }
@@ -626,7 +681,8 @@ dd($objects);
     }
 
     public function getLocations() {
-        $results = $this->getSearchPage();
+        $results = $this->getSearchPage(true);
+        $results = $results['items'];
 //        dd($results->toArray());
         $data = array();
         $locations = array(

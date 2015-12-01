@@ -44,7 +44,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                <div class=\"sm-imgText\">\r" +
     "\n" +
-    "                    <img ng-show=\"v.featured_image\" ng-src=\"{{v.featured_image ? mediaUrl + v.featured_image : ''}}\" />\r" +
+    "                    <img ng-src=\"{{v.featured_image ? mediaUrl + v.featured_image : mediaUrl + currentItem.featuredImageUrl }}\" />\r" +
     "\n" +
     "                    <div class=\"inner-smi\">\r" +
     "\n" +
@@ -74,7 +74,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                    <div></div>\r" +
     "\n" +
-    "                    <span>View on map</span>\r" +
+    "                    <span>Afficher sur la carte</span>\r" +
     "\n" +
     "                </a>\r" +
     "\n" +
@@ -165,7 +165,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                <div class=\"sm-imgText\">\r" +
     "\n" +
-    "                    <img ng-show=\"v.featured_image\" ng-src=\"{{v.featured_image ? mediaUrl + v.featured_image : ''}}\" />\r" +
+    "                    <img ng-src=\"{{v.featured_image ? mediaUrl + v.featured_image : mediaUrl + currentItem.featuredImageUrl }}\" />\r" +
     "\n" +
     "                    <div class=\"inner-smi\">\r" +
     "\n" +
@@ -195,7 +195,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                    <div></div>\r" +
     "\n" +
-    "                    <span>View on map</span>\r" +
+    "                    <span>Afficher sur la carte</span>\r" +
     "\n" +
     "                </a>\r" +
     "\n" +
@@ -289,7 +289,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "            <div class=\"in-scroller-content\">\r" +
     "\n" +
-    "                <a ng-href=\"{{backUrl}}\" ng-if=\"backUrl\" class=\"back-t\">Back to list view</a>\r" +
+    "                <a ng-href=\"{{backUrl}}\" ng-if=\"backUrl\" class=\"back-t\">Revenir à la liste des résultats</a>\r" +
     "\n" +
     "                <a ng-click=\"displayHandle.closeAll()\" class=\"close-btn\"></a>\r" +
     "\n" +
@@ -369,7 +369,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                                    <td data-type=\"{{item.type}}\" class=\"ii-text\">{{item.key}}:</td>\r" +
     "\n" +
-    "                                    <td ng-if=\"item.type == 'checkbox'\" class=\"ii-text second\">{{item.value ? 'v' : 'x'}}</td>\r" +
+    "                                    <td ng-if=\"item.type == 'checkbox' || item.type == 'boolean'\" class=\"ii-text second\">{{item.value ? 'v' : 'x'}}</td>\r" +
     "\n" +
     "                                    <td ng-if=\"item.type == 'text'\" class=\"ii-text second\">{{item.value}}</td>\r" +
     "\n" +
@@ -733,11 +733,11 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "    <div class=\"top_strip\">\r" +
     "\n" +
-    "        <span ng-show=\"center_search_result.count\" class=\"numOfRes\"><span class=\"bold\">{{center_search_result.count}}</span> Results for {{keywords.keywords}}</span>\r" +
+    "        <span ng-show=\"center_search_result.count\" class=\"numOfRes\"><span class=\"bold\">{{center_search_result.count}}</span> Résultats pour {{keywords.keywords}}</span>\r" +
     "\n" +
-    "        <span ng-show=\"!center_search_result.count && keywords.keywords.length\" class=\"numOfRes\">No results for {{keywords.keywords}}</span>\r" +
+    "        <span ng-show=\"!center_search_result.count && keywords.keywords.length\" class=\"numOfRes\">Aucun résultat trouvé pour {{keywords.keywords}}</span>\r" +
     "\n" +
-    "        <span ng-show=\"!center_search_result.count && !keywords.keywords.length\" class=\"numOfRes\">Please type something to start</span>\r" +
+    "        <span ng-show=\"!center_search_result.count && !keywords.keywords.length\" class=\"numOfRes\">S'il vous plaît taper quelque chose pour commencer</span>\r" +
     "\n" +
     "        <div class=\"clearfix\"></div>\r" +
     "\n" +
@@ -747,19 +747,19 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "        <div ng-repeat=\"(catID, catData) in center_search_result.data\" class=\"search_word_sec\">\r" +
     "\n" +
-    "            <a ng-href=\"{{'#/' + catID + '/' + catData.name + '/search/' + keywords.keywords}}\" class=\"sws-title\">{{catData.title | cut:true:23:' ...'}}</a>\r" +
+    "            <a ng-href=\"{{'#/' + catData.id + '/' + catData.name + '/search/' + keywords.keywords}}\" class=\"sws-title\">{{catData.title | cut:true:23:' ...'}}</a>\r" +
     "\n" +
-    "            <span class=\"numOfRes\">{{catData.itemsCount}} results</span>\r" +
+    "            <span class=\"numOfRes\">{{catData.itemsCount}} résultat</span>\r" +
     "\n" +
     "            <div class=\"category-breadcrumbs\">\r" +
     "\n" +
-    "                <span ng-if=\"!$last\" ng-repeat=\"(k, v) in allBreadCrumbs[catID]\">\r" +
+    "                <span ng-if=\"!$last\" ng-repeat=\"(k, v) in allBreadCrumbs[catData.id]\">\r" +
     "\n" +
     "                    <!--{{v.title}}-->\r" +
     "\n" +
     "                    <a ng-href=\"{{'#/' + v.id + '/' + v.url}}\">{{v.title}}</a>\r" +
     "\n" +
-    "                    <span ng-if=\"allBreadCrumbs[catID].length - 2 != $index\">/</span>\r" +
+    "                    <span ng-if=\"allBreadCrumbs[catData.id].length - 2 != $index\">/</span>\r" +
     "\n" +
     "                </span>\r" +
     "\n" +
@@ -767,7 +767,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "            <div ng-repeat=\"item in catData.items\" class=\"text-separator\">\r" +
     "\n" +
-    "                <a ng-href=\"{{'#/' + catID + '-' + item.id + '/' + catData.title + '/' + item.name + '/fromSearch-' + keywords.keywords}}\" class=\"smi-title\">{{item.title | cut:true:35:' ...'}}</a>\r" +
+    "                <a ng-href=\"{{'#/' + catData.id + '-' + item.id + '/' + catData.title + '/' + item.name + '/fromSearch-' + keywords.keywords}}\" class=\"smi-title\">{{item.title | cut:true:35:' ...'}}</a>\r" +
     "\n" +
     "                <p class=\"smi-text\" ng-if=\"item.excerpt\" ng-bind-html=\"item.excerpt | cut:true:150:' ...' | rawHtml\">Apartment description by the owner or advertiser Apartment description by the owner or advertiser...</p>\r" +
     "\n" +

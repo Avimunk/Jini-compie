@@ -568,6 +568,7 @@ function getCurrentCategoryByParentArray(categories, parentArray) {
             id:       parentArray[0],
             title:    categories[parentArray[0]]['title'],
             contentImageUrl:      categories[parentArray[0]]['contentImageUrl'],
+            featuredImageUrl:      categories[parentArray[0]]['featuredImageUrl'],
             items_count: categories[parentArray[0]]['items_count'] ? true : false,
             contetnt: false,
         }

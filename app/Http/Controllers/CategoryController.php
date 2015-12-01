@@ -261,6 +261,7 @@ class CategoryController extends Controller {
             'id'    => $id,
             'title' => $this->items->getDictionary()[$id]['title'],
             'contentImageUrl'   => $this->items->getDictionary()[$id]['contentImageUrl'],
+            'featuredImageUrl'   => $this->items->getDictionary()[$id]['featuredImageUrl'],
         ];
 
 //        echo "script execution time: ".($time22-$time11); //value in seconds

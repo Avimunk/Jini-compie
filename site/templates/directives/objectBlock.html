@@ -2,7 +2,7 @@
     <div class="item_info {{showObjectBlock ? 'collapsed' : ''}}" ng-class="sideObject._content_image ? 'item_info_img' : ''" ng-show="showObjectBlock">
         <div scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 542px" >
             <div class="in-scroller-content">
-                <a ng-href="{{backUrl}}" ng-if="backUrl" class="back-t">Back to list view</a>
+                <a ng-href="{{backUrl}}" ng-if="backUrl" class="back-t">Revenir à la liste des résultats</a>
                 <a ng-click="displayHandle.closeAll()" class="close-btn"></a>
                 <div class="ii-top" lazy-img="{{ sideObject._content_image ? mediaUrl + sideObject._content_image : ''}}">
                     <!--  ng-attr-style="{{ sideObject.content_image ? 'background-image: url(' + mediaUrl + sideObject.content_image + ');' : ''}}" -->
@@ -42,7 +42,7 @@
                             <table class="more">
                                 <tr ng-repeat="item in sideObject.more">
                                     <td data-type="{{item.type}}" class="ii-text">{{item.key}}:</td>
-                                    <td ng-if="item.type == 'checkbox'" class="ii-text second">{{item.value ? 'v' : 'x'}}</td>
+                                    <td ng-if="item.type == 'checkbox' || item.type == 'boolean'" class="ii-text second">{{item.value ? 'v' : 'x'}}</td>
                                     <td ng-if="item.type == 'text'" class="ii-text second">{{item.value}}</td>
                                     <td ng-if="item.type == 'tel'" class="ii-text second"><a ng-href="tel:{{item.value}}">{{item.value}}</a></td>
                                     <td ng-if="item.type == 'wysiwyg'" ng-bind-html="item.value | rawHtml" class="ii-text second"></td>
