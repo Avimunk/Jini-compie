@@ -146,7 +146,7 @@ function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageP
                     'message': 'Name is required.'
                 },
                 'pattern' :{
-                    'value' : '/^.{2,}\s.{2,}$/',
+                    'value' : /(\w+)\s((\w+)[\s]?)+/,
                     'message': 'Name must have at least 2 words'
                 }
             },
@@ -157,7 +157,7 @@ function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageP
                     'message': 'Phone number must be between 7 and 20 digits.'
                 },
                 'pattern' : {
-                    'value' : '/^[0-9]+$/',
+                    'value' : /^[0-9]+$/,
                     'message': 'Phone number can contains only digits'
                 }
             },
@@ -171,11 +171,11 @@ function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageP
             },
             'reason': {
                 'required': {
-                    'message': '1You must select a reason'
+                    'message': 'You must select a reason'
                 },
                 'pattern' :{
-                    'value' : '/[1-5]/',
-                    'message': '2You must select a reason'
+                    'value' : /[1-5]/,
+                    'message': 'You must select a reason'
                 }
             }
         }
