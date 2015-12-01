@@ -82,6 +82,7 @@
             }
             else{
                 var formData = new FormData(this);
+                console.log(formData);
                 $.ajax({
                     type : form.attr('method'),
                     url : form.attr('action'),
@@ -92,8 +93,8 @@
                     processData:false
                 }).success(function() {
                         setTimeout(function() {
-                            parent.$.colorbox.close();
-                            window.parent.location.reload();
+//                            parent.$.colorbox.close();
+//                            window.parent.location.reload();
                         }, 10);
 
                     }).fail(function(jqXHR, textStatus, errorThrown) {

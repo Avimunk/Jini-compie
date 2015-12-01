@@ -7,7 +7,6 @@ MainController.$inject = ['$state', '$rootScope', 'pie', 'fixPie', '$http', '$lo
 function MainController($state, $rootScope, pie, fixPie, $http, $location, $scope, $window, $timeout) {
 
     console.log('MainController');
-
     /**
      * Setters.
      */
@@ -384,36 +383,61 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
      *
      * @param categoryData
      */
-    $rootScope.showCategoryList = function(categoryData){
-        // remove old data so the loader will show again
-        $rootScope.sideCategories = false;
+    $rootScope.showCategoryList = function(categoryData, offset){
 
-        console.log('$rootScope.showCategoryList', categoryData);
-        var id = categoryData.id;
-        if(sideCategoriesList[id])
+        $rootScope.currentCategoryData = categoryData;
+        if(typeof offset == 'undefined')
+            offset = 0;
+
+        if(!offset)
         {
-            console.log(sideCategoriesList[id].data.length);
-            if(sideCategoriesList[id].data.length == 1)
+            // remove old data so the loader will show again
+            $rootScope.sideCategories = false;
+
+            console.log('$rootScope.showCategoryList', categoryData);
+            var id = categoryData.id;
+            if(sideCategoriesList[id])
             {
-                var item = sideCategoriesList[id].data[0];
-                //console.log('$rootScope.showCategoryList', item, sideCategoriesList[id]);
-                $rootScope.displayHandle.closeAll();
-                $location.path('/' + id + '-' + item.id + '/' + item.name + '/' + item.catName + '/');
+                console.log(sideCategoriesList[id].length);
+                if(sideCategoriesList[id].length == 1)
+                {
+                    var item = sideCategoriesList[id][0];
+                    //console.log('$rootScope.showCategoryList', item, sideCategoriesList[id]);
+                    $rootScope.displayHandle.closeAll();
+                    $location.path('/' + id + '-' + item.id + '/' + item.name + '/' + item.catName + '/');
+                }
+                $rootScope.sideCategories = sideCategoriesList[id];
             }
-            $rootScope.sideCategories = sideCategoriesList[id];
+            else
+            {
+                $http.get('/Jini3/public/objects/search?categoryid='+ id +'&index=100')
+                    .then(function(response){
+                        var item = response.data.items;
+                        if(item.length == 1)
+                        {
+                            item = item[0];
+                            $rootScope.displayHandle.closeAll();
+                            $location.path('/' + id + '-' + item.id + '/' + item.name + '/' + item.catName + '/');
+                        }
+                        $rootScope.sideCategories = sideCategoriesList[id] = response.data.items;
+                        $rootScope.regularCategoryOffsetCount = response.data.offset ? response.data.offset : 0;
+                    });
+            }
         }
         else
         {
-            $http.get('/Jini3/public/objects/search?categoryid='+ id +'&index=100')
+            if($rootScope.regularCategoryFetchMoreStarted == true)
+
+                return false;
+
+            $rootScope.regularCategoryFetchMoreStarted = true;
+
+            var id = categoryData.id;
+            $http.get('/Jini3/public/objects/search?categoryid='+ id +'&offset=' + offset)
                 .then(function(response){
-                    var item = response.data;
-                    if(item.length == 1)
-                    {
-                        item = item[0];
-                        $rootScope.displayHandle.closeAll();
-                        $location.path('/' + id + '-' + item.id + '/' + item.name + '/' + item.catName + '/');
-                    }
-                    $rootScope.sideCategories = sideCategoriesList[id] = response;
+                    $rootScope.sideCategories = $rootScope.sideCategories.concat(response.data.items);
+                    $rootScope.regularCategoryOffsetCount = response.data.offset ? response.data.offset : 0;
+                    $rootScope.regularCategoryFetchMoreStarted = false;
                 });
         }
     };
@@ -590,13 +614,16 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
      * DO the search based on the search type.
      * @returns {boolean}
      */
-    $rootScope.search = function(){
+    $rootScope.search = function(offset){
 
         /**
          * Search page
          */
         if($state.current.name == 'search')
         {
+            if(typeof offset == 'undefined')
+                offset = 0;
+
             /**
              * Clear other search
              */
@@ -609,42 +636,78 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             if(interval1)
                 clearTimeout(timeout1);
 
-            /**
-             * Start to search on a timeout
-             *
-             * store the search and on the next time return the stored search.
-             */
-            var currentSearch = $rootScope.keywords.keywords;
-            interval1 = true;
-            timeout1 = setTimeout(function()
+            if(!offset)
             {
-                interval1 = false;
-                // empty other searches
-                $rootScope.center_search_result = $rootScope.top_search_result = null;
+                /**
+                 * Start to search on a timeout
+                 *
+                 * store the search and on the next time return the stored search.
+                 */
+                var currentSearch = $rootScope.keywords.keywords;
+                interval1 = true;
+                timeout1 = setTimeout(function()
+                {
+                    interval1 = false;
+                    // empty other searches
+                    $rootScope.center_search_result = $rootScope.top_search_result = null;
 
-                // Has the current search stored
-                if(searches.page[currentSearch])
-                {
-                    $rootScope.center_search_result = searches.page[currentSearch];
-                    if(!$rootScope.$$phase) $rootScope.$digest();
-                }
-                // http get the search
-                else
-                {
-                    $http.get(centerSearchUrl + currentSearch).then(function(resp){
-                        searches.page[currentSearch] = $rootScope.center_search_result = resp.data;
+                    // Has the current search stored
+                    if(searches.page[currentSearch])
+                    {
+                        $rootScope.center_search_result = searches.page[currentSearch];
+                        $rootScope.searchPageOffsetCount = searches.page[currentSearch].offset ? searches.page[currentSearch].offset : 0;
                         if(!$rootScope.$$phase) $rootScope.$digest();
+                    }
+                    // http get the search
+                    else
+                    {
+                        $http.get(centerSearchUrl + currentSearch).then(function(resp){
+                            searches.page[currentSearch] = $rootScope.center_search_result = resp.data;
+                            $rootScope.searchPageOffsetCount = resp.data.offset ? resp.data.offset : 0;
+                            if(!$rootScope.$$phase) $rootScope.$digest();
+                        });
+                    }
+
+                }, 500);
+            }
+            else
+            {
+                if($rootScope.searchPageFetchMoreStarted == true)
+                    return false;
+
+                $rootScope.searchPageFetchMoreStarted = true;
+                /**
+                 * Start to search on a timeout
+                 *
+                 * store the search and on the next time return the stored search.
+                 */
+                interval1 = true;
+                var currentSearch = $rootScope.keywords.keywords;
+                timeout1 = setTimeout(function()
+                {
+                    interval1 = false;
+                    // empty other searches
+
+                    $http.get(centerSearchUrl + currentSearch + '&offset=' + offset).then(function(resp){
+                        $rootScope.center_search_result.data = $rootScope.center_search_result.data.concat(resp.data.data);
+                        //console.log($rootScope.center_search_result);
+                        $rootScope.searchPageOffsetCount = resp.data.offset ? resp.data.offset : 0;
+
+                        if(!$rootScope.$$phase) $rootScope.$digest();
+                        $rootScope.searchPageFetchMoreStarted = false;
                     });
-                }
-
-            }, 500);
-
+                }, 500);
+            }
         }
         /**
          * Category search.
          */
         else if($state.current.name == 'searchInCategory')
         {
+            console.log('new searchInCategory');
+            if(typeof offset == 'undefined')
+                offset = 0;
+
             /**
              * Clear other search
              */
@@ -657,37 +720,70 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             if(interval2)
                 clearTimeout(timeout2);
 
-            // remove old search so the loader will show again
-            $rootScope.category_search_result = false;
-
-            /**
-             * Start to search on a timeout
-             *
-             * store the search and on the next time return the stored search.
-             */
-            interval2 = true;
-            timeout2 = setTimeout(function()
+            if(!offset)
             {
-                interval2 = false;
-                // empty other searches
-                $rootScope.top_search_result = $rootScope.center_search_result = false;
+                // remove old search so the loader will show again
+                $rootScope.category_search_result = false;
 
-                // Has the current search stored
-                if(searches.page[$rootScope.keywords.keywords + '|' + $state.params.id])
+                /**
+                 * Start to search on a timeout
+                 *
+                 * store the search and on the next time return the stored search.
+                 */
+                interval2 = true;
+                timeout2 = setTimeout(function()
                 {
-                    $rootScope.category_search_result = searches.page[$rootScope.keywords.keywords + '|' + $state.params.id];
-                    if(!$rootScope.$$phase) $rootScope.$digest();
-                }
-                // http get the search
-                else
-                {
-                    $http.get(centerSearchUrl + $rootScope.keywords.keywords + '&categoryid=' + $state.params.id).then(function(resp){
-                        searches.page[$rootScope.keywords.keywords + '|' + $state.params.id] = $rootScope.category_search_result = resp.data;
+                    interval2 = false;
+                    // empty other searches
+                    $rootScope.top_search_result = $rootScope.center_search_result = false;
+
+                    // Has the current search stored
+                    if(searches.page[$rootScope.keywords.keywords + '|' + $state.params.id])
+                    {
+                        $rootScope.category_search_result = searches.page[$rootScope.keywords.keywords + '|' + $state.params.id];
                         if(!$rootScope.$$phase) $rootScope.$digest();
-                    });
-                }
+                    }
+                    // http get the search
+                    else
+                    {
+                        $http.get(centerSearchUrl + $rootScope.keywords.keywords + '&categoryid=' + $state.params.id).then(function(resp){
+                            searches.page[$rootScope.keywords.keywords + '|' + $state.params.id] = $rootScope.category_search_result = resp.data.items;
+                            $rootScope.offsetCount = resp.data.offset ? resp.data.offset : 0;
+                            if(!$rootScope.$$phase) $rootScope.$digest();
+                        });
+                    }
 
-            }, 500);
+                }, 500);
+            }
+            else
+            {
+                if($rootScope.fetchMoreStarted == true)
+                    return false;
+
+                $rootScope.fetchMoreStarted = true;
+                /**
+                 * Start to search on a timeout
+                 *
+                 * store the search and on the next time return the stored search.
+                 */
+                interval2 = true;
+                timeout2 = setTimeout(function()
+                {
+                    interval2 = false;
+                    // empty other searches
+                    $rootScope.top_search_result = $rootScope.center_search_result = false;
+
+                    $http.get(centerSearchUrl + $rootScope.keywords.keywords + '&categoryid=' + $state.params.id + '&offset=' + offset).then(function(resp){
+                        $rootScope.category_search_result = $rootScope.category_search_result.concat(resp.data.items);
+                        console.log($rootScope.category_search_result);
+                        $rootScope.offsetCount = resp.data.offset ? resp.data.offset : 0;
+
+                        if(!$rootScope.$$phase) $rootScope.$digest();
+                        $rootScope.fetchMoreStarted = false;
+                    });
+
+                }, 500);
+            }
         }
         /**
          * Regular search

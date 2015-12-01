@@ -9,7 +9,7 @@
         <span ng-show="!center_search_result.count && !keywords.keywords.length" class="numOfRes">Please type something to start</span>
         <div class="clearfix"></div>
     </div>
-    <div class="inner_sr" scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 435px">
+    <div class="inner_sr" scrollbar="{autoUpdate: true,wheelSpeed : 20, reFetchOnScroll:true, fetchType: 'searchPage'}" nextUrl="{{searchPageOffsetCount}}" style="max-height: 100%;width: 435px">
         <div ng-repeat="(catID, catData) in center_search_result.data" class="search_word_sec">
             <a ng-href="{{'#/' + catID + '/' + catData.name + '/search/' + keywords.keywords}}" class="sws-title">{{catData.title | cut:true:23:' ...'}}</a>
             <span class="numOfRes">{{catData.itemsCount}} results</span>
@@ -25,6 +25,12 @@
                 <p class="smi-text" ng-if="item.excerpt" ng-bind-html="item.excerpt | cut:true:150:' ...' | rawHtml">Apartment description by the owner or advertiser Apartment description by the owner or advertiser...</p>
             </div>
 
+        </div>
+        <div ng-show="searchPageFetchMoreStarted" style="position: relative;width:auto;height: 100px">
+            <div class="innerSpinner spinner">
+                <div class="double-bounce1"></div>
+                <div class="double-bounce2"></div>
+            </div>
         </div>
     </div>
 </div>

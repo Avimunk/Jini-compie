@@ -11,13 +11,13 @@
     </div>
 
     <div ng-show="showCategoriesBlock && showCategoriesBlockList" ng-class="showCategoriesBlock && showCategoriesBlockList ? 'collapsed' : ''" class="filter_search_result">
-        <div class="innerSpinner spinner" ng-hide="showCategoriesBlockMap || sideCategories.data">
+        <div class="innerSpinner spinner" ng-hide="showCategoriesBlockMap || sideCategories">
             <div class="double-bounce1"></div>
             <div class="double-bounce2"></div>
         </div>
         <span class="ts-title">Search by categorie {{currentItem.title}}</span>
-        <div class="results-list" scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 429px">
-            <div ng-repeat="(k, v) in sideCategories.data" class="text-separator">
+        <div class="results-list" scrollbar="{autoUpdate: true,wheelSpeed : 20, reFetchOnScroll:true, fetchType: 'category'}" nextUrl="{{regularCategoryOffsetCount}}" style="max-height: 100%;width: 429px">
+            <div ng-repeat="(k, v) in sideCategories" class="text-separator">
                 <div class="sm-imgText">
                     <img ng-show="v.featured_image" ng-src="{{v.featured_image ? mediaUrl + v.featured_image : ''}}" />
                     <div class="inner-smi">
@@ -36,6 +36,12 @@
                     <div></div>
                     <span>View on map</span>
                 </a>
+            </div>
+            <div ng-show="regularCategoryFetchMoreStarted" style="position: relative;width:auto;height: 100px">
+                <div class="innerSpinner spinner">
+                    <div class="double-bounce1"></div>
+                    <div class="double-bounce2"></div>
+                </div>
             </div>
         </div>
     </div>

@@ -28,7 +28,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "    <div ng-show=\"showCategoriesBlock && showCategoriesBlockList\" ng-class=\"showCategoriesBlock && showCategoriesBlockList ? 'collapsed' : ''\" class=\"filter_search_result\">\r" +
     "\n" +
-    "        <div class=\"innerSpinner spinner\" ng-hide=\"showCategoriesBlockMap || sideCategories.data\">\r" +
+    "        <div class=\"innerSpinner spinner\" ng-hide=\"showCategoriesBlockMap || sideCategories\">\r" +
     "\n" +
     "            <div class=\"double-bounce1\"></div>\r" +
     "\n" +
@@ -38,9 +38,9 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "        <span class=\"ts-title\">Search by categorie {{currentItem.title}}</span>\r" +
     "\n" +
-    "        <div class=\"results-list\" scrollbar=\"{autoUpdate: true,wheelSpeed : 20}\" style=\"max-height: 100%;width: 429px\">\r" +
+    "        <div class=\"results-list\" scrollbar=\"{autoUpdate: true,wheelSpeed : 20, reFetchOnScroll:true, fetchType: 'category'}\" nextUrl=\"{{regularCategoryOffsetCount}}\" style=\"max-height: 100%;width: 429px\">\r" +
     "\n" +
-    "            <div ng-repeat=\"(k, v) in sideCategories.data\" class=\"text-separator\">\r" +
+    "            <div ng-repeat=\"(k, v) in sideCategories\" class=\"text-separator\">\r" +
     "\n" +
     "                <div class=\"sm-imgText\">\r" +
     "\n" +
@@ -77,6 +77,18 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "                    <span>View on map</span>\r" +
     "\n" +
     "                </a>\r" +
+    "\n" +
+    "            </div>\r" +
+    "\n" +
+    "            <div ng-show=\"regularCategoryFetchMoreStarted\" style=\"position: relative;width:auto;height: 100px\">\r" +
+    "\n" +
+    "                <div class=\"innerSpinner spinner\">\r" +
+    "\n" +
+    "                    <div class=\"double-bounce1\"></div>\r" +
+    "\n" +
+    "                    <div class=\"double-bounce2\"></div>\r" +
+    "\n" +
+    "                </div>\r" +
     "\n" +
     "            </div>\r" +
     "\n" +
@@ -147,7 +159,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "        <span class=\"ts-title\">Search by categorie {{currentItem.title}}</span>\r" +
     "\n" +
-    "        <div class=\"results-list\" scrollbar=\"{autoUpdate: true,wheelSpeed : 20}\" style=\"max-height: 100%;width: 429px\">\r" +
+    "        <div class=\"results-list\" scrollbar=\"{autoUpdate: true,wheelSpeed : 20, reFetchOnScroll:true, fetchType: 'searchInCategory'}\" nextUrl=\"{{offsetCount}}\" style=\"max-height: 100%;width: 429px\">\r" +
     "\n" +
     "            <div ng-repeat=\"(k, v) in category_search_result\" class=\"text-separator\">\r" +
     "\n" +
@@ -186,6 +198,18 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "                    <span>View on map</span>\r" +
     "\n" +
     "                </a>\r" +
+    "\n" +
+    "            </div>\r" +
+    "\n" +
+    "            <div ng-show=\"fetchMoreStarted\" style=\"position: relative;width:auto;height: 100px\">\r" +
+    "\n" +
+    "                <div class=\"innerSpinner spinner\">\r" +
+    "\n" +
+    "                    <div class=\"double-bounce1\"></div>\r" +
+    "\n" +
+    "                    <div class=\"double-bounce2\"></div>\r" +
+    "\n" +
+    "                </div>\r" +
     "\n" +
     "            </div>\r" +
     "\n" +
@@ -719,7 +743,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "    </div>\r" +
     "\n" +
-    "    <div class=\"inner_sr\" scrollbar=\"{autoUpdate: true,wheelSpeed : 20}\" style=\"max-height: 100%;width: 435px\">\r" +
+    "    <div class=\"inner_sr\" scrollbar=\"{autoUpdate: true,wheelSpeed : 20, reFetchOnScroll:true, fetchType: 'searchPage'}\" nextUrl=\"{{searchPageOffsetCount}}\" style=\"max-height: 100%;width: 435px\">\r" +
     "\n" +
     "        <div ng-repeat=\"(catID, catData) in center_search_result.data\" class=\"search_word_sec\">\r" +
     "\n" +
@@ -750,6 +774,18 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "            </div>\r" +
     "\n" +
     "\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "        <div ng-show=\"searchPageFetchMoreStarted\" style=\"position: relative;width:auto;height: 100px\">\r" +
+    "\n" +
+    "            <div class=\"innerSpinner spinner\">\r" +
+    "\n" +
+    "                <div class=\"double-bounce1\"></div>\r" +
+    "\n" +
+    "                <div class=\"double-bounce2\"></div>\r" +
+    "\n" +
+    "            </div>\r" +
     "\n" +
     "        </div>\r" +
     "\n" +

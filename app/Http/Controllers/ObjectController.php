@@ -278,6 +278,8 @@ class ObjectController extends Controller {
         $categoryId = Input::get('categoryid');
         $index = Input::get('index') ?: 0;
         $search = Input::get('query');
+        $offset = (integer) Input::get('offset');
+        $limit = 5;
 
         $objects = null;
 
@@ -308,6 +310,8 @@ class ObjectController extends Controller {
                 ->select(DB::raw("'$featuredImageUrl' AS featured_image"),'cat.id AS catID', 'cat.title AS catTitle', 'cat.name AS catName','obj.id AS objID', 'obj.name AS objName', 'objects.id', 'objects.excerpt', 'objects.parent_id', 'objects.name', 'objects.type', 'objects.title', 'objects.score')
                 ->orderBy('objects.score','DESC')
                 ->orderBy('objects.title','ASC')
+                ->take($limit)
+                ->skip($offset)
             ;
 //            dd($objects->toSql());
             $objects = $objects->get();
@@ -316,7 +320,11 @@ class ObjectController extends Controller {
                 $this->processObject($object);
             }
 //            dd($objects->toArray());
-            return $objects;
+            return [
+                'items' => $objects,
+                'offset' => count($objects) >= $limit ? $offset + $limit : 0,
+            ];
+//            return $objects;
             /*
             // Category Image
             $featuredImageUrl = '';
@@ -420,11 +428,12 @@ class ObjectController extends Controller {
         $categoryId = Input::get('categoryid');
         $index = Input::get('index') ?: 0;
         $search = Input::get('query');
+        $offset = (integer) Input::get('offset');
+        $limit = 5;
 
         $objects = null;
 
         if ( $categoryId ) {
-
             // Category Image
             $featuredImageUrl = '';
             if ($categoryFeaturedImageId = ObjectMeta::getValue($categoryId, '_featured_image')) {
@@ -451,12 +460,17 @@ class ObjectController extends Controller {
                     ->select(DB::raw("'$featuredImageUrl' AS featured_image"),'cat.id AS catID', 'cat.title AS catTitle', 'cat.name AS catName','obj.id AS objID', 'obj.name AS objName', 'objects.id', 'objects.excerpt', 'objects.parent_id', 'objects.name', 'objects.type', 'objects.title', 'objects.score')
                     ->orderBy('objects.score','DESC')
                     ->orderBy('objects.title','ASC')
+                    ->take($limit)
+                    ->skip($offset)
                 ;
             $objects = $objects->get();
             foreach ($objects as $object) {
                 $this->processObject($object);
             }
-            return $objects;
+            return [
+                'items' => $objects,
+                'offset' => count($objects) >= $limit ? $offset + $limit : 0,
+            ];
 
             /*
             dd($objects->toArray());
@@ -578,9 +592,16 @@ class ObjectController extends Controller {
                             $categories[$k]['items'] = array_slice($categories[$k]['items'], 0, 3);
 
                         }
+
+                        if($limit)
+                        {
+                            $categories = array_slice($categories, $offset, $limit);
+                        }
+
                         return [
                             'data' => $categories,
                             'count' => $counter,
+                            'offset' => $counter >= $limit ? $offset + $limit : 0,
                         ];
                     }
                 }

@@ -86,13 +86,13 @@ class CategoryController extends AdminController {
             ->get();
 
         if ($imageObjectId = $object->getValue('_featured_image')) {
-            $featuredImage = getImageSrc($imageObjectId, 'thumbnail');
-            $featuredImage = 'cropped/' . getTheImageSize($featuredImage, '_featured_image');
+//            $featuredImage = getImageSrc($imageObjectId, 'thumbnail');
+            $featuredImage = 'cropped/' . getTheImageSize(getImageSrc($imageObjectId), '_featured_image');
         }
 
         if ($imageObjectId = $object->getValue('_content_image')) {
-            $contentImage = getImageSrc($imageObjectId, 'thumbnail');
-            $contentImage = 'cropped/' . getTheImageSize($contentImage, '_content_image');
+//            $contentImage = getImageSrc($imageObjectId, 'thumbnail');
+            $contentImage = 'cropped/' . getTheImageSize(getImageSrc($imageObjectId), '_content_image');
         }
 
         $toolTip = $object->getValue('_tooltip');
