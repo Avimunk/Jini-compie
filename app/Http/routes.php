@@ -19,6 +19,251 @@ Route::get('/a', function(){
     dd($user);
 });*/
 
+Route::get('/addressError', function(){
+    $list = \App\Object::whereNotIn('objects.type', ['image','category'])
+        ->join('object_meta as om',function($join){
+            $join->on('om.object_id', '=', 'objects.id');
+        })
+        ->where(function($where){
+            $where->where('om.meta_key', '=', '_field_address-address')
+                ->orWhere('om.meta_key', '=', '_field_address-city')
+                ->orWhere('om.meta_key', '=', '_field_address-country')
+                ->orWhere('om.meta_key', '=', '_field_address-location-g')
+                ->orWhere('om.meta_key', '=', '_field_address-location-k')
+            ;
+        })
+        ->select('om.id', 'om.object_id', 'om.meta_key', 'om.meta_value')
+        ->orderBy('om.object_id', 'ASC')
+    ;
+
+    $items = array();
+    foreach($list->get() as $item)
+    {
+        $items[$item->object_id][$item->meta_key] = array(
+            'id' => $item->id,
+            'value' => $item->meta_value,
+        );
+    }
+
+    if(!isset($_GET['type']))
+        $_GET['type'] = '';
+
+    switch($_GET['type'])
+    {
+        case 'address':
+            $addresses = array();
+            foreach($items as $k => $item)
+            {
+                $tempAddress =
+                    $item['_field_address-address']['value']. ' ' .
+                    $item['_field_address-city']['value']. ' ' .
+                    $item['_field_address-country']['value']
+                ;
+
+                if(!trim($tempAddress))
+                    $addresses[] = $k;
+            }
+
+            if(empty($addresses))
+                die('No address error!');
+
+            $items = \App\Object::whereIn('id', $addresses)->select('id', 'title', 'type')->get()->toArray();
+
+            echo '<h2>'.(count($items)).' Objects without address:</h2>';
+            echo '<table style="border-color: #048108 !important;border-spacing: 0;" border="1" cellpadding="0">';
+            echo '<thead style="background: #048108; color: white; font-weight: bold;">';
+            echo '<tr>';
+            echo '<td style="text-align: center">#</td>';
+            echo '<td>Type</td>';
+            echo '<td>Title</td>';
+            echo '<td>Object ID</td>';
+            echo '</tr>';
+            echo '</thead>';
+            echo '<tbody>';
+            foreach($items as $k => $item)
+            {
+                echo '<tr>';
+                echo '<td style="text-align: center">'.($k + 1).'</td>';
+                echo '<td>'.$item['type'].'</td>';
+                echo '<td>'.$item['title'].'</td>';
+                echo '<td style="text-align: center"><a href="'.url("admin/objects/{$item['id']}/edit").'">'.$item['id'].'</a></td>';
+                echo '</tr>';
+            }
+            echo '</tbody>';
+            echo '<table>';
+            echo '<style>td{padding: 2px 5px;}</style><pre>';
+
+            break;
+        case 'coordinates':
+            $coordinates = array();
+            foreach($items as $k => $item)
+            {
+                if((!isset($item['_field_address-location-k']['value']) || !trim($item['_field_address-location-k']['value'])) || !isset($item['_field_address-location-g']['value']) || !trim($item['_field_address-location-g']['value']))
+                {
+                    $coordinates[] = $k;
+                }
+            }
+
+            if(empty($coordinates))
+                die('No address error!');
+
+            $items = \App\Object::whereIn('id', $coordinates)->select('id', 'title', 'type')->get()->toArray();
+
+            echo '<h2>'.(count($items)).' Objects without coordinates:</h2>';
+            echo '<table style="border-color: #048108 !important;border-spacing: 0;" border="1" cellpadding="0">';
+            echo '<thead style="background: #048108; color: white; font-weight: bold;">';
+            echo '<tr>';
+            echo '<td style="text-align: center">#</td>';
+            echo '<td>Type</td>';
+            echo '<td>Title</td>';
+            echo '<td>Object ID</td>';
+            echo '</tr>';
+            echo '</thead>';
+            echo '<tbody>';
+            foreach($items as $k => $item)
+            {
+                echo '<tr>';
+                echo '<td style="text-align: center">'.($k + 1).'</td>';
+                echo '<td>'.$item['type'].'</td>';
+                echo '<td>'.$item['title'].'</td>';
+                echo '<td style="text-align: center"><a href="'.url("admin/objects/{$item['id']}/edit").'">'.$item['id'].'</a></td>';
+                echo '</tr>';
+            }
+            echo '</tbody>';
+            echo '<table>';
+            echo '<style>td{padding: 2px 5px;}</style><pre>';
+            break;
+
+        default:
+            die('Please pass a type (address / coordinates)');
+    }
+});
+Route::get('/fixAddresses', function(){
+
+    ini_set('max_execution_time', 300);
+    $list = \App\Object::whereNotIn('objects.type', ['image','category'])
+        ->join('object_meta as om',function($join){
+            $join->on('om.object_id', '=', 'objects.id');
+        })
+        ->where(function($where){
+            $where->where('om.meta_key', '=', '_field_address-address')
+                ->orWhere('om.meta_key', '=', '_field_address-city')
+                ->orWhere('om.meta_key', '=', '_field_address-country')
+                ->orWhere('om.meta_key', '=', '_field_address-location-g')
+                ->orWhere('om.meta_key', '=', '_field_address-location-k')
+            ;
+        })
+        ->select('om.id', 'om.object_id', 'om.meta_key', 'om.meta_value')
+        ->orderBy('om.object_id', 'ASC')
+    ;
+
+    $limit = isset($_GET['limit']) ? intval($_GET['limit']) : false;
+    $offset = isset($_GET['offset']) ? intval($_GET['offset']) : false;
+    $print = isset($_GET['print']) ? true : false;
+
+    if(!$limit)
+        die('You did not send a limit');
+
+    $items = array();
+    foreach($list->get() as $item)
+    {
+        $items[$item->object_id][$item->meta_key] = array(
+            'id' => $item->id,
+            'value' => $item->meta_value,
+        );
+    }
+
+    $items = array_slice($items, $offset, $limit, true);
+
+    if($print)
+        dd($items);
+
+    $startCounter = $offset;
+    foreach($items as $id => &$item)
+    {
+        echo $startCounter .': '.$id . '<hr>';
+
+        $address =
+            $item['_field_address-address']['value']. ' ' .
+            $item['_field_address-city']['value']. ' ' .
+            $item['_field_address-country']['value']
+        ;
+
+        if(trim($address))
+        {
+            if($response = getFrenchAddress($address))
+            {
+                $newAddress = explode(',', $response['formatted_address']);
+
+                $countNewAddress = count($newAddress);
+                if($countNewAddress == 1)
+                {
+                    $item['_field_address-country']['new']  = $newAddress[0];
+                }
+                elseif($countNewAddress == 2)
+                {
+                    $item['_field_address-city']['new']  = $newAddress[0];
+                    $item['_field_address-country']['new']  = $newAddress[1];
+                }
+                elseif($countNewAddress == 3)
+                {
+                    $item['_field_address-address']['new']  = $newAddress[0];
+                    $item['_field_address-city']['new']     = $newAddress[1];
+                    $item['_field_address-country']['new']  = $newAddress[2];
+                }
+                else
+                {
+                    $item['_field_address-address']['new']  = implode(',', array_slice($newAddress, 0, $countNewAddress - 2));
+                    $item['_field_address-city']['new']     = $newAddress[$countNewAddress - 2];
+                    $item['_field_address-country']['new']  = $newAddress[$countNewAddress - 1];
+                }
+
+                // Update
+                if($countNewAddress > 2)
+                {
+                    $address = \App\ObjectMeta::find($item['_field_address-address']['id']);
+                    $address->meta_value = trim($item['_field_address-address']['new']);
+                    $address->save();
+                }
+
+                if($countNewAddress > 1)
+                {
+                    $city = \App\ObjectMeta::find($item['_field_address-city']['id']);
+                    $city->meta_value = trim($item['_field_address-city']['new']);
+                    $city->save();
+                }
+
+                if($countNewAddress > 0)
+                {
+                    $country = \App\ObjectMeta::find($item['_field_address-country']['id']);
+                    $country->meta_value = trim($item['_field_address-country']['new']);
+                    $country->save();
+                }
+            }
+        }
+
+        $startCounter++;
+    }
+    if($items)
+        die('Done!');
+
+    die('No Items!');
+});
+
+function getFrenchAddress($address)
+{
+    $url = 'http://maps.google.com/maps/api/geocode/json?address=' . urlencode($address) . '&sensor=true&language=fr';
+    $content = @file_get_contents($url);
+    $contentObj = json_decode($content, 1);
+
+    if(@$contentObj['status'] == "OK")
+        return $contentObj['results'][0];
+
+    return false;
+}
+
+
+
 /* Tiny png */
 Route::get('/tinypng', function(){
 
