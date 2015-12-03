@@ -411,14 +411,13 @@ header{
 					/*margin-top: 14px;*/
 				}
 				.contactUs form .error-txt{
-					/*display: none;*/
-					padding-left: 20px;
+					padding-left: 8px;
 					color: #ed272f;
 					margin-top: 0;
 					margin-bottom: 10px;
 					font-size: 12px;
 					position: absolute;
-					top: -14px;
+					bottom: -6px;
 				}
 				.contactUs input{
 					font-family: 'Roboto', sans-serif;
@@ -673,7 +672,7 @@ header{
 	.view-map{
 		margin-top: 15px;
 	    display: block;
-	    max-width: 100px;
+	    max-width: 130px;
 	    color: #ccc;
 	    font-size: 14px;
 	}

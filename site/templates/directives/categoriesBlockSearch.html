@@ -32,7 +32,7 @@
                     </div>
                     <div class="clearfix"></div>
                 </div>
-                <a ng-show="v.address_location_g != '' && v.address_location_k != ''" ng-href="{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/fromSearch-' + keywords.keywords}}" class="view-map">
+                <a ng-show="v.address_location_g != '' && v.address_location_k != '' && v.address_location_g != null && v.address_location_k != null" ng-href="{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/fromSearch-' + keywords.keywords}}" class="view-map">
                     <div></div>
                     <span>Afficher sur la carte</span>
                 </a>

@@ -229,7 +229,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         categoryHover: function(categoryData, fromParent)
         {
             // cancel on search or single page
-            if($state.current.name == 'search' || $state.current.name == 'searchInCategory' || $state.current.name == 'singlePage')
+            if($state.current.name == 'search' || $state.current.name == 'searchInCategory')
             {
                 $rootScope.displayHandle.closeAll();
                 return false;
@@ -962,4 +962,15 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
 
         $location.path('/' + $state.params.id + '/' + $state.params.title + '/search/' + $rootScope.keywords.keywords);
     };
+
+    /**
+     * force to reload the page when category hover and tring to get the current page again.
+     * @param page
+     */
+    $rootScope.goToPage = function(page){
+        if($rootScope.showCategoryBlock && $rootScope.currentPage == page)
+        {
+            $state.reload();
+        }
+    }
 };

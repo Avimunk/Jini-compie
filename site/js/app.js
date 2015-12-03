@@ -142,37 +142,37 @@ function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageP
                     'number': 40,
                     'message': 'Name length cannot be more then 40 letters'
                 },
-                'required': {
-                    'message': 'Name is required.'
-                },
+                //'required': {
+                //    'message': 'Name is required.'
+                //},
                 'pattern' :{
                     'value' : /(\w+)\s((\w+)[\s]?)+/,
                     'message': 'Name must have at least 2 words'
                 }
             },
             'phone': {
-                'size': {
-                    'min': 7,
-                    'max': 20,
-                    'message': 'Phone number must be between 7 and 20 digits.'
-                },
+                //'size': {
+                //    'min': 7,
+                //    'max': 20,
+                //    'message': 'Phone number must be between 7 and 20 digits.'
+                //},
                 'pattern' : {
-                    'value' : /^[0-9]+$/,
-                    'message': 'Phone number can contains only digits'
+                    'value' : /^([0-9]+){7,20}$/,
+                    'message': 'Phone number can contains only digits and must be between 7 and 20 digits.'
                 }
             },
             'email': {
                 "email": {
                     "message": "Must be a valid E-Mail address."
                 },
-                'required': {
-                    'message': 'E-Mail address is required.'
-                }
+                //'required': {
+                //    'message': 'E-Mail address is required.'
+                //}
             },
             'reason': {
-                'required': {
-                    'message': 'You must select a reason'
-                },
+                //'required': {
+                //    'message': 'You must select a reason'
+                //},
                 'pattern' :{
                     'value' : /[1-5]/,
                     'message': 'You must select a reason'

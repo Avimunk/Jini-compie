@@ -91,7 +91,7 @@ class ObjectController extends Controller {
 
             return false;
         });
-        $objectFinal['map'] = true;
+        $objectFinal['map'] = false;
 //        dd($objectData->toArray());
         foreach($objectData as $item)
         {
@@ -109,6 +109,8 @@ class ObjectController extends Controller {
                 {
                     if($itemVal == '')
                         $objectFinal['map'] = false;
+                    else
+                        $objectFinal['map'] = true;
 
                     $key = str_replace('-', '_', $key);
                 }

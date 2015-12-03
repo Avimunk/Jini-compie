@@ -55,7 +55,14 @@ function SinglePageController($rootScope, $scope, $state, $http) {
          */
         $scope.validate = function(form){
             if(form.$valid)
+            {
+                $scope.notValid = false;
                 $scope.save();
+            }
+            else
+            {
+                $scope.notValid = true;
+            }
         };
 
         /**

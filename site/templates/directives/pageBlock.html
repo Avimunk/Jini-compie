@@ -49,6 +49,8 @@
                             {{error}}
                         </div>
                         <input type="submit" class="gold-btn" ng-click="validate(contactForm)" value="SEND" />
+                        <span class="error-txt" ng-show="notValid">There are some errors / empty fields in the form, please fix them.</span>
+
                     </form>
                 </div>
             </div>

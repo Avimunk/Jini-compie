@@ -89,19 +89,19 @@
         <nav>
             <ul class="side-menu">
                 <li class="liVision" ng-class="isPage && currentPage == 'vision' ? 'active' : ''">
-                    <a href="#/vision" class="li-item vision"></a>
+                    <a ng-click="goToPage('vision')" href="#/vision" class="li-item vision"></a>
                 </li>
                 <li class="liFavorites" ng-class="isPage && currentPage == 'recommended' ? 'active' : ''">
-                    <a href="#/recommended" class="li-item favorites"></a>
+                    <a ng-click="goToPage('recommended')" href="#/recommended" class="li-item favorites"></a>
                 </li>
                 <li class="liInfo" ng-class="isPage && currentPage == 'info' ? 'active' : ''">
-                    <a href="#/info" class="li-item info"></a>
+                    <a ng-click="goToPage('info')" href="#/info" class="li-item info"></a>
                 </li>
                 <li class="liContact" ng-class="isPage && currentPage == 'contact' ? 'active' : ''">
-                    <a href="#contact" class="li-item contact"></a>
+                    <a ng-click="goToPage('contact')" href="#contact" class="li-item contact"></a>
                 </li>
                 <li class="liNews" ng-class="isPage && currentPage == '24news' ? 'active' : ''">
-                    <a href="#/24news" class="li-item news"></a>
+                    <a ng-click="goToPage('24news')" href="#/24news" class="li-item news"></a>
                 </li>
             </ul>
         </nav>
@@ -151,7 +151,6 @@
                     width: {{set_map_width - 177}}px !important;
                 }
             </style>
-
             <style ng-if="set_map_width == 0">
                 .filter_search_result.map{
                     width: 0px !important;
@@ -161,11 +160,11 @@
                 }
             </style>
 
-            <div ui-view></div>
-
             <objectblock></objectblock>
             <categoriesblock></categoriesblock>
             <categoryhover></categoryhover>
+
+            <div ui-view></div>
 
             <div class="banner" ng-class="showHomeBanner ? 'collapsed' : ''" ng-show="showHomeBanner">
                 <span class="b-title" ng-bind-html="showHomeBanner.title | rawHtml"></span>

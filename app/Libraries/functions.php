@@ -689,7 +689,8 @@ function tinifyImage($real_path, $save_path = '', $output_new = '')
     }
 
 //    $key = "DapPHppTkF3aAXPi46wkOqcxhm1GiFuB";
-    $key = "0C4ZaQsz0fnSCvbseT2usUBBjcTrQVC9";
+//    $key = "0C4ZaQsz0fnSCvbseT2usUBBjcTrQVC9";
+    $key = "q_3X61dIcoTSQYHhNMbhlQHtOPs-h1TP";
 
     $url = "https://api.tinify.com/shrink";
     $options = array(

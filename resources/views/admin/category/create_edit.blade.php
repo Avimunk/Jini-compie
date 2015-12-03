@@ -63,11 +63,11 @@
                     <div class="form-group {{{ $errors->has('url') ? 'error' : '' }}}">
                         <div class="col-md-12">
                             <label class="control-label" for="url">{{ trans("admin/admin.url") }}</label>
-                            <input class="form-control" type="text" name="url" id="url" value="{{ $object->url }}">
+                            <input class="form-control" type="text" name="url" id="url" value="{{ isset($object) && $object->url }}">
                         </div>
                         <div class="col-md-12">
                             <label class="control-label" for="target"> {{ trans("admin/admin.target") }}</label>
-                            <input name="target" id="target" type="checkbox" value="1" {{ $object->target == '_blank' ? 'checked' : '' }}>
+                            <input name="target" id="target" type="checkbox" value="1" {{ isset($object) && $object->target == '_blank' ? 'checked' : '' }}>
 
                         </div>
                     </div>

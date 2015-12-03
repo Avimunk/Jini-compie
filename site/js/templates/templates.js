@@ -70,7 +70,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                </div>\r" +
     "\n" +
-    "                <a ng-show=\"v.address_location_g != '' && v.address_location_k != ''\" ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/'}}\" class=\"view-map\">\r" +
+    "                <a ng-show=\"v.address_location_g != '' && v.address_location_k != '' && v.address_location_g != null && v.address_location_k != null\" ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/'}}\" class=\"view-map\">\r" +
     "\n" +
     "                    <div></div>\r" +
     "\n" +
@@ -191,7 +191,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                </div>\r" +
     "\n" +
-    "                <a ng-show=\"v.address_location_g != '' && v.address_location_k != ''\" ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/fromSearch-' + keywords.keywords}}\" class=\"view-map\">\r" +
+    "                <a ng-show=\"v.address_location_g != '' && v.address_location_k != '' && v.address_location_g != null && v.address_location_k != null\" ng-href=\"{{'#/' + currentItem.id + '-' + v.id + '/map/' + currentItem.title + '/' + v.name + '/fromSearch-' + keywords.keywords}}\" class=\"view-map\">\r" +
     "\n" +
     "                    <div></div>\r" +
     "\n" +
@@ -580,6 +580,10 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "                        </div>\r" +
     "\n" +
     "                        <input type=\"submit\" class=\"gold-btn\" ng-click=\"validate(contactForm)\" value=\"SEND\" />\r" +
+    "\n" +
+    "                        <span class=\"error-txt\" ng-show=\"notValid\">There are some errors / empty fields in the form, please fix them.</span>\r" +
+    "\n" +
+    "\r" +
     "\n" +
     "                    </form>\r" +
     "\n" +
