@@ -729,9 +729,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth', 'namespace' => 'Admin
     Route::get('categories/search', 'CategoryController@getSearch');
 
 
+    Route::get('slika/start', 'SlikaController@index');
+    Route::post('slika/getIframe', 'SlikaController@getIframe');
+    Route::get('slika/showUserCards/{id}',  'SlikaController@showUserCards');
+    Route::post('slika/initTokenPayment/{id}/{id2}',  'SlikaController@initTokenPayment');
 
-    Route::match(['get', 'post'], 'slika/{id?}', function($id = false){
+    Route::match(['get', 'post'], 'slika/{id?}/{id2?}', function($id = false, $id2 = 0){
         $id = $id ?: (isset($_POST['id']) && intval($_POST['id']) ? intval($_POST['id']) : false);
+        $sum = $id2 ?: (isset($_POST['sum']) && intval($_POST['sum']) ? intval($_POST['sum']) : false);
 
         $creditCaredResponseErrors = array(
             '001' => 'חסום .',
@@ -912,10 +917,53 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth', 'namespace' => 'Admin
             die;
         }
 
-        if(!$id)
+        if(!$id || !$sum)
         {
-            dd($_GET, $_POST);
-            die('<script>alert("יש להזין מזהה על מנת להציג את דף הסליקה")</script>');
+            ?>
+            <style>
+                body{
+                    background: #ddd;
+                }
+                div {
+                    margin: 150px auto;
+                    width: 300px;
+                    text-align: center;
+                    direction: rtl;
+                }
+
+                input {
+                    font-size: 20px;
+                    text-align: center;
+                    margin: 20px 10px;
+                    border: 1px solid #B9B9B9;
+                    padding: 5px;
+                    color: #3A3A3A;
+                }
+
+                button {
+                    font-size: 20px;
+                    color: #3A3A3A;
+                    margin-top: 20px;
+                }
+            </style>
+                <div>
+                    <input type="text" id="userid" placeholder="מזהה משתמש" />
+                    <input type="text" id="sum"  placeholder="מחיר"/>
+                    <button id="btn">טען דף תשלום</button>
+                    <script>
+                        var btn = document.getElementById('btn').onclick = function(){
+                            var userid = document.getElementById('userid').value;
+                            var sum = document.getElementById('sum').value;
+                            if(!userid || !sum)
+                                return alert('יש להזין מזהה משתמש וסכום על מנת להמשיך.');
+
+                            top.location.href = '<?=url('admin/slika')?>/' + userid + '/' + sum;
+                        };
+                    </script>
+                </div>
+
+            <?php
+            die;
         }
 
         ?>
@@ -929,39 +977,47 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth', 'namespace' => 'Admin
                     }
                     .container
                     {
-                        margin: 30px auto;
-                        max-width: 1200px;
+                        margin: 30px auto 0;
+                        max-width: 500px;
                         display: block;
                     }
                     iframe{
-                        width: 1200px;
-                        height: 880px;
+                        width: 500px;
+                        height: 500px;
                         border: none;
                         background: #ECECEC;
                     }
                     .container > div {
-                        text-align: center;
-                        direction: rtl;
-                        font-size: 50px;
-                        font-family: arial;
                         color: #676767;
-                        margin-top: 100px;
+                        direction: rtl;
+                        font-size: 30px;
+                        font-family: arial;
+                        text-align: center;
+                        margin: -20px 0 10px;
                     }
                 </style>
-                <?php if($isFail):?>
-                    <script>
-                        alert('הסליקה נכשלה:' + "\n" + '<?=$creditCaredResponseErrors[$_POST['Response']]?>');
-                        top.location.reload();
-                    </script>
-                <?php endif?>
             </head>
             <body>
                 <div class="container">
-                    <?php if($isSuccess):?>
-                        <div>הסליקה בוצעה בהצלחה!</div>
-                    <?php else:?>
-                        <iframe src="https://direct.tranzila.com/jiniclub?<?=http_build_query($_GET)?>&id=<?=$id?>&aksdjhasd=aksei73de"></iframe>
-                    <?php endif?>
+                    <div>
+                        User ID: <?=$id?>
+                    </div>
+
+                    <div>
+                        <input type="text" id="sum"  placeholder="שנה סכום"/>
+                        <button id="btn">שנה סכום</button>
+                        <script>
+                            var btn = document.getElementById('btn').onclick = function(){
+                                var sum = document.getElementById('sum').value;
+                                if(!sum)
+                                    return alert('יש להזין סכום על מנת להמשיך.');
+
+                                top.location.href = '<?=url('admin/slika')?>/' + <?=$id?> + '/' + sum;
+                            };
+                        </script>
+                    </div>
+
+                    <iframe src="https://direct.tranzila.com/jiniclub/iframe.php?<?=http_build_query($_GET)?>&currency=1&trBgColor=dddddd&nologo=1&trTextColor=676767&lang=il&trButtonColor=676767&sum=<?=$sum?>&tranmode=AK&userid=<?=$id?>"></iframe>
                 </div>
             </body>
         </html>
@@ -969,14 +1025,44 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth', 'namespace' => 'Admin
     });
 });
 
-#Slika
-Route::match(['get', 'post'], 'slika/notify', function(){
+use Illuminate\Http\Request;
+use App\Slika;
+Route::post('slika/notify',  function(Request $request){
+
     $json = json_encode(array(
-        "SERVER" =>  $_SERVER,
         "POST"   =>  $_POST,
         "GET"    =>  $_GET,
     ));
 
-    \App\Slika::create(['data' => $json]);
-    die;
+    $Response = $request->get('Response', false);
+    $transaction_id = $request->get('transaction_id', false);
+
+    if($Response && $transaction_id)
+    {
+        $slikaRow = Slika::where('transaction_id', '=', $transaction_id)->where('response_number', '=', '');
+        if($slikaRow->count())
+        {
+            $four_digits = $request->get('ccno', '0000');
+            $credit_expired = $request->get('expmonth', '00') . '/' . $request->get('expyear', '00');
+            $approve_number = $request->get('Tempref', '');
+            $token = $request->get('TranzilaTK', '');
+            $sum = $request->get('sum', 0);
+            if($sum == $slikaRow->first()->sum)
+            {
+                $slikaRow->update([
+                    'data'              => $json,
+                    'response_number'   => $Response,
+                    'four_digits'       => $four_digits,
+                    'credit_expired'    => $credit_expired,
+                    'approve_number'    => $approve_number,
+                    'token'             => $token,
+                ]);
+
+            }
+            else
+            {
+                mail('nk@leado.co.il', 'Jini slika error3', 'sum not right: '. $json);
+            }
+        }
+    }
 });
