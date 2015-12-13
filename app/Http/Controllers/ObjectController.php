@@ -331,7 +331,7 @@ class ObjectController extends Controller {
                 unset($object['address_country']);
                 unset($object['address_street']);
                 unset($object['catID']);
-                unset($object['catName']);
+//                unset($object['catName']);
                 unset($object['catTitle']);
                 unset($object['email']);
                 unset($object['objID']);
@@ -506,7 +506,7 @@ class ObjectController extends Controller {
                     unset($object['address_country']);
                     unset($object['address_street']);
                     unset($object['catID']);
-                    unset($object['catName']);
+//                    unset($object['catName']);
                     unset($object['catTitle']);
                     unset($object['email']);
                     unset($object['objID']);

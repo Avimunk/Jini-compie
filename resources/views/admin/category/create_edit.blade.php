@@ -63,7 +63,7 @@
                     <div class="form-group {{{ $errors->has('url') ? 'error' : '' }}}">
                         <div class="col-md-12">
                             <label class="control-label" for="url">{{ trans("admin/admin.url") }}</label>
-                            <input class="form-control" type="text" name="url" id="url" value="{{ isset($object) && $object->url }}">
+                            <input class="form-control" type="text" name="url" id="url" value="{{ isset($object) && $object->url ? $object->url : '' }}">
                         </div>
                         <div class="col-md-12">
                             <label class="control-label" for="target"> {{ trans("admin/admin.target") }}</label>

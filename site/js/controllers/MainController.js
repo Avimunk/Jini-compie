@@ -404,7 +404,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                     var item = sideCategoriesList[id][0];
                     //console.log('$rootScope.showCategoryList', item, sideCategoriesList[id]);
                     $rootScope.displayHandle.closeAll();
-                    $location.path('/' + id + '-' + item.id + '/' + item.name + '/' + item.catName + '/');
+                    $location.path('/' + id + '-' + item.id + '/' + item.catName + '/' + item.name + '/');
                 }
                 $rootScope.sideCategories = sideCategoriesList[id];
             }
@@ -417,7 +417,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                         {
                             item = item[0];
                             $rootScope.displayHandle.closeAll();
-                            $location.path('/' + id + '-' + item.id + '/' + item.name + '/' + item.catName + '/');
+                            $location.path('/' + id + '-' + item.id + '/' + item.catName + '/' + item.name + '/');
                         }
                         $rootScope.sideCategories = sideCategoriesList[id] = response.data.items;
                         $rootScope.regularCategoryOffsetCount = response.data.offset ? response.data.offset : 0;

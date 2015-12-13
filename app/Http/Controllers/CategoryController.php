@@ -151,7 +151,10 @@ class CategoryController extends Controller {
             $this->items = Object::where('objects.type', 'category')
                 ->leftJoin('objects as parent', 'parent.id', '=', 'objects.parent_id')
                 ->select(array('objects.id', 'objects.title', 'objects.name', 'objects.parent_id', 'objects.url', 'objects.target', 'parent.parent_id as grandParentID'))
+                ->orderBy(DB::raw('objects.id = 4'), 'DESC')
+                ->orderBy('objects.id', 'ASC')
                 ->get();
+
             return $this->items;
     }
 
@@ -208,35 +211,35 @@ class CategoryController extends Controller {
         $this->items2 = $this->items->getDictionary();
 
         /*
-        $time11 = microtime(true);
-        foreach($this->items2 as $k => &$v)
-        {
-            if($v->items_count)
-                continue;
+            $time11 = microtime(true);
+            foreach($this->items2 as $k => &$v)
+            {
+                if($v->items_count)
+                    continue;
 
-            $objects = Object::whereNotIn('objects.type', ['object_type', 'image','category'])
-                ->join('objects as obj', function ($join){
-                    $join->on('obj.name', '=', DB::raw("concat( '_object_type_', objects.type )"));
-                })
-                ->join('object_meta', function ($join){
-                    $join->on('object_meta.object_id', '=', 'obj.id')
-                        ->where('object_meta.meta_key', '=', '_category_id');
-                })
-                ->join('objects as cat', function ($join){
-                    $join->on('cat.id', '=', 'object_meta.meta_value');
-                })
-                ->where('object_meta.meta_value', $k)
-                ->select('objects.id', 'objects.name')
-                ->limit(2)
-            ;
+                $objects = Object::whereNotIn('objects.type', ['object_type', 'image','category'])
+                    ->join('objects as obj', function ($join){
+                        $join->on('obj.name', '=', DB::raw("concat( '_object_type_', objects.type )"));
+                    })
+                    ->join('object_meta', function ($join){
+                        $join->on('object_meta.object_id', '=', 'obj.id')
+                            ->where('object_meta.meta_key', '=', '_category_id');
+                    })
+                    ->join('objects as cat', function ($join){
+                        $join->on('cat.id', '=', 'object_meta.meta_value');
+                    })
+                    ->where('object_meta.meta_value', $k)
+                    ->select('objects.id', 'objects.name')
+                    ->limit(2)
+                ;
 
-            if($objects->count() != 1)
-                continue;
+                if($objects->count() != 1)
+                    continue;
 
-            $v->url = $objects->first()->toArray();
-        }
-        $time22 = microtime(true);
-        */
+                $v->url = $objects->first()->toArray();
+            }
+            $time22 = microtime(true);
+            */
 
         $categories2 = $this->itemArray2();
         $this->itemsParents2[0] = [];
