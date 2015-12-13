@@ -20,6 +20,7 @@
         }
         #menu #itemsContainer {
             z-index: 1000;
+            position: relative;
         }
         #menu .menu-trigger {
             fill: #fff;
@@ -46,7 +47,28 @@
         #menu .item:hover .sector
         /*, #menu .item:focus .sector */
         {
-            opacity: 0.6;
+            fill: #c5ab68;
+            opacity: 1;
+        }
+
+        #svgContainer:hover .itemsTooltip {
+            display: block;
+        }
+
+        .itemsTooltip{
+            display: none;
+            position: absolute;
+            width: 180px;
+            height: 60px;
+            border-radius: 5px;
+            background: #fff;
+            color: #000;
+            font-family: 'Roboto', sans-serif;
+            padding: 13px 20px;
+            word-break: break-all;
+            top: 50%;
+            margin-top: -90px;
+            left: -200px;
         }
 
 

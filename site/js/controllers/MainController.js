@@ -369,7 +369,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                 content: false,
             };
 
-            $http.get('/Jini3/public/categories/'+id+'/content')
+            $http.get('/COMPIE/jini3/public/categories/'+id+'/content')
                 .then(function(response){
                     $rootScope.sideCategory.content = sideCategoriesHover[id].content = response.data;
                 });
@@ -410,7 +410,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             }
             else
             {
-                $http.get('/Jini3/public/objects/search?categoryid='+ id +'&index=100')
+                $http.get('/COMPIE/jini3/public/objects/search?categoryid='+ id +'&index=100')
                     .then(function(response){
                         var item = response.data.items;
                         if(item.length == 1)
@@ -433,7 +433,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             $rootScope.regularCategoryFetchMoreStarted = true;
 
             var id = categoryData.id;
-            $http.get('/Jini3/public/objects/search?categoryid='+ id +'&offset=' + offset)
+            $http.get('/COMPIE/jini3/public/objects/search?categoryid='+ id +'&offset=' + offset)
                 .then(function(response){
                     $rootScope.sideCategories = $rootScope.sideCategories.concat(response.data.items);
                     $rootScope.regularCategoryOffsetCount = response.data.offset ? response.data.offset : 0;
@@ -591,8 +591,8 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
     /**
      * create a few variables for the search options
      */
-    var topSearchUrl = '/Jini3/public/objects/search?query=',
-    centerSearchUrl = '/Jini3/public/objects/searchPage?query=',
+    var topSearchUrl = '/COMPIE/jini3/public/objects/search?query=',
+    centerSearchUrl = '/COMPIE/jini3/public/objects/searchPage?query=',
     interval1 = false,
     interval2 = false,
     interval3 = false,
