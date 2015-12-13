@@ -106,6 +106,7 @@ html, body{
 		line-height: 26.88px;
 		letter-spacing: -0.02em;
 		font-weight: 700;
+		text-align: left !important;
 	}
 	.inner-text{
 		font-size: 20px;
@@ -1495,7 +1496,7 @@ header{
 				font-weight: bold;
 			}
 
-			.bottom .inner-b{
+			.bottom .inner-b .inner-text{
 				text-align: justify;
 			}
 
