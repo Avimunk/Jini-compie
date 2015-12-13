@@ -1,7 +1,7 @@
 <div>
     <div ng-show="showCategorySearchBlock" ng-class="showCategorySearchBlock ? 'collapsed' : ''" class="filterResault">
         <a ng-href="{{backUrl}}" ng-if="backUrl" class="back-btn"></a>
-        <span class="slogen">Votre connexion à Israël – Tous nos services & informations réunis dans un même clic et dans votre langue.</span>
+        <span class="slogen">{{selectedSlogan}}</span>
         <div class="frButtons">
             <a ng-click="showCategoriesSearchList()" ng-class="showCategoriesSearchBlockList ? 'active' : ''" class="filter-i"></a>
             <a class="filter-i-hover"></a>

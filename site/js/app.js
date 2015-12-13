@@ -56,6 +56,10 @@ function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageP
                     console.log('CALL: resolve.categories5')
                     return CategoryService.getCategories($stateParams);
                 }],
+                getSloganJson: ['SloganService', function(SloganService){
+                    console.log('CALL: resolve.getSloganJson5')
+                    return SloganService.getSlogan();
+                }],
                 setScope: ['$rootScope', '$state', '$stateParams', 'categories', 'setScopeService', function($rootScope, $state, $stateParams, categories, setScopeService){
                     console.log('CALL: resolve.setScope5')
                     return setScopeService.init($rootScope, $state, $stateParams, categories);
@@ -71,6 +75,10 @@ function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageP
                 categories: ['CategoryService', '$stateParams', function(CategoryService, $stateParams){
                     console.log('CALL: resolve.categories2')
                     return CategoryService.getCategories($stateParams);
+                }],
+                getSloganJson: ['SloganService', function(SloganService){
+                    console.log('CALL: resolve.getSloganJson2')
+                    return SloganService.getSlogan();
                 }],
                 setScope: ['$rootScope', '$state', '$stateParams', 'categories', 'setScopeService', function($rootScope, $state, $stateParams, categories, setScopeService){
                     console.log('CALL: resolve.setScope2')

@@ -2,6 +2,7 @@ angular.module('JINI.services', [])
     .factory('pie', pie)
     .factory('fixPie', ['$document', fixPie])
     .factory('CategoryService', ['$http', '$state', '$rootScope', CategoryService])
+    .factory('SloganService', ['$http', '$rootScope', SloganService])
     .factory('setScopeService', setScopeService)
     .factory('objectService', ['$http', objectService])
 ;
@@ -89,6 +90,26 @@ function setScopeService(){
             return true;
         }
     }
+}
+
+function SloganService($http, $rootScope) {
+    var ss = {};
+    ss.getSlogan = function(){
+        console.log('CALL: SloganService.getSlogan', ss)
+        if(ss.slogan)
+        {
+            $rootScope.selectedSlogan = ss.slogan[Math.floor(Math.random() * ss.slogan.length)];
+            return;
+        }
+        else
+        {
+            return $http.get('data/categories/slogan.json').then(function(resp){
+                $rootScope.selectedSlogan = resp.data[Math.floor(Math.random() * resp.data.length)];
+                return ss.slogan = resp.data;
+            });
+        }
+    };
+    return ss;
 }
 
 /**

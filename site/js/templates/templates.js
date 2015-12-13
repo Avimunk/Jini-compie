@@ -8,7 +8,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "        <a ng-click=\"displayHandle.closeAll()\" class=\"back-btn\"></a>\r" +
     "\n" +
-    "        <span class=\"slogen\">Votre connexion à Israël – Tous nos services & informations réunis dans un même clic et dans votre langue.</span>\r" +
+    "        <span class=\"slogen\">{{selectedSlogan}}</span>\r" +
     "\n" +
     "        <div class=\"frButtons\">\r" +
     "\n" +
@@ -129,7 +129,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "        <a ng-href=\"{{backUrl}}\" ng-if=\"backUrl\" class=\"back-btn\"></a>\r" +
     "\n" +
-    "        <span class=\"slogen\">Votre connexion à Israël – Tous nos services & informations réunis dans un même clic et dans votre langue.</span>\r" +
+    "        <span class=\"slogen\">{{selectedSlogan}}</span>\r" +
     "\n" +
     "        <div class=\"frButtons\">\r" +
     "\n" +
