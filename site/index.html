@@ -57,7 +57,7 @@
                 <a href="#/" class="logo"><img src="images/logo.png" /></a>
                 <form>
                     <input enter-submit ng-keyup="changeUrl()" ng-model="keywords.keywords" type="text" placeholder="" />
-                    <span class="search-placeholder">Entrez votre recherche</span>
+                    <span ng-hide="keywords.keywords" class="search-placeholder">Entrez votre recherche</span>
                     <div ng-show="keywords.keywords" ng-click="closeSearchBtn()" class="search-close"></div>
                     <input type="submit" ng-click="changeUrl(true)"  value="" />
 
