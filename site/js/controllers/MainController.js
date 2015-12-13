@@ -91,6 +91,12 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
     // On resize fix the map width
     angular.element($window).bind('resize', function() {
         $rootScope.setMapWidth(true);
+
+        if(window.innerWidth < 980)
+        {
+            top.location.href = '/Jini3/mobile.html';
+        }
+
     });
 
     /**

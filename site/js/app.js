@@ -1,3 +1,8 @@
+if(window.innerWidth < 980)
+{
+    top.location.href = '/Jini3/mobile.html';
+}
+
 angular.module('JINI', [
     'ui.router',
     'ngStorage',
