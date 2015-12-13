@@ -2,12 +2,12 @@
   "img"   : "24-logo.png",
   "items" :[
     {
-      "title"   : "LIVE",
+      "title"   : "Direct",
       "content" : "pour profiter des informations en live sur le site d’I24 News, cliquez sur l’icône.",
       "url"     : "http://www.i24news.tv/fr/tv/live"
     },
     {
-      "title"   : "Chanel i24",
+      "title"   : "Chaîne I24",
       "content" : "Pour accéder aux dernières actualités sur le site d’I24 News, cliquez sur l’icône.",
       "url"     : "http://www.i24news.tv/fr/"
     }

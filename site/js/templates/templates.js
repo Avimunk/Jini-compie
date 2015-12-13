@@ -509,7 +509,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                                type=\"text\"\r" +
     "\n" +
-    "                                placeholder=\"Name\"\r" +
+    "                                placeholder=\"Nom\"\r" +
     "\n" +
     "                                ng-model=\"contact.name\"\r" +
     "\n" +
@@ -525,7 +525,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                                type=\"text\"\r" +
     "\n" +
-    "                                placeholder=\"Phone\"\r" +
+    "                                placeholder=\"Téléphone\"\r" +
     "\n" +
     "                                ng-model=\"contact.phone\"\r" +
     "\n" +
@@ -579,7 +579,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                        </div>\r" +
     "\n" +
-    "                        <input type=\"submit\" class=\"gold-btn\" ng-click=\"validate(contactForm)\" value=\"SEND\" />\r" +
+    "                        <input type=\"submit\" class=\"gold-btn\" ng-click=\"validate(contactForm)\" value=\"Envoyé\" />\r" +
     "\n" +
     "                        <span class=\"error-txt\" ng-show=\"notValid\">There are some errors / empty fields in the form, please fix them.</span>\r" +
     "\n" +
@@ -683,7 +683,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                        <p class=\"inner-text\" ng-bind-html=\"item.content | rawHtml\"></p>\r" +
     "\n" +
-    "                        <a class=\"black-btn\" ng-href=\"{{item.url}}\" target=\"_blank\">Visit website</a>\r" +
+    "                        <a class=\"black-btn\" ng-href=\"{{item.url}}\" target=\"_blank\">Visiter le site web</a>\r" +
     "\n" +
     "                    </div>\r" +
     "\n" +
@@ -802,7 +802,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
   $templateCache.put('templates/main/content.html',
     "<div id=\"svgContainer\" ng-attr-class=\"{{ showCategoriesBlock || showObjectBlock || showCategorySearchBlock ? 'closed' : ''}}\" ng-mouseover=\"closeMenuOnMouseover()\">\r" +
     "\n" +
-    "    <a title=\"Go Home\" ng-if=\"parentID == 0\" ng-href=\"#/\" class=\"back-button home\"></a>\r" +
+    "    <a title=\"Accueil\" ng-if=\"parentID == 0\" ng-href=\"#/\" class=\"back-button home\"></a>\r" +
     "\n" +
     "    <a title=\"Back to parent Category\" ng-if=\"parentID != 0 && parentID != null\" ng-href=\"{{'#/' + parentID.id + '/' + parentID.name}}\" class=\"back-button\"></a>\r" +
     "\n" +

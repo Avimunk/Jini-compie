@@ -73,12 +73,12 @@
                 <div class="breadcrumbs">
                     <span ng-if="currentBreadCrumbs.length">
                         <a href="#/">
-                            Home
+                            Accueil
                         </a>
                         /
                     </span>
                     <span ng-if="!currentBreadCrumbs.length">
-                        Home
+                        Accueil
                     </span>
                     <span ng-if="!$last" ng-repeat="(k, v) in currentBreadCrumbs">
                         <a ng-href="{{'#/' + v.id + '/' + v.url}}">{{v.title}}</a>
@@ -184,7 +184,7 @@
                     <img src="images/icons/b-nav.png" />
                     <span>Tarsat 11 st. Tel-Aviv</span>
                 </div>
-                <a ng-href="{{showHomeBanner.url}}" class="read-more">READ MORE</a>
+                <a ng-href="{{showHomeBanner.url}}" class="read-more">En savoir plus</a>
                 <div class="clearfix"></div>
             </div>
         </div>

@@ -13,7 +13,7 @@
                         <div valdr-form-group>
                             <input
                                 type="text"
-                                placeholder="Name"
+                                placeholder="Nom"
                                 ng-model="contact.name"
                                 name="name"/>
 
@@ -21,7 +21,7 @@
                         <div valdr-form-group>
                             <input
                                 type="text"
-                                placeholder="Phone"
+                                placeholder="Téléphone"
                                 ng-model="contact.phone"
                                 name="phone"/>
                         </div>
@@ -48,7 +48,7 @@
                         <div class="error" ng-if="!success && error">
                             {{error}}
                         </div>
-                        <input type="submit" class="gold-btn" ng-click="validate(contactForm)" value="SEND" />
+                        <input type="submit" class="gold-btn" ng-click="validate(contactForm)" value="Envoyé" />
                         <span class="error-txt" ng-show="notValid">There are some errors / empty fields in the form, please fix them.</span>
 
                     </form>
@@ -100,7 +100,7 @@
                     <div ng-repeat="item in pageContent.items">
                         <span class="inner-title">{{item.title}}</span>
                         <p class="inner-text" ng-bind-html="item.content | rawHtml"></p>
-                        <a class="black-btn" ng-href="{{item.url}}" target="_blank">Visit website</a>
+                        <a class="black-btn" ng-href="{{item.url}}" target="_blank">Visiter le site web</a>
                     </div>
                 </div>
             </div>
