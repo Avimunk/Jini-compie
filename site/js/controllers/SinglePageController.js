@@ -72,7 +72,7 @@ function SinglePageController($rootScope, $scope, $state, $http) {
             // set a few data variables.
             var contact = $scope.contact;
             var url = 'https://secure.powerlink.co.il/web/webtocrm.aspx';
-            var url = '/Jini3/public/contactToCRM';
+            var url = '/COMPIE/jini3/public/contactToCRM';
             var name = split2s(contact.name, ' ');
             var data = {
                 "firstname" : name[0],

@@ -133,13 +133,21 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "        <div class=\"frButtons\">\r" +
     "\n" +
-    "            <a ng-click=\"showCategoriesSearchList()\" ng-class=\"showCategoriesSearchBlockList ? 'active' : ''\" class=\"filter-i\"></a>\r" +
+    "            <a ng-click=\"showCategoriesSearchList()\" ng-class=\"showCategoriesSearchBlockList ? 'active' : ''\" class=\"filter-i\">\r" +
+    "\n" +
+    "                <span class=\"filterTooltip frButtonsTooltip\">Switch to list view</span>\r" +
+    "\n" +
+    "            </a>\r" +
     "\n" +
     "            <a class=\"filter-i-hover\"></a>\r" +
     "\n" +
     "            <a class=\"mapNav-i-hover\"></a>\r" +
     "\n" +
-    "            <a ng-click=\"showCategoriesSearchMap();\" ng-class=\"showCategoriesSearchBlockMap ? 'active' : ''\" class=\"mapNav-i\"></a>\r" +
+    "            <a ng-click=\"showCategoriesSearchMap();\" ng-class=\"showCategoriesSearchBlockMap ? 'active' : ''\" class=\"mapNav-i\">\r" +
+    "\n" +
+    "                <span class=\"mapNavTooltip frButtonsTooltip\">Switch to map view</span>\r" +
+    "\n" +
+    "            </a>\r" +
     "\n" +
     "        </div>\r" +
     "\n" +
@@ -845,6 +853,14 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "        </g>\r" +
     "\n" +
     "    </svg>\r" +
+    "\n" +
+    "    <span class=\"itemsTooltip\">\r" +
+    "\n" +
+    "        For More Information Click here\r" +
+    "\n" +
+    "        <img src=\"../../images/arrow-left.png\" />\r" +
+    "\n" +
+    "    </span>\r" +
     "\n" +
     "</div>\r" +
     "\n" +
