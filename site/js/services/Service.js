@@ -135,7 +135,7 @@ function CategoryService($http, $state, $rootScope) {
             return ca.categoriesData;
 
         var id = $stateParams.id || 0;
-        return ca.categoriesData = $http.get('/COMPIE/jini3/public/categories/' + id + '/categories').then(function(response){
+        return ca.categoriesData = $http.get('/Jini3/public/categories/' + id + '/categories').then(function(response){
 
             if(typeof response.data.parents == 'undefined' || typeof response.data.parents[id] == 'undefined')
                 $state.go('home');
@@ -164,7 +164,7 @@ function objectService($http) {
         if(obj.objectData[id])
             return obj.objectData[id];
 
-        return obj.objectData[id] = $http.get('/COMPIE/jini3/public/objects/' + id).then(function(response){
+        return obj.objectData[id] = $http.get('/Jini3/public/objects/' + id).then(function(response){
             return response.data;
         });
     };

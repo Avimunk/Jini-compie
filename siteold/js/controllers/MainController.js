@@ -9,7 +9,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
     console.log('MainController');
 
     $rootScope.siteUrl = '/Jini3/#';
-    $rootScope.mediaUrl = '/COMPIE/jini3/public/uploads/';
+    $rootScope.mediaUrl = '/Jini3/public/uploads/';
 
     var history = [];
     $rootScope.$on('$locationChangeSuccess', function() {
@@ -169,7 +169,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                 content: false,
             };
 
-            $http.get('/COMPIE/jini3/public/categories/'+id+'/content')
+            $http.get('/Jini3/public/categories/'+id+'/content')
                 .then(function(response){
                     $rootScope.sideCategory.content = sideCategoriesHover[id].content = response.data;
                 });
@@ -184,7 +184,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         }
         else
         {
-            $http.get('/COMPIE/jini3/public/objects/search?categoryid='+ id +'&index=100')
+            $http.get('/Jini3/public/objects/search?categoryid='+ id +'&index=100')
                 .then(function(response){
                     $rootScope.sideCategories = sideCategoriesList[id] = response;
                 });
@@ -245,8 +245,8 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         $rootScope.showCategoriesBlockMap  = false;
     }
 
-    var topSearchUrl = '/COMPIE/jini3/public/objects/search?query=';
-    var centerSearchUrl = '/COMPIE/jini3/public/objects/searchPage?query=';
+    var topSearchUrl = '/Jini3/public/objects/search?query=';
+    var centerSearchUrl = '/Jini3/public/objects/searchPage?query=';
     var interval = false;
     var timeout;
     var searches = {

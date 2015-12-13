@@ -301,7 +301,7 @@
 
 
 
-        siteUrl1 = '/COMPIE/jini3/public';
+        siteUrl1 = '/Jini3/public';
         $(function() {
             $.ajax({
                 url: siteUrl1 + '/objects/locations{{ $criteria }}',
