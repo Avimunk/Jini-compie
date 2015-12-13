@@ -519,7 +519,7 @@ class ObjectController extends Controller {
                     if($featuredImageUrl == $object['featured_image'])
                         unset($object['featured_image']);
 
-                    $object['excerpt'] = substr($object['excerpt'], 0, 200);
+                    $object['excerpt'] = mb_substr($object['excerpt'], 0, 200);
                 }
             }
 
@@ -639,7 +639,7 @@ class ObjectController extends Controller {
                             {
                                 if(in_array($v['objID'], $item['parents']))
                                 {
-                                    $v['excerpt'] = substr($v['excerpt'], 0, 200);
+                                    $v['excerpt'] = mb_substr($v['excerpt'], 0, 200);
                                     $categories[$k]['items'][] = $v;
                                 }
                             }
