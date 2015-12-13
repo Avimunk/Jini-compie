@@ -11,7 +11,7 @@ function SinglePageController($rootScope, $scope, $state, $http) {
     $rootScope.clearSearch();
 
     // close all other views
-    $rootScope.showCategorySearchBlock = $rootScope.showHomeBanner = $scope.showSearchBlock = $rootScope.top_search_result = $rootScope.center_search_result = $rootScope.category_search_result = false;
+    $rootScope.showCategorySearchBlock = $rootScope.showHomeBanner.homeBanner = $scope.showSearchBlock = $rootScope.top_search_result = $rootScope.center_search_result = $rootScope.category_search_result = false;
     $rootScope.displayHandle.closeAll();
 
     // set some scope variables

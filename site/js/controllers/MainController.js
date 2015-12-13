@@ -112,6 +112,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         $rootScope.showCategoryBlock = false;
         $rootScope.showObjectBlock   = false;
         $rootScope.showCategoriesBlock   = false;
+        $rootScope.showHomeBanner = {};
 
     /**
      * This function will change the view based on the item it recieved.
@@ -160,7 +161,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         }
 
         // not home page, hide home banner / content
-        $rootScope.showHomeBanner = false;
+        $rootScope.showHomeBanner.homeBanner = false;
 
         // switch the optional types and show the right content
         switch(item.type)
@@ -336,7 +337,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         closeAll: function()
         {
             console.log('closeAll');
-            $rootScope.showHomeBanner = $rootScope.showCategoryBlock = $rootScope.showObjectBlock = $rootScope.showCategoriesBlock = false;
+            $rootScope.showHomeBanner.homeBanner = $rootScope.showCategoryBlock = $rootScope.showObjectBlock = $rootScope.showCategoriesBlock = false;
         }
     }
 
@@ -352,7 +353,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         console.log('showCategoryHover', categoryData)
 
         // Disable the home banner
-        $rootScope.showHomeBanner = false;
+        $rootScope.showHomeBanner.homeBanner = false;
 
         // if the current category fetched already return it
         // else http get it.
@@ -471,10 +472,11 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
      * Get a random home banner and set it to the scope.
      */
     $rootScope.showHomePageBanner = function() {
+        console.log('showHomePageBanner');
         $http.get('/Jini3/data/home/banner.json')
             .then(function(response){
                 var items = response.data;
-                $rootScope.showHomeBanner = items[Math.floor(Math.random()*items.length)];
+                $rootScope.showHomeBanner.homeBanner = items[Math.floor(Math.random()*items.length)];
             });
     };
 

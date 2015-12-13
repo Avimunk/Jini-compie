@@ -30,7 +30,7 @@
                 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        ga('create', 'UA-71096115-1', 'auto');
+        ga('create', 'UA-70848505-1', 'auto');
         ga('send', 'pageview');
 
     </script>
@@ -212,11 +212,11 @@
 
             <div ui-view></div>
 
-            <div class="banner" ng-class="showHomeBanner ? 'collapsed' : ''" ng-show="showHomeBanner">
-                <a href="#" class="banner-close"><img src="images/icons/banner-close.png" /></a>
-                <span class="b-title" ng-bind-html="showHomeBanner.title | rawHtml"></span>
-                <p class="b-text" ng-bind-html="showHomeBanner.content | rawHtml"></p>
-                <a ng-href="{{showHomeBanner.url}}" class="read-more">En savoir plus</a>
+            <div class="banner" ng-class="showHomeBanner.homeBanner ? 'collapsed' : ''" ng-show="showHomeBanner.homeBanner">
+                <a href="javascript:void(0)" ng-click="showHomeBanner.homeBanner = false" class="banner-close"><img src="images/icons/banner-close.png" /></a>
+                <span class="b-title" ng-bind-html="showHomeBanner.homeBanner.title | rawHtml"></span>
+                <p class="b-text" ng-bind-html="showHomeBanner.homeBanner.content | rawHtml"></p>
+                <a ng-href="{{showHomeBanner.homeBanner.url}}" class="read-more">En savoir plus</a>
                 <div class="ng-hide b-adress">
                     <img src="images/icons/b-nav.png" />
                     <span>Tarsat 11 st. Tel-Aviv</span>
