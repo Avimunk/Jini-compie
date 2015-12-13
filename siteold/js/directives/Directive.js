@@ -104,7 +104,7 @@ angular.module('JINI.directives', [])
             }
             else
             {
-                $http.get('/Jini3/public/objects/locations?categoryid=' + categoryID + (queryString ? '&query=' + queryString : ''))
+                $http.get('/COMPIE/jini3/public/objects/locations?categoryid=' + categoryID + (queryString ? '&query=' + queryString : ''))
                     .then(function(response){
                         console.log('getMapData',response.data)
 
@@ -120,10 +120,10 @@ angular.module('JINI.directives', [])
                     var data = content.data[i];
 
                     if (data.promoted == 1) {
-                        iconUrl = '/Jini3/public/img/icons/map_pin_promoted_xs.png';
+                        iconUrl = '/COMPIE/jini3/public/img/icons/map_pin_promoted_xs.png';
                     }
                     else {
-                        iconUrl = '/Jini3/public/img/icons/map_pin_xs.png';
+                        iconUrl = '/COMPIE/jini3/public/img/icons/map_pin_xs.png';
                     }
 
                     var html = '<a href="#/'+ scope.currentItem.id +'-'+data.id+'/'+scope.currentItem.title+'/'+data.title+'" class="marker-popup' + (!data.content_image ? ' no-content-image' : '') +'">' +

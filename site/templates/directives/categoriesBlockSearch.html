@@ -3,10 +3,14 @@
         <a ng-href="{{backUrl}}" ng-if="backUrl" class="back-btn"></a>
         <span class="slogen">Votre connexion à Israël – Tous nos services & informations réunis dans un même clic et dans votre langue.</span>
         <div class="frButtons">
-            <a ng-click="showCategoriesSearchList()" ng-class="showCategoriesSearchBlockList ? 'active' : ''" class="filter-i"></a>
+            <a ng-click="showCategoriesSearchList()" ng-class="showCategoriesSearchBlockList ? 'active' : ''" class="filter-i">
+                <span class="filterTooltip frButtonsTooltip">Switch to list view</span>
+            </a>
             <a class="filter-i-hover"></a>
             <a class="mapNav-i-hover"></a>
-            <a ng-click="showCategoriesSearchMap();" ng-class="showCategoriesSearchBlockMap ? 'active' : ''" class="mapNav-i"></a>
+            <a ng-click="showCategoriesSearchMap();" ng-class="showCategoriesSearchBlockMap ? 'active' : ''" class="mapNav-i">
+                <span class="mapNavTooltip frButtonsTooltip">Switch to map view</span>
+            </a>
         </div>
     </div>
 

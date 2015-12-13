@@ -1,5 +1,6 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,700);
+/*@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,700);
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700,300);
+*/
 
 @font-face {
     font-family: 'bodoni';
@@ -141,7 +142,7 @@ header{
 }
 	header .left{
 		float: left;
-	}	
+	}
 		header .left .logo{
 			padding-left: 7px;
 			display: inline-block;
@@ -157,25 +158,47 @@ header{
 		}
 			header .left input{
 				position: relative;
-				background: transparent;
+				background: #eaecf0;
 				width: 100%;
 				height:100%;
 				line-height: 45px;
-			    border: 1px solid #fff;
+			    border: 0px solid #fff;
 			    vertical-align: top;
 			    font-size: 20px;
 			    color: #fff;
 			    padding: 0px 40px 0px 10px;
 			    outline: none;
 			    box-sizing: border-box;
+				color: #808080;
 			}
+			@keyframes type{
+				from { width: 0; }
+			}
+			@keyframes type2{
+				0%{width: 0;}
+				50%{width: 0;}
+				100%{ width: 100; }
+			}
+				header .left .search-placeholder {
+					position: absolute;
+					top: 10px;
+					left: 10px;
+					animation: type 4s steps(25, end);
+					font-size: 16px;
+					color: #808080;
+					width: 165px;
+					/*font-style: italic;*/
+					line-height: 25px;
+					white-space: nowrap;
+					overflow: hidden;
+				}
 			header .left input[type="search"]::-webkit-search-cancel-button{
-			    position:relative;  
+			    position:relative;
 			    -webkit-appearance: none;
 			    height: 20px;
 			    width: 20px;
 			    border-radius:10px;
-			    background: url(../images/icons/white-close.png);	
+			    background: url(../images/icons/white-close.png);
 			    background-repeat: no-repeat;
 			    background-position: center;
 			}
@@ -183,7 +206,7 @@ header{
 				position: absolute;
 				top: 0;
 				right: 0;
-				background: url(../images/icons/search.png);
+				background: #c5ab68 url(../images/icons/search.png);
 			    background-repeat: no-repeat;
 			    background-position: center;
 			    border: 0;
@@ -201,7 +224,7 @@ header{
 				padding: 0 18px;
 				position: absolute;
     			bottom: -250px;
-    			overflow-y: scroll; 
+    			overflow-y: scroll;
     			direction: rtl;
     			text-align: left;
 			}
@@ -211,7 +234,7 @@ header{
 					list-style-type: none;
 					padding: 0;
 					margin: 0;
-				} 
+				}
 					.search_autoComplete .sa-list li{
 						border-bottom: 1px solid #d2d2d2;
 						text-align: left;
@@ -251,16 +274,16 @@ header{
 		padding-top: 15px;
 	}
 		header .right .social a{
-		    opacity: 0.5;
+		    opacity: 1;
 		    transition:all 0.5s;
 		    -moz-transition:all 0.5s;
 			-webkit-transition: all 0.5s;
 		}
 			header .right .social a:hover{
-				opacity: 1;
+				opacity: 0.8;
 			}
 		header .right .social a:not(.last){
-			margin-left: 3px;	
+			margin-left: 3px;
 		}
 
 	nav {
@@ -270,7 +293,6 @@ header{
 		top: 100px;
 		left: 0;
 		background: #fff;
-		padding-top: 82px;
 		z-index: 1;
 	}
 		.side-menu{
@@ -279,6 +301,7 @@ header{
 			padding: 0;
 		}
 			.side-menu li{
+				position: relative;
 				height: 90px;
 				border-bottom: 1px solid #e6e6e6;
 				width: 100%;
@@ -289,10 +312,37 @@ header{
 				.side-menu li.active{
 					background: #f6f2e8;
 				}
+				.side-menu li .tooltip{
+					display: none;
+					padding: 8px 10px;
+					height: 30px;
+					background: #fff;
+					border-radius: 5px;
+					font-size: 16px;
+					font-family: 'Roboto', sans-serif;
+					position: absolute;
+					right: -170px;
+					top: 50%;
+					margin-top: -15px;
+					min-width: 150px;
+					text-align: center;
+				}
+					.side-menu li .tooltip img{
+						margin-right: 10px;
+					}
+				.side-menu li:hover .tooltip{
+					display: block;
+				}
+
 				.side-menu li .li-item{
-					display: block; 	
+					display: block;
 					width: 100%;
 					height: 100%;
+				}
+				.side-menu li .main-menu{
+					background: url(../images/icons/main-menu.png);
+					background-repeat: no-repeat;
+					background-position: center;
 				}
 				.side-menu li .vision{
 					background: url(../images/icons/vision.png);
@@ -318,6 +368,11 @@ header{
 					background: url(../images/icons/news.png);
 				    background-repeat: no-repeat;
 				    background-position: center;
+				}
+				.side-menu li .city-info{
+					background: url(../images/icons/city-icon.png);
+					background-repeat: no-repeat;
+					background-position: center;
 				}
 			.side-menu li.last{
 				position: absolute;
@@ -471,17 +526,17 @@ header{
 
 				.contactUs :-moz-placeholder { /* Firefox 18- */
 				   font-size: 20px;
-				   color: #000;  
+				   color: #000;
 				}
 
 				.contactUs ::-moz-placeholder {  /* Firefox 19+ */
 				   font-size: 20px;
-				   color: #000;  
+				   color: #000;
 				}
 
-				.contactUs :-ms-input-placeholder {  
+				.contactUs :-ms-input-placeholder {
 				   font-size: 20px;
-				   color: #000;  
+				   color: #000;
 				}
 				form.c-error input[type="text"], form.c-error select, form.c-error textarea{
 					border: 2px solid #ed272f;
@@ -492,15 +547,15 @@ header{
 				}
 
 				form.c-error textarea:-moz-placeholder { /* Firefox 18- */
-				   line-height: 45px;  
+				   line-height: 45px;
 				}
 
 				form.c-error textarea::-moz-placeholder {  /* Firefox 19+ */
-				   line-height: 45px;  
+				   line-height: 45px;
 				}
 
-				form.c-error textarea:-ms-input-placeholder {  
-				   line-height: 45px;  
+				form.c-error textarea:-ms-input-placeholder {
+				   line-height: 45px;
 				}
 
 				.contactUs form.c-error .error-txt{
@@ -542,16 +597,16 @@ header{
 		background-position: top center;
     }
 		.channel24 .bottom {
-			height: calc(100% - 327px);	
+			height: calc(100% - 327px);
 			/*overflow-y: scroll; */
 		}
 				.channel24 .bottom .inner-b .inner-text{
-					margin-bottom: 25px; 	
+					margin-bottom: 25px;
 				}
 				.channel24 .bottom .inner-b .black-btn{
 					margin-bottom: 50px;
 				}
-	
+
 	.recommendedDiv{
 		/*overflow-y: scroll;*/
 		background: #fff;
@@ -708,7 +763,7 @@ header{
 			color: #000;
 			font-family: 'Roboto', sans-serif;
 			display: block;
-			margin-top: 12px;			
+			margin-top: 12px;
 		}
 	.results-list{
 		height: calc(100% - 40px);
@@ -761,53 +816,88 @@ header{
 			}
 		.filterResault .frButtons{
 			/*display: none;*/
+			width: 100px;
+			height: 50px;
+			border-radius: 50px;
 			position: absolute;
 			top: 20px;
 			right: 20px;
+			background: #c5ab68;
+			padding-top: 3px;
+			padding-left: 8px;
+		}
+
+		.filterResault .frButtons.active{
+			background: #fff;
 		}
 			.filterResault .frButtons a{
 				cursor: pointer;
 			}
-			
+
+		.frButtonsTooltip{
+			display: none;
+			position: absolute;
+			bottom: -55px;
+			left: 0;
+			padding: 10px 14px;
+			background: #000;
+			color: #fff;
+			text-align: center;
+			border-radius: 5px;
+		}
+		.filterTooltip.frButtonsTooltip{
+			bottom: -85px;
+		}
 		.filter-i{
+			position: relative;
 			display: inline-block;
-			width: 28px;
+			width: 23px;
 			height: 25px;
-			background: url(../images/icons/gray-filter-i.png);
+			background: url(../images/icons/white-filter-i.png);
 			background-repeat:no-repeat;
 			background-position: bottom center;
-			margin-right: 16px;  
+			margin-right: 16px;
 			transition:all 0.5s;
 			-moz-transition:all 0.5s;
 			-webkit-transition: all 0.5s;
+			vertical-align: top;
+			margin-top: 7px;
+			margin-left: 3px;
 		}
-			.filter-i.active, .filter-i:hover{
-				background: url(../images/icons/filter-i.png);
+		.frButtons.active .filter-i:hover .filterTooltip{
+			display: block;
+		}
+		.frButtons.active .filter-i{
+				background: url(../images/icons/gold-filter-i.png);
 				background-repeat:no-repeat;
 				background-position: bottom center;
 			}
-		.filter-i-hover{
-			background: url(../images/icons/filter-i.png);
-		}
 		.mapNav-i{
 			display: inline-block;
-			width: 28px;
-			height: 25px;
-			background: url(../images/icons/g-map-nav.png);
+			width: 42px;
+			height: 42px;
+			background: url(../images/icons/w-map-nav.png);
 			background-repeat:no-repeat;
-			background-position: bottom center; 
+			background-position: bottom center;
 			transition:all 0.5s;
 			-moz-transition:all 0.5s;
 			-webkit-transition: all 0.5s;
 		}
-			.mapNav-i.active, .mapNav-i:hover{
-				background: url(../images/icons/gold-map-nav.png);
+			.frButtons.active .mapNav-i{
+				background: url(../images/icons/g-map-view.png);
 				background-repeat:no-repeat;
-				background-position: bottom center; 
+				background-position: bottom center;
 			}
 		.mapNav-i-hover{
 			background: url(../images/icons/gold-map-nav.png);
 		}
+		.frButtons .mapNav-i:hover .mapNavTooltip{
+			display: block;
+		}
+		.frButtons.active .mapNav-i:hover .mapNavTooltip{
+			display: none;
+		}
+
 	/* SEARCH RESULTS */
 
 	.search_results{
@@ -895,10 +985,10 @@ header{
 				-webkit-transition: all .3s;
 				bottom: 85px;
 				max-width: 480px;
-				padding: 25px 30px 20px 0;
-				background: rgba(255, 255, 255, 0.9);
+				padding: 25px 30px 20px;
+				background: #eee9db;
 			}
-			.banner:before{
+			/*.banner:before{
 				position: absolute;
 				content: '';
 				background:url(../images/banner-corner.png);
@@ -919,12 +1009,19 @@ header{
 			    height: calc(100% - 41px);
 			    z-index: -1;
 			    border-top: 51px solid transparent;
+			}*/
+			.banner-close{
+				position: absolute;
+				top: 16px;
+				right: 16px;
 			}
 				.b-title{
 					font-family: 'bodoni';
 					font-size: 25px;
 					line-height: 28px;
 					font-weight: 700;
+					max-width: 400px;
+					display: block;
 				}
 				.b-text{
 					font-family: 'Roboto', sans-serif;
@@ -934,25 +1031,34 @@ header{
 				}
 				.b-adress{
 					font-family: 'Roboto', sans-serif;
+					clear:both;
 					float: left;
-					margin-left:-10px;
-					font-size: 16px;
+					margin-left: 0;
+					font-size: 14px;
 					line-height: 22px;
-					font-weight: 700;
+					font-weight: 500;
 				}
 					.b-adress img{
-						margin-right: 8px;
+						height: 18px;
+						margin-right: 3px;
 						margin-top: -5px;
+					}
+					.b-adress span {
+						margin-top: -7px;
+						display: inline-block;
+						line-height: 23px;
+						vertical-align: middle;
 					}
 					.banner .read-more{
 						display: block;
-						float: right;
+						float: left;
 						color:#000;
 						line-height: 23px;
 						font-weight: 700;
-						font-size: 16px;
+						font-size: 14px;
 						margin-top: 1px;
-					}	
+						margin-bottom: 10px;
+					}
 					.banner .read-more:hover{
 						color:#000;
 					}
@@ -1129,12 +1235,15 @@ header{
 	    left: 105px;
 	    bottom: 55px;
 	}
+	.side-menu li {
+		height: 77px;
+	}
 }
 
 
 
 
-			
+
 
 
 
@@ -1398,7 +1507,7 @@ header{
 				background-position: center;
 				cursor: pointer;
 			}
-			
+
 			.search_autoComplete .sa-list li a{
 				display: block;
 				padding: 11px 3px;
@@ -1410,7 +1519,7 @@ header{
 			}
 
 
-			
+
 			.view-map{
 				background: url(../images/icons/g-nav.png);
 				background-position: left center;

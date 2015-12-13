@@ -45,7 +45,8 @@
             <div class="left">
                 <a href="#/" class="logo"><img src="images/logo.png" /></a>
                 <form>
-                    <input enter-submit ng-keyup="changeUrl()" ng-model="keywords.keywords" type="text" />
+                    <input enter-submit ng-keyup="changeUrl()" ng-model="keywords.keywords" type="text" placeholder="" />
+                    <span class="search-placeholder">Entrez votre recherche</span>
                     <div ng-show="keywords.keywords" ng-click="closeSearchBtn()" class="search-close"></div>
                     <input type="submit" ng-click="changeUrl(true)"  value="" />
 
@@ -89,19 +90,53 @@
         <nav>
             <ul class="side-menu">
                 <li class="liVision" ng-class="isPage && currentPage == 'vision' ? 'active' : ''">
+                    <a ng-click="goToPage('vision')" href="#/vision" class="li-item main-menu"></a>
+                    <span class="tooltip">
+                        <img src="images/icons/arrow-left.png"/>
+                        Main Menu
+                    </span>
+                </li>
+                <li class="liVision" ng-class="isPage && currentPage == 'vision' ? 'active' : ''">
                     <a ng-click="goToPage('vision')" href="#/vision" class="li-item vision"></a>
+                    <span class="tooltip">
+                        <img src="images/icons/arrow-left.png"/>
+                        About Us
+                    </span>
                 </li>
                 <li class="liFavorites" ng-class="isPage && currentPage == 'recommended' ? 'active' : ''">
                     <a ng-click="goToPage('recommended')" href="#/recommended" class="li-item favorites"></a>
-                </li>
-                <li class="liInfo" ng-class="isPage && currentPage == 'info' ? 'active' : ''">
-                    <a ng-click="goToPage('info')" href="#/info" class="li-item info"></a>
+                    <span class="tooltip">
+                        <img src="images/icons/arrow-left.png"/>
+                        Recommended
+                    </span>
                 </li>
                 <li class="liContact" ng-class="isPage && currentPage == 'contact' ? 'active' : ''">
                     <a ng-click="goToPage('contact')" href="#contact" class="li-item contact"></a>
+                    <span class="tooltip">
+                        <img src="images/icons/arrow-left.png"/>
+                        Contact Us
+                    </span>
                 </li>
                 <li class="liNews" ng-class="isPage && currentPage == '24news' ? 'active' : ''">
                     <a ng-click="goToPage('24news')" href="#/24news" class="li-item news"></a>
+                    <span class="tooltip">
+                        <img src="images/icons/arrow-left.png"/>
+                        News
+                    </span>
+                </li>
+                <li class="liInfo" ng-class="isPage && currentPage == 'info' ? 'active' : ''">
+                    <a ng-click="goToPage('info')" href="#/info" class="li-item info"></a>
+                    <span class="tooltip">
+                        <img src="images/icons/arrow-left.png"/>
+                        Information
+                    </span>
+                </li>
+                <li class="liInfo" ng-class="isPage && currentPage == 'info' ? 'active' : ''">
+                    <a ng-click="goToPage('info')" href="#/info" class="li-item city-info"></a>
+                    <span class="tooltip">
+                        <img src="images/icons/arrow-left.png"/>
+                        City Information
+                    </span>
                 </li>
             </ul>
         </nav>
@@ -167,13 +202,14 @@
             <div ui-view></div>
 
             <div class="banner" ng-class="showHomeBanner ? 'collapsed' : ''" ng-show="showHomeBanner">
+                <a href="#" class="banner-close"><img src="images/icons/banner-close.png" /></a>
                 <span class="b-title" ng-bind-html="showHomeBanner.title | rawHtml"></span>
                 <p class="b-text" ng-bind-html="showHomeBanner.content | rawHtml"></p>
+                <a ng-href="{{showHomeBanner.url}}" class="read-more">READ MORE</a>
                 <div class="ng-hide b-adress">
                     <img src="images/icons/b-nav.png" />
                     <span>Tarsat 11 st. Tel-Aviv</span>
                 </div>
-                <a ng-href="{{showHomeBanner.url}}" class="read-more">READ MORE</a>
                 <div class="clearfix"></div>
             </div>
         </div>
