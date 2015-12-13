@@ -537,7 +537,6 @@ class ObjectController extends AdminController {
         $fields = Object::getFields($id)->get();
 
         foreach ($fields as $field) {
-
             foreach ( array_keys($_POST) as $key ) {
                 if ( substr($key, 0, 7) == '_field_' ) {
                     $value = $request->input($key);
@@ -546,6 +545,15 @@ class ObjectController extends AdminController {
 
                     $object->setValue($key, $value);
                 }
+            }
+        }
+
+        foreach ($fields as $field)
+        {
+            if ($request->get('delete_address', false) && strpos($field->meta_key, '_field_address') === 0)
+            {
+                $field->delete();
+                continue;
             }
         }
 

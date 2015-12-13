@@ -1,9 +1,19 @@
 <div class="col-md-12">
+
+    <br>
+    <label class="control-label" for="delete_address">
+        {{ trans("admin/admin.delete_address") }}
+        <input name="delete_address" id="delete_address" type="checkbox" value="1">
+    </label>
+    <br>
+
     <label class="control-label" for="label"> {{ $field['label'] }} - {{{ isset( $values['address'] ) ? $values['address'] : null }}}
         {{{ isset( $values['city'] ) ? $values['city'] : null }}} {{{ isset( $values['country'] ) ? ', ' . $values['country'] : null }}}
         ({{{ isset( $values['location-g'] ) ? $values['location-g'] : null }}}, {{{ isset( $values['location-k'] ) ? $values['location-k'] : null }}})
     </label>
     {!!$errors->first('label', '<span class="help-block">:message </span>')!!}
+
+
 
     <input class="form-control" type="hidden" name="{{{ $field['id'] }}}-location-g" id="{{{ $field['id'] }}}-location-g" value="{{{ isset( $values['location-g'] ) ? $values['location-g'] : null }}}" />
     <input class="form-control" type="hidden" name="{{{ $field['id'] }}}-location-k" id="{{{ $field['id'] }}}-location-k" value="{{{ isset( $values['location-k'] ) ? $values['location-k'] : null }}}" />

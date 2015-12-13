@@ -50,4 +50,5 @@ return [
     'no_score' => 'None',
     'url' => 'Override category url. (leave blank for original)',
     'target' => 'Open category link in new window?',
+    'delete_address' => 'Delete the address',
 ];
