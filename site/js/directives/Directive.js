@@ -202,7 +202,7 @@ angular.module('JINI.directives', [])
                         '       </div>' +
                         '       <div class="row heading">' +
                         '           <div class="col-md-12">' +
-                        '               <div class="content">' + decodeEntities(data.excerpt).trunc(85,true) + '</div>' +
+                        '               <div class="content">' + decodeEntities(data.excerpt).trunc(78,true) + '</div>' +
                         '           </div>' +
                         '       </div>' +
                         '       <div class="row actions actions-pane">' +
@@ -335,7 +335,7 @@ angular.module('JINI.directives', [])
                     '       </div>' +
                     '       <div class="row heading">' +
                     '           <div class="col-md-12">' +
-                    '               <div class="content">' + decodeEntities(scope.sideObject.excerpt).trunc(85,true) + '</div>' +
+                    '               <div class="content">' + decodeEntities(scope.sideObject.excerpt).trunc(78,true) + '</div>' +
                     '           </div>' +
                     '       </div>' +
                     '       <div class="row actions actions-pane">' +
