@@ -2,7 +2,7 @@
     <div ng-show="showCategorySearchBlock" ng-class="showCategorySearchBlock ? 'collapsed' : ''" class="filterResault">
         <a ng-href="{{backUrl}}" ng-if="backUrl" class="back-btn"></a>
         <span class="slogen">{{selectedSlogan}}</span>
-        <div class="frButtons">
+        <div class="frButtons" ng-show="showCategoriesSearchBlockList">
             <a ng-click="showCategoriesSearchList()" ng-class="showCategoriesSearchBlockList ? 'active' : ''" class="filter-i">
                 <span class="filterTooltip frButtonsTooltip">Switch to list view</span>
             </a>
@@ -51,7 +51,17 @@
     </div>
 
     <div ng-class="showCategorySearchBlock && showCategoriesSearchBlockMap ? 'collapsed' : ''" ng-if="showCategorySearchBlock && showCategoriesSearchBlockMap" class="filter_search_result map" style="width: 1178px;min-height: 955px;">
-        <a ng-href="{{backUrl}}" ng-if="backUrl" class="back-btn"></a>
+        <div class="frButtons active">
+            <a ng-click="showCategoriesSearchList()" ng-class="showCategoriesSearchBlockList ? 'active' : ''" class="filter-i">
+                <span class="filterTooltip frButtonsTooltip">Switch to list view</span>
+            </a>
+            <a class="filter-i-hover"></a>
+            <a class="mapNav-i-hover"></a>
+            <a ng-click="showCategoriesSearchMap();" ng-class="showCategoriesSearchBlockMap ? 'active' : ''" class="mapNav-i">
+                <span class="mapNavTooltip frButtonsTooltip">Switch to map view</span>
+            </a>
+        </div>
+
         <div id="mapFrame">
             <div class="innerSpinner spinner" ng-hide="categoryMapItemsLoaded">
                 <div class="double-bounce1"></div>

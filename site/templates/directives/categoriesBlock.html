@@ -2,11 +2,15 @@
     <div ng-show="showCategoriesBlock" ng-class="showCategoriesBlock ? 'collapsed' : ''" class="filterResault">
         <a ng-click="displayHandle.closeAll()" class="back-btn"></a>
         <span class="slogen">{{selectedSlogan}}</span>
-        <div class="frButtons">
-            <a ng-click="showCategoriesList()" ng-class="showCategoriesBlockList ? 'active' : ''" class="filter-i"></a>
+        <div class="frButtons" ng-show="showCategoriesBlockList">
+            <a ng-click="showCategoriesList()" ng-class="showCategoriesBlockList ? 'active' : ''" class="filter-i">
+                <span class="filterTooltip frButtonsTooltip">Switch to list view</span>
+            </a>
             <a class="filter-i-hover"></a>
             <a class="mapNav-i-hover"></a>
-            <a ng-click="showCategoriesMap();" ng-class="showCategoriesBlockMap ? 'active' : ''" class="mapNav-i"></a>
+            <a ng-click="showCategoriesMap();" ng-class="showCategoriesBlockMap ? 'active' : ''" class="mapNav-i">
+                <span class="mapNavTooltip frButtonsTooltip">Switch to map view</span>
+            </a>
         </div>
     </div>
 
@@ -47,7 +51,16 @@
     </div>
 
     <div ng-if="showCategoriesBlock && showCategoriesBlockMap" ng-class="showCategoriesBlock && showCategoriesBlockMap ? 'collapsed' : ''" class="filter_search_result map" ng-attr-style="{{closeMapImportant ? 'width:0 !important' : ''}}" style="width: 1178px;min-height: 955px;">
-        <a ng-click="back()" class="back-btn"></a>
+        <div class="frButtons active">
+            <a ng-click="showCategoriesList()" ng-class="showCategoriesBlockList ? 'active' : ''" class="filter-i">
+                <span class="filterTooltip frButtonsTooltip">Switch to list view</span>
+            </a>
+            <a class="filter-i-hover"></a>
+            <a class="mapNav-i-hover"></a>
+            <a ng-click="showCategoriesMap();" ng-class="showCategoriesBlockMap ? 'active' : ''" class="mapNav-i">
+                <span class="mapNavTooltip frButtonsTooltip">Switch to map view</span>
+            </a>
+        </div>
         <div id="mapFrame">
             <div class="innerSpinner spinner" ng-hide="categoryMapItemsLoaded">
                 <div class="double-bounce1"></div>

@@ -10,15 +10,23 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "        <span class=\"slogen\">{{selectedSlogan}}</span>\r" +
     "\n" +
-    "        <div class=\"frButtons\">\r" +
+    "        <div class=\"frButtons\" ng-show=\"showCategoriesBlockList\">\r" +
     "\n" +
-    "            <a ng-click=\"showCategoriesList()\" ng-class=\"showCategoriesBlockList ? 'active' : ''\" class=\"filter-i\"></a>\r" +
+    "            <a ng-click=\"showCategoriesList()\" ng-class=\"showCategoriesBlockList ? 'active' : ''\" class=\"filter-i\">\r" +
+    "\n" +
+    "                <span class=\"filterTooltip frButtonsTooltip\">Switch to list view</span>\r" +
+    "\n" +
+    "            </a>\r" +
     "\n" +
     "            <a class=\"filter-i-hover\"></a>\r" +
     "\n" +
     "            <a class=\"mapNav-i-hover\"></a>\r" +
     "\n" +
-    "            <a ng-click=\"showCategoriesMap();\" ng-class=\"showCategoriesBlockMap ? 'active' : ''\" class=\"mapNav-i\"></a>\r" +
+    "            <a ng-click=\"showCategoriesMap();\" ng-class=\"showCategoriesBlockMap ? 'active' : ''\" class=\"mapNav-i\">\r" +
+    "\n" +
+    "                <span class=\"mapNavTooltip frButtonsTooltip\">Switch to map view</span>\r" +
+    "\n" +
+    "            </a>\r" +
     "\n" +
     "        </div>\r" +
     "\n" +
@@ -100,7 +108,25 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "    <div ng-if=\"showCategoriesBlock && showCategoriesBlockMap\" ng-class=\"showCategoriesBlock && showCategoriesBlockMap ? 'collapsed' : ''\" class=\"filter_search_result map\" ng-attr-style=\"{{closeMapImportant ? 'width:0 !important' : ''}}\" style=\"width: 1178px;min-height: 955px;\">\r" +
     "\n" +
-    "        <a ng-click=\"back()\" class=\"back-btn\"></a>\r" +
+    "        <div class=\"frButtons active\">\r" +
+    "\n" +
+    "            <a ng-click=\"showCategoriesList()\" ng-class=\"showCategoriesBlockList ? 'active' : ''\" class=\"filter-i\">\r" +
+    "\n" +
+    "                <span class=\"filterTooltip frButtonsTooltip\">Switch to list view</span>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "            <a class=\"filter-i-hover\"></a>\r" +
+    "\n" +
+    "            <a class=\"mapNav-i-hover\"></a>\r" +
+    "\n" +
+    "            <a ng-click=\"showCategoriesMap();\" ng-class=\"showCategoriesBlockMap ? 'active' : ''\" class=\"mapNav-i\">\r" +
+    "\n" +
+    "                <span class=\"mapNavTooltip frButtonsTooltip\">Switch to map view</span>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "        </div>\r" +
     "\n" +
     "        <div id=\"mapFrame\">\r" +
     "\n" +
@@ -131,7 +157,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "        <span class=\"slogen\">{{selectedSlogan}}</span>\r" +
     "\n" +
-    "        <div class=\"frButtons\">\r" +
+    "        <div class=\"frButtons\" ng-show=\"showCategoriesSearchBlockList\">\r" +
     "\n" +
     "            <a ng-click=\"showCategoriesSearchList()\" ng-class=\"showCategoriesSearchBlockList ? 'active' : ''\" class=\"filter-i\">\r" +
     "\n" +
@@ -229,7 +255,27 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "    <div ng-class=\"showCategorySearchBlock && showCategoriesSearchBlockMap ? 'collapsed' : ''\" ng-if=\"showCategorySearchBlock && showCategoriesSearchBlockMap\" class=\"filter_search_result map\" style=\"width: 1178px;min-height: 955px;\">\r" +
     "\n" +
-    "        <a ng-href=\"{{backUrl}}\" ng-if=\"backUrl\" class=\"back-btn\"></a>\r" +
+    "        <div class=\"frButtons active\">\r" +
+    "\n" +
+    "            <a ng-click=\"showCategoriesSearchList()\" ng-class=\"showCategoriesSearchBlockList ? 'active' : ''\" class=\"filter-i\">\r" +
+    "\n" +
+    "                <span class=\"filterTooltip frButtonsTooltip\">Switch to list view</span>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "            <a class=\"filter-i-hover\"></a>\r" +
+    "\n" +
+    "            <a class=\"mapNav-i-hover\"></a>\r" +
+    "\n" +
+    "            <a ng-click=\"showCategoriesSearchMap();\" ng-class=\"showCategoriesSearchBlockMap ? 'active' : ''\" class=\"mapNav-i\">\r" +
+    "\n" +
+    "                <span class=\"mapNavTooltip frButtonsTooltip\">Switch to map view</span>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "\r" +
     "\n" +
     "        <div id=\"mapFrame\">\r" +
     "\n" +

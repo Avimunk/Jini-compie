@@ -43,3 +43,4 @@ Thumbs.db
 /public/uploads
 /site/.sass-cache
 
+*.zip
