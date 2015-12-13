@@ -818,9 +818,9 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "            <symbol ng-init=\"currentItem && $first ? openItem(currentItem) : ''\" ng-repeat=\"(k, v) in currentCategories\"  class=\"icon icon-\" id=\"icon-{{$index+1}}\" viewBox=\"0 0 40 40\">\r" +
     "\n" +
-    "                <text ng-if=\"currentCategoriesLength == 2\" fill=\"#222\" dx=\"-30\" y=\"0\" dy=\"-95px\" text-anchor=\"middle\" font-size=\"22px\">{{v.newTitle ? v.newTitle[0] : v.title}}</text>\r" +
+    "                <text ng-if=\"currentCategoriesLength == 2\" fill=\"#222\" dx=\"-30\" y=\"0\" dy=\"-95px\" text-anchor=\"middle\" font-size=\"22px\">{{v.newTitle ? v.newTitle[1] : v.title}}</text>\r" +
     "\n" +
-    "                <text ng-if=\"currentCategoriesLength == 2 && v.newTitle\" fill=\"#222\" dx=\"-30\" y=\"0\" dy=\"-120px\" text-anchor=\"middle\" font-size=\"22px\">{{v.newTitle[1]}}</text>\r" +
+    "                <text ng-if=\"currentCategoriesLength == 2 && v.newTitle\" fill=\"#222\" dx=\"-30\" y=\"0\" dy=\"-120px\" text-anchor=\"middle\" font-size=\"22px\">{{v.newTitle[0]}}</text>\r" +
     "\n" +
     "                <text ng-if=\"currentCategoriesLength != 2\" fill=\"#222\" x=\"50%\" dx=\"0\" y=\"50%\" dy=\"0px\" text-anchor=\"middle\" font-size=\"16px\">{{v.newTitle ? v.newTitle[0] : v.title}}</text>\r" +
     "\n" +
