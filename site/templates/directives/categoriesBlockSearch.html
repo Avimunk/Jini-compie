@@ -4,12 +4,12 @@
         <span class="slogen">{{selectedSlogan}}</span>
         <div class="frButtons" ng-show="showCategoriesSearchBlockList">
             <a ng-click="showCategoriesSearchList()" ng-class="showCategoriesSearchBlockList ? 'active' : ''" class="filter-i">
-                <span class="filterTooltip frButtonsTooltip">Switch to list view</span>
+                <span class="filterTooltip frButtonsTooltip">Accéder à la liste</span>
             </a>
             <a class="filter-i-hover"></a>
             <a class="mapNav-i-hover"></a>
             <a ng-click="showCategoriesSearchMap();" ng-class="showCategoriesSearchBlockMap ? 'active' : ''" class="mapNav-i">
-                <span class="mapNavTooltip frButtonsTooltip">Switch to map view</span>
+                <span class="mapNavTooltip frButtonsTooltip">Accéder à la carte</span>
             </a>
         </div>
     </div>
@@ -19,7 +19,7 @@
             <div class="double-bounce1"></div>
             <div class="double-bounce2"></div>
         </div>
-        <span class="ts-title">Search by categorie {{currentItem.title}}</span>
+        <span class="ts-title">Rechercher par catégorie {{currentItem.title}}</span>
         <div class="results-list" scrollbar="{autoUpdate: true,wheelSpeed : 20, reFetchOnScroll:true, fetchType: 'searchInCategory'}" nextUrl="{{offsetCount}}" style="max-height: 100%;width: 429px">
             <div ng-repeat="(k, v) in category_search_result" class="text-separator">
                 <div class="sm-imgText">
@@ -53,12 +53,12 @@
     <div ng-class="showCategorySearchBlock && showCategoriesSearchBlockMap ? 'collapsed' : ''" ng-if="showCategorySearchBlock && showCategoriesSearchBlockMap" class="filter_search_result map" style="width: 1178px;min-height: 955px;">
         <div class="frButtons active">
             <a ng-click="showCategoriesSearchList()" ng-class="showCategoriesSearchBlockList ? 'active' : ''" class="filter-i">
-                <span class="filterTooltip frButtonsTooltip">Switch to list view</span>
+                <span class="filterTooltip frButtonsTooltip">Accéder à la liste</span>
             </a>
             <a class="filter-i-hover"></a>
             <a class="mapNav-i-hover"></a>
             <a ng-click="showCategoriesSearchMap();" ng-class="showCategoriesSearchBlockMap ? 'active' : ''" class="mapNav-i">
-                <span class="mapNavTooltip frButtonsTooltip">Switch to map view</span>
+                <span class="mapNavTooltip frButtonsTooltip">Accéder à la carte</span>
             </a>
         </div>
 

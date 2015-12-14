@@ -1511,8 +1511,8 @@ header{
 				height: 45px;
 				position: absolute;
 				top: 0;
-				right: 40px;
-				background: url('../images/icons/white-close.png');
+				right: 50px;
+				background: url('../images/icons/grey-close.png');
 				background-repeat: no-repeat;
 				background-position: center;
 				cursor: pointer;
@@ -1698,4 +1698,50 @@ header{
 /* Nechemya - lazy load */
 .categoryHover .top img{
 	height: inherit;
+}
+
+
+/*	 Video block	*/
+.videoBlock{
+	overflow:hidden;
+	overflow-x:hidden;
+	overflow-y:hidden;
+	height:100%;
+	width:100%;
+	position:absolute;
+	top:0px;
+	left:0px;
+	right:0px;
+	bottom:0px;
+	z-index: 999;
+}
+
+.videoBlock .closeVideo{
+	position: absolute;
+	right: 15px;
+	top: 15px;
+	z-index: 9999;
+	background: white;
+	border-radius: 30px;
+	padding: 6px 9px;
+	opacity: 0.6;
+	cursor: pointer;
+}
+
+.videoBlock .closeVideo:hover{
+	opacity: 0.8;
+}
+
+
+.videoBlock iframe{
+	overflow:hidden;
+	overflow-x:hidden;
+	overflow-y:hidden;
+	height:100%;
+	width:100%;
+	position:absolute;
+	top:0px;
+	left:0px;
+	right:0px;
+	bottom:0px
 }

@@ -14,7 +14,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "            <a ng-click=\"showCategoriesList()\" ng-class=\"showCategoriesBlockList ? 'active' : ''\" class=\"filter-i\">\r" +
     "\n" +
-    "                <span class=\"filterTooltip frButtonsTooltip\">Switch to list view</span>\r" +
+    "                <span class=\"filterTooltip frButtonsTooltip\">Accéder à la liste</span>\r" +
     "\n" +
     "            </a>\r" +
     "\n" +
@@ -24,7 +24,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "            <a ng-click=\"showCategoriesMap();\" ng-class=\"showCategoriesBlockMap ? 'active' : ''\" class=\"mapNav-i\">\r" +
     "\n" +
-    "                <span class=\"mapNavTooltip frButtonsTooltip\">Switch to map view</span>\r" +
+    "                <span class=\"mapNavTooltip frButtonsTooltip\">Accéder à la carte</span>\r" +
     "\n" +
     "            </a>\r" +
     "\n" +
@@ -44,7 +44,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "        </div>\r" +
     "\n" +
-    "        <span class=\"ts-title\">Search by categorie {{currentItem.title}}</span>\r" +
+    "        <span class=\"ts-title\">Rechercher par catégorie {{currentItem.title}}</span>\r" +
     "\n" +
     "        <div class=\"results-list\" scrollbar=\"{autoUpdate: true,wheelSpeed : 20, reFetchOnScroll:true, fetchType: 'category'}\" nextUrl=\"{{regularCategoryOffsetCount}}\" style=\"max-height: 100%;width: 429px\">\r" +
     "\n" +
@@ -112,7 +112,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "            <a ng-click=\"showCategoriesList()\" ng-class=\"showCategoriesBlockList ? 'active' : ''\" class=\"filter-i\">\r" +
     "\n" +
-    "                <span class=\"filterTooltip frButtonsTooltip\">Switch to list view</span>\r" +
+    "                <span class=\"filterTooltip frButtonsTooltip\">Accéder à la liste</span>\r" +
     "\n" +
     "            </a>\r" +
     "\n" +
@@ -122,7 +122,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "            <a ng-click=\"showCategoriesMap();\" ng-class=\"showCategoriesBlockMap ? 'active' : ''\" class=\"mapNav-i\">\r" +
     "\n" +
-    "                <span class=\"mapNavTooltip frButtonsTooltip\">Switch to map view</span>\r" +
+    "                <span class=\"mapNavTooltip frButtonsTooltip\">Accéder à la carte</span>\r" +
     "\n" +
     "            </a>\r" +
     "\n" +
@@ -161,7 +161,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "            <a ng-click=\"showCategoriesSearchList()\" ng-class=\"showCategoriesSearchBlockList ? 'active' : ''\" class=\"filter-i\">\r" +
     "\n" +
-    "                <span class=\"filterTooltip frButtonsTooltip\">Switch to list view</span>\r" +
+    "                <span class=\"filterTooltip frButtonsTooltip\">Accéder à la liste</span>\r" +
     "\n" +
     "            </a>\r" +
     "\n" +
@@ -171,7 +171,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "            <a ng-click=\"showCategoriesSearchMap();\" ng-class=\"showCategoriesSearchBlockMap ? 'active' : ''\" class=\"mapNav-i\">\r" +
     "\n" +
-    "                <span class=\"mapNavTooltip frButtonsTooltip\">Switch to map view</span>\r" +
+    "                <span class=\"mapNavTooltip frButtonsTooltip\">Accéder à la carte</span>\r" +
     "\n" +
     "            </a>\r" +
     "\n" +
@@ -191,7 +191,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "        </div>\r" +
     "\n" +
-    "        <span class=\"ts-title\">Search by categorie {{currentItem.title}}</span>\r" +
+    "        <span class=\"ts-title\">Rechercher par catégorie {{currentItem.title}}</span>\r" +
     "\n" +
     "        <div class=\"results-list\" scrollbar=\"{autoUpdate: true,wheelSpeed : 20, reFetchOnScroll:true, fetchType: 'searchInCategory'}\" nextUrl=\"{{offsetCount}}\" style=\"max-height: 100%;width: 429px\">\r" +
     "\n" +
@@ -259,7 +259,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "            <a ng-click=\"showCategoriesSearchList()\" ng-class=\"showCategoriesSearchBlockList ? 'active' : ''\" class=\"filter-i\">\r" +
     "\n" +
-    "                <span class=\"filterTooltip frButtonsTooltip\">Switch to list view</span>\r" +
+    "                <span class=\"filterTooltip frButtonsTooltip\">Accéder à la liste</span>\r" +
     "\n" +
     "            </a>\r" +
     "\n" +
@@ -269,7 +269,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "            <a ng-click=\"showCategoriesSearchMap();\" ng-class=\"showCategoriesSearchBlockMap ? 'active' : ''\" class=\"mapNav-i\">\r" +
     "\n" +
-    "                <span class=\"mapNavTooltip frButtonsTooltip\">Switch to map view</span>\r" +
+    "                <span class=\"mapNavTooltip frButtonsTooltip\">Accéder à la carte</span>\r" +
     "\n" +
     "            </a>\r" +
     "\n" +
@@ -858,7 +858,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "    <a title=\"Accueil\" ng-if=\"parentID == 0\" ng-href=\"#/\" class=\"back-button home\"></a>\r" +
     "\n" +
-    "    <a title=\"Back to parent Category\" ng-if=\"parentID != 0 && parentID != null\" ng-href=\"{{'#/' + parentID.id + '/' + parentID.name}}\" class=\"back-button\"></a>\r" +
+    "    <a title=\"Précèdent\" ng-if=\"parentID != 0 && parentID != null\" ng-href=\"{{'#/' + parentID.id + '/' + parentID.name}}\" class=\"back-button\"></a>\r" +
     "\n" +
     "    <svg ng-mouseleave=\"imageOff()\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"-2 -2 504 504\" id=\"menu\">\r" +
     "\n" +

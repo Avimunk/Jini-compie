@@ -36,6 +36,10 @@
     </script>
 </head>
     <body ng-app="JINI" ng-controller="MainController">
+    <div class="videoBlock" ng-if="!video.hide">
+        <div ng-click="closeVideo()" class="closeVideo">X</div>
+        <iframe ng-src="http://jini.co.il/video.html" width="100%" height="100%" scrolling="no"></iframe>
+    </div>
     <!-- Start of Zoom Analytics Code -->
         <script type="text/javascript">
             var _zaVer=4,_zaq=_zaq||[];
@@ -56,8 +60,8 @@
             <div class="left">
                 <a href="#/" class="logo"><img src="images/logo.png" /></a>
                 <form>
-                    <input enter-submit ng-keyup="changeUrl()" ng-model="keywords.keywords" type="text" placeholder="" />
-                    <span ng-hide="keywords.keywords" class="search-placeholder">Entrez votre recherche</span>
+                    <input class="searchField" enter-submit ng-keyup="changeUrl()" ng-model="keywords.keywords" type="text" placeholder="" />
+                    <span ng-click="searchFocus()" ng-hide="keywords.keywords" class="search-placeholder">Entrez votre recherche</span>
                     <div ng-show="keywords.keywords" ng-click="closeSearchBtn()" class="search-close"></div>
                     <input type="submit" ng-click="changeUrl(true)"  value="" />
 
@@ -93,13 +97,14 @@
             <div class="right">
                 <div class="social">
                     <a href="http://www.twitter.com" target="_blank"><img src="images/icons/twitter.png" /></a>
-                    <a href="http://www.facebook.com" target="_blank"><img src="images/icons/facebook.png" /></a>
+                    <a href="https://www.facebook.com/jinisimplifiezvouslavie/" target="_blank"><img src="images/icons/facebook.png" /></a>
                     <a href="http://www.linkedin.com" target="_blank"><img src="images/icons/linkdin.png" /></a>
                 </div>
             </div>
         </header>
         <nav>
             <ul class="side-menu">
+                <!--
                 <li class="liVision" ng-class="isPage && currentPage == 'vision' ? 'active' : ''">
                     <a ng-click="goToPage('vision')" href="#/vision" class="li-item main-menu"></a>
                     <span class="tooltip">
@@ -107,6 +112,7 @@
                         Main Menu
                     </span>
                 </li>
+                -->
                 <li class="liVision" ng-class="isPage && currentPage == 'vision' ? 'active' : ''">
                     <a ng-click="goToPage('vision')" href="#/vision" class="li-item vision"></a>
                     <span class="tooltip">
@@ -135,15 +141,15 @@
                         News
                     </span>
                 </li>
-                <li class="liInfo" ng-class="isPage && currentPage == 'info' ? 'active' : ''">
-                    <a ng-click="goToPage('info')" href="#/info" class="li-item info"></a>
+                <li class="liInfo" ng-class="isPage && currentPage == 'disclaimer' ? 'active' : ''">
+                    <a ng-click="goToPage('disclaimer')" href="#/disclaimer" class="li-item info"></a>
                     <span class="tooltip">
                         <img src="images/icons/arrow-left.png"/>
-                        Information
+                        Désistement
                     </span>
                 </li>
-                <li class="liInfo" ng-class="isPage && currentPage == 'info' ? 'active' : ''">
-                    <a ng-click="goToPage('info')" href="#/info" class="li-item city-info"></a>
+                <li class="liInfo">
+                    <a href="#/2168/raanana" class="li-item city-info"></a>
                     <span class="tooltip">
                         <img src="images/icons/arrow-left.png"/>
                         City Information

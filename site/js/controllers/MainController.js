@@ -2,10 +2,30 @@ angular.module('JINI.controllers')
 .controller('MainController', MainController);
 
 
-MainController.$inject = ['$state', '$rootScope', 'pie', 'fixPie', '$http', '$location', '$scope', '$window', '$timeout'];
+MainController.$inject = ['$state', '$rootScope', 'pie', 'fixPie', '$http', '$location', '$scope', '$window', '$timeout', '$cookies'];
 
-function MainController($state, $rootScope, pie, fixPie, $http, $location, $scope, $window, $timeout) {
+function MainController($state, $rootScope, pie, fixPie, $http, $location, $scope, $window, $timeout, $cookies) {
 
+    $rootScope.video = {};
+    if($cookies.get('video') == '1')
+    {
+        $rootScope.video.hide = true;
+    }
+
+    $rootScope.closeVideo = function(){
+        var now = new Date(),
+        // this will set the expiration to 12 months
+            exp = new Date(now.getFullYear()+5, now.getMonth(), now.getDate());
+
+        $cookies.put('video', '1',{
+            expires: exp
+        });
+        $rootScope.video.hide = true;
+    };
+
+    $rootScope.searchFocus = function(){
+        document.getElementsByClassName('searchField')[0].focus();
+    }
     console.log('MainController');
     /**
      * Setters.

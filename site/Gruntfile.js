@@ -40,6 +40,7 @@ module.exports = function(grunt) {
 						'lib/angular-animate/angular-animate.min.js',
 						'lib/angular-messages/angular-messages.min.js',
 						'lib/angular-sanitize/angular-sanitize.min.js',
+						'lib/angular-cookies/angular-cookies.min.js',
 						'lib/angular-ui-router/release/angular-ui-router.min.js',
 						'lib/ngstorage/ngStorage.min.js',
 						'lib/ng-tiny-scrollbar/ng-tiny-scrollbar.min.js',

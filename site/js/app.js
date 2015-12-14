@@ -8,6 +8,7 @@ angular.module('JINI', [
     'ngStorage',
     'ngMessages',
     'ngAnimate',
+    'ngCookies',
     'ngTinyScrollbar',
     'JINI.controllers',
     'JINI.directives',
@@ -88,7 +89,7 @@ function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageP
         })
         .state('singlePage', {
             cache: false,
-            url: '/{name:(?:vision|recommended|info|contact|24news)}',
+            url: '/{name:(?:vision|recommended|info|contact|24news|disclaimer)}',
             controller: 'SinglePageController',
             templateUrl: 'templates/main/content.html',
             resolve: {
