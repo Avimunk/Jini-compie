@@ -12,7 +12,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
      */
     // site and media url's
     $rootScope.siteUrl = '/Jini3/#';
-    $rootScope.mediaUrl = 'http://jini.co.il/public/uploads/';
+    $rootScope.mediaUrl = 'http://jini.co.il/API/public/uploads/';
 
     // the optional menu center image
     $rootScope.centerImage = centerImage = '../img/menu-logo.png';

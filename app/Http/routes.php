@@ -558,6 +558,229 @@ Route::get('/', function(){
     return redirect('admin/dashboard');
 });
 
+/* Delete categories and objects.
+use App\Object;
+use App\ObjectMeta;
+Route::get('check', function(){
+    $categories = Object::whereIn('id', [226, 227, 204, 13, 203])
+        ->select('id', 'type', 'name', 'parent_id')
+    ;
+
+    $cats = [];
+    $allCats = [];
+    foreach($categories->get()->getDictionary() as $item)
+    {
+        $temp = Object::where('parent_id', '=', $item['id'])
+            ->select('id', 'type', 'name', 'parent_id')
+            ->get()
+            ->getDictionary()
+        ;
+
+        $allCats[$item['id']] = $item;
+        $allCats = array_replace($allCats, $temp);
+
+        foreach($temp as &$v)
+        {
+            $temp2 = Object::where('parent_id', '=', $v['id'])
+                ->select('id', 'type', 'name', 'parent_id')
+                ->get()
+                ->getDictionary()
+            ;
+
+            $allCats = array_replace($allCats, $temp2);
+            $v['children'] = $temp2 ?: false;
+        }
+
+        $item['children'] = $temp ?: false;
+        $cats[] = $item;
+
+    }
+
+    echo 'SELECT * FROM `objects` WHERE id = ';
+    foreach($allCats as $k => $v)
+        echo $k . ($v !== end($allCats) ? ' OR id = ' : '');
+
+    echo '<br><br><br>SELECT * FROM `object_meta` WHERE object_id = ';
+    foreach($allCats as $k => $v)
+    {
+        $catsIDS[] = $k;
+        echo $k . ($v !== end($allCats) ? ' OR object_id = ' : '');
+    }
+
+    $images = [];
+    foreach(
+        ObjectMeta::whereIn('meta_key',['_featured_image', '_content_image'])
+        ->whereIn('object_id' ,$catsIDS)
+        ->get()
+    as $x
+    )
+    {
+        $images[] = $x->meta_value;
+    }
+
+    echo '<br><br><br>SELECT * FROM `objects` WHERE id = ';
+    foreach($images as $v)
+        echo $v . ($v !== end($images) ? ' OR id = ' : '');
+
+    echo '<br><br><br>SELECT * FROM `object_meta` WHERE object_id = ';
+    foreach($images as $v)
+    {
+        if(!trim($v))
+            continue;
+        echo $v . ($v !== end($images) ? ' OR object_id = ' : '');
+    }
+
+    echo '<h2>categories: ('.count($allCats).')</h2>';
+    echo '<table style="border-color: #048108 !important;border-spacing: 0;" border="1" cellpadding="0">';
+    echo '<thead style="background: #048108; color: white; font-weight: bold;">';
+    echo '<tr>';
+    echo '<td>#</td>';
+    echo '<td>Title</td>';
+    echo '<td>Admin url</td>';
+    echo '</tr>';
+    echo '</thead>';
+    echo '<tbody>';
+    foreach($cats as $a)
+    {
+        echo '<tr>';
+            echo '<td>'.$a->id.'</td>';
+            echo '<td>'.$a->name.'</td>';
+            echo '<td style="text-align: center"><a href="'.url('admin/categories/'.$a->id.'/edit').'">'.$a->id.'</a></td>';
+        echo '</tr>';
+        if($a['children'])
+        {
+            foreach($a['children'] as $b)
+            {
+                echo '<tr>';
+                echo '<td>##'.$b->id.'</td>';
+                echo '<td>'.$b->name.'</td>';
+                echo '<td style="text-align: center"><a href="'.url('admin/categories/'.$b->id.'/edit').'">'.$b->id.'</a></td>';
+                echo '</tr>';
+                if($b['children'])
+                {
+                    foreach($b['children'] as $c)
+                    {
+                        echo '<tr>';
+                        echo '<td>####'.$c->id.'</td>';
+                        echo '<td>'.$c->name.'</td>';
+                        echo '<td style="text-align: center"><a href="'.url('admin/categories/'.$c->id.'/edit').'">'.$c->id.'</a></td>';
+                        echo '</tr>';
+                    }
+                }
+            }
+        }
+    }
+    echo '</tbody>';
+    echo '<table>';
+    echo '<style>td{padding: 2px 5px;}</style>';
+
+    $objectTypes = [];
+    $objectTypes2 = [];
+    foreach($allCats as $catID => $catData)
+    {
+        $temp = ObjectMeta::where('object_meta.meta_key', '=', '_category_id')
+            ->where('object_meta.meta_value', '=', $catID)
+            ->whereNotIn('object_meta.object_id',[2881, 2883, 1272])
+            ->join('objects as obj', function ($join){
+                $join->on('obj.id', '=', 'object_meta.object_id');
+            })
+            ->select('obj.id', 'object_meta.meta_value as categoryID', 'obj.title', 'obj.name')
+            ->get()
+            ->toArray()
+        ;
+        $objectTypes = array_merge($objectTypes, $temp);
+        foreach($temp as $x)
+        {
+            $objectTypes2[$x['id']] = $x;
+        }
+    }
+
+    $duplicates = [];
+    foreach($objectTypes as $x)
+    {
+        if(isset($duplicates[$x['id']]))
+            $duplicates[$x['id']]++;
+        else
+            $duplicates[$x['id']] = 1;
+    }
+
+    echo 'SELECT * FROM `objects` WHERE id = ';
+    foreach($objectTypes2 as $k => $v)
+        echo $k . ($v !== end($objectTypes2) ? ' OR id = ' : '');
+
+   echo '<br><br><br>SELECT * FROM `object_meta` WHERE object_id = ';
+    foreach($objectTypes2 as $k => $v)
+        echo $k . ($v !== end($objectTypes2) ? ' OR object_id = ' : '');
+
+    echo '<h2>Object Types: ('.count($objectTypes2).')</h2>';
+    echo '<table style="border-color: #048108 !important;border-spacing: 0;" border="1" cellpadding="0">';
+    echo '<thead style="background: #048108; color: white; font-weight: bold;">';
+    echo '<tr>';
+    echo '<td>#</td>';
+    echo '<td>Title</td>';
+    echo '<td>Admin url</td>';
+    echo '<td>Belong To Category</td>';
+    echo '</tr>';
+    echo '</thead>';
+    echo '<tbody>';
+    foreach($objectTypes as $a)
+    {
+        echo '<tr>';
+        echo '<td>'.($duplicates[$a['id']] > 1 ? '#' : '').$a['id'].'</td>';
+        echo '<td>'.$a['title'].'</td>';
+        echo '<td style="text-align: center"><a href="'.url('admin/object-types/'.$a['id'].'/edit').'">'.$a['id'].'</a></td>';
+        echo '<td style="text-align: center"><a href="'.url('admin/categories/'.$a['categoryID'].'/edit').'">'.$a['categoryID'].'</a></td>';
+        echo '</tr>';
+    }
+    echo '</tbody>';
+    echo '<table>';
+    echo '<style>td{padding: 2px 5px;}</style>';
+
+    $totalObjects = [];
+    foreach($objectTypes2 as $typeID => $type)
+    {
+        $objects = Object::where('type', '=', str_replace('_object_type_', '', $type['name']))
+            ->select('id', 'title', 'type')
+            ->get()
+            ->toArray()
+        ;
+        foreach($objects as $x)
+        {
+            $x['typeID'] = $typeID;
+            $totalObjects[$x['id']] = $x;
+        }
+    }
+
+    echo 'SELECT * FROM `objects` WHERE id = ';
+    foreach($totalObjects as $k => $v)
+        echo $k . ($v !== end($totalObjects) ? ' OR id = ' : '');
+    die;
+    echo '<h2>Objects: ('.count($totalObjects).')</h2>';
+    echo '<table style="border-color: #048108 !important;border-spacing: 0;" border="1" cellpadding="0">';
+    echo '<thead style="background: #048108; color: white; font-weight: bold;">';
+    echo '<tr>';
+    echo '<td>#</td>';
+    echo '<td>Title</td>';
+    echo '<td>Admin url</td>';
+    echo '<td>Belong To Type</td>';
+    echo '</tr>';
+    echo '</thead>';
+    echo '<tbody>';
+    foreach($totalObjects as $a)
+    {
+        echo '<tr>';
+        echo '<td>'.$a['id'].'</td>';
+        echo '<td>'.$a['title'].'</td>';
+        echo '<td style="text-align: center"><a href="'.url('admin/objects/'.$a['id'].'/edit').'">'.$a['id'].'</a></td>';
+        echo '<td style="text-align: center"><a href="'.url('admin/object-types/'.$a['typeID'].'/edit').'">'.$a['type'].'</a></td>';
+        echo '</tr>';
+    }
+    echo '</tbody>';
+    echo '<table>';
+    echo '<style>td{padding: 2px 5px;}</style>';
+    die;
+});
+*/
 /*
 Route::get('/', 'HomeController@index');
 Route::get('home', 'HomeController@index');

@@ -398,6 +398,7 @@ class ObjectController extends Controller {
                             ->orWhere('content', 'LIKE', '%' . $search . '%');
                     })
                     ->select('id', 'parent_id', 'name', 'type', 'title', 'score')
+                    ->orderBy(DB::raw("objects.type = 'category'"),'DESC')
                     ->orderBy('score','DESC')
                     ->orderBy('title','ASC')
                     ->take(50)
