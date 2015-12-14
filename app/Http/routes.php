@@ -554,12 +554,16 @@ Route::get('/contactToCRM', function(\Illuminate\Http\Request $request){
     return response('');
 });
 
+Route::get('/', function(){
+    return redirect('admin/dashboard');
+});
 
+/*
 Route::get('/', 'HomeController@index');
 Route::get('home', 'HomeController@index');
 Route::get('about', 'PagesController@about');
 Route::get('contact', 'PagesController@contact');
-
+*/
 Route::get('categories/', 'CategoryController@getCategories');
 Route::get('categories/{id}', 'CategoryController@getCategory');
 Route::get('categories/{id}/categories', 'CategoryController@getCategories');
@@ -575,9 +579,11 @@ Route::get('objects/{id}/content', 'ObjectController@getContent');
 Route::get('objects/{id}', 'ObjectController@get');
 
 Route::pattern('id', '[0-9]+');
+/*
 Route::get('news/{id}', 'ArticlesController@show');
 Route::get('video/{id}', 'VideoController@show');
 Route::get('photo/{id}', 'PhotoController@show');
+*/
 
 Route::controllers([
     'auth' => 'Auth\AuthController',
@@ -1066,3 +1072,14 @@ Route::post('slika/notify',  function(Request $request){
         }
     }
 });
+
+Route::get('{slug}', function($slug) {
+
+    die('
+	<div style="margin: 100px auto; width: 700px; text-align: center; font-family: arial; font-size: 20px; line-height: 30px;">
+		The url : <span style="color:#C1C1C1">"'.env('APP_URL').'/'.$slug.'"</span> does not exists. <br>
+		Please login to the <a href="'.url('admin/dashboard').'">dashboard</a>
+	</div>
+	');
+
+})->where('slug', '^.*');
