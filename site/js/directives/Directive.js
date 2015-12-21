@@ -145,7 +145,7 @@ angular.module('JINI.directives', [])
             initMap();
 
             var categoryID = scope.currentItem.id;
-            console.log('scope.keywords.keywords' ,scope.keywords.keywords, typeof scope.keywords.keywords);
+            log('scope.keywords.keywords' ,scope.keywords.keywords, typeof scope.keywords.keywords);
             var queryString = typeof scope.keywords.keywords != 'undefined' && typeof scope.keywords.keywords != 'function' ? scope.keywords.keywords : '';
             $rootScope.categoryMapItemsLoaded = false;
             if(mapData[categoryID + queryString])
@@ -164,7 +164,7 @@ angular.module('JINI.directives', [])
             {
                 $http.get('/Jini3/public/objects/locations?categoryid=' + categoryID + (queryString ? '&query=' + queryString : ''))
                     .then(function(response){
-                        console.log('getMapData',response.data)
+                        log('getMapData',response.data)
 
                         // if there is no items in the map go back to list view
                         if(response.data.data.length == 0)
@@ -174,7 +174,7 @@ angular.module('JINI.directives', [])
                         }
 
                         mapData[categoryID + queryString] = response.data;
-                        console.log(mapData[categoryID + queryString]);
+                        log(mapData[categoryID + queryString]);
                         $rootScope.categoryMapItemsLoaded = true;
                         setMarkers(mapData[categoryID + queryString]);
                     });
@@ -236,7 +236,7 @@ angular.module('JINI.directives', [])
         // directive link function
         var mapData = [];
         var link = function(scope, element, attrs) {
-            console.log('objectMap', attrs);
+            log('objectMap', attrs);
             var map, infoWindow, infoBubble;
             var markers = [];
 
@@ -317,7 +317,7 @@ angular.module('JINI.directives', [])
             initMap();
             if(scope.sideObject.map)
             {
-                console.log('mapItem')
+                log('mapItem')
                 if (scope.sideObject.score >= 1) {
                     iconUrl = '/Jini3/public/img/icons/map_pin_promoted_xs.png';
                 }
@@ -377,14 +377,14 @@ angular.module('JINI.directives', [])
                     var searchResults = $rootScope.top_search_result.length;
                     if(searchResults){
                         if (code === 38) { // Up
-                            console.log('upkey', searchResults, $rootScope.top_search_position)
+                            log('upkey', searchResults, $rootScope.top_search_position)
                             if($rootScope.top_search_position <= 0)
                                 return false;
 
                             $rootScope.top_search_position = $rootScope.top_search_position - 1;
                         }
                         if (code === 40) { // Down
-                            console.log('downkey', searchResults, $rootScope.top_search_position)
+                            log('downkey', searchResults, $rootScope.top_search_position)
                             if($rootScope.top_search_position >= searchResults)
                                 return false;
 
@@ -393,21 +393,21 @@ angular.module('JINI.directives', [])
                     }
 
                     if (code === 13) {
-                        console.log('sdfsdfsdf', $rootScope.top_search_position, $rootScope.top_search_result.length);
+                        log('sdfsdfsdf', $rootScope.top_search_position, $rootScope.top_search_result.length);
 
                         var path = '/search/' + elem.val();
                         if($rootScope.top_search_position && $rootScope.top_search_result.length)
                         {
                             item = $rootScope.top_search_result[$rootScope.top_search_position + 1];
-                            console.log('inScope',item)
+                            log('inScope',item)
                             if(item)
                             {
                                 var path = item.type == 'category' ? ('/' + item.id + '/' + item.name) : ('/' + item.category['id'] + '-' + item.id + '/' + item.category['name'] + '/' + item.name + '/')
                                 path = encodeURI(path);
-                                console.log('inScope2',path)
+                                log('inScope2',path)
                             }
                         }
-                        console.log('inScope3',path)
+                        log('inScope3',path)
                         $location.path(path);
                     }
                     */
@@ -439,7 +439,7 @@ angular.module('JINI.directives', [])
                 else
                     $rootScope.item_info_height = height + 53;
 
-                console.log($rootScope.item_info_height);
+                log($rootScope.item_info_height);
                 $rootScope.$digest();
             });
 
@@ -450,7 +450,7 @@ angular.module('JINI.directives', [])
                 $rootScope.item_info_height = height + 53;
 
             $rootScope.$digest();
-            console.log($rootScope.item_info_height)
+            log($rootScope.item_info_height)
         }
     }])
 ;

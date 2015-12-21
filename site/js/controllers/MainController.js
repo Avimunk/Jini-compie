@@ -2,17 +2,29 @@ angular.module('JINI.controllers')
 .controller('MainController', MainController);
 
 
-MainController.$inject = ['$state', '$rootScope', 'pie', 'fixPie', '$http', '$location', '$scope', '$window', '$timeout', '$cookies'];
+MainController.$inject = ['$state', '$rootScope', 'pie', 'fixPie', '$http', '$location', '$scope', '$window', '$timeout', '$cookies', '$stateParams', 'sendToAnalytics'];
 
-function MainController($state, $rootScope, pie, fixPie, $http, $location, $scope, $window, $timeout, $cookies) {
+function MainController($state, $rootScope, pie, fixPie, $http, $location, $scope, $window, $timeout, $cookies, $stateParams, sendToAnalytics) {
+
+    $rootScope.$on('$stateChangeStart', function(event, state, params) {
+        sendToAnalytics.init(state, params)
+    });
 
     $rootScope.video = {};
     if($cookies.get('video') == '1')
     {
         $rootScope.video.hide = true;
     }
+    window.addEventListener("message", function(message){
+        if(message.data == 'closeVideo')
+        {
+            $rootScope.closeVideo();
+            log('Video is closed!');
+        }
+    }, false);
 
     $rootScope.closeVideo = function(){
+        log('$rootScope.closeVideo = function()');
         var now = new Date(),
         // this will set the expiration to 12 months
             exp = new Date(now.getFullYear()+5, now.getMonth(), now.getDate());
@@ -21,12 +33,13 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             expires: exp
         });
         $rootScope.video.hide = true;
+        $rootScope.$digest();
     };
 
     $rootScope.searchFocus = function(){
         document.getElementsByClassName('searchField')[0].focus();
     }
-    console.log('MainController');
+    log('MainController');
     /**
      * Setters.
      */
@@ -66,7 +79,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
 
         // History
         $rootScope.isPage = false;
-        //console.log('history', $location.$$path, history);
+        //log('history', $location.$$path, history);
         history.push($location.$$path);
 
         if($location.$$path.indexOf('search') == -1)
@@ -149,14 +162,14 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         // if is a search page will close all and not enable to change the view on hover unless is an object
         if(($state.current.name == 'search' || $state.current.name == 'searchInCategory') && type != 'object')
         {
-            console.log('in search page');
+            log('in search page');
             $rootScope.displayHandle.closeAll();
             return false;
         }
         // if its a signle content page will close all and not enable to change the view on hover unless is an object
         else if($state.current.name == 'singlePage' && type != 'object')
         {
-            console.log('in single page');
+            log('in single page');
             $rootScope.displayHandle.closeAll();
             return false;
         }
@@ -171,7 +184,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         justOpened = true;
         setTimeout(function(){justOpened = false;},500)
 
-        console.log('openItem',item)
+        log('openItem',item)
 
         // Home page, so show the home content and return.
         if(!Object.keys(item).length)
@@ -190,7 +203,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
                 $rootScope.leftBlocksHandler.objectView(item);
                 break;
             case 'category':
-                console.log("case 'category':", item, item.items_count);
+                log("case 'category':", item, item.items_count);
                 if(item.items_count)
                 {
                     // Show category hover
@@ -213,7 +226,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
      */
     $rootScope.disableCategoryHover = function(id)
     {
-        console.log('disableCategoryHover', id)
+        log('disableCategoryHover', id)
         if(categoryHoverTimeOut)
         {
             clearTimeout(categoryHoverTimeOut);
@@ -228,7 +241,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
      * @param fromParent
      */
     $rootScope.categoryHoverHelper = function(categoryData, fromParent){
-        console.log('categoryHoverHelper', categoryData.id, categoryHoverTimeOut)
+        log('categoryHoverHelper', categoryData.id, categoryHoverTimeOut)
         if(categoryHoverTimeOut)
         {
             clearTimeout(categoryHoverTimeOut);
@@ -329,7 +342,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         // Show category hover and hide others
         showCategoryHover: function()
         {
-            console.log('showCategoryHover');
+            log('showCategoryHover');
             $rootScope.showCategoryBlock    = true;
             $rootScope.showCategoriesBlock  = false;
             $rootScope.showObjectBlock      = false;
@@ -337,7 +350,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         // Show category list and hide others
         showCategoryList: function()
         {
-            console.log('showCategoryList');
+            log('showCategoryList');
             $rootScope.showCategoriesBlock  = true;
             $rootScope.showCategoryBlock    = false;
             $rootScope.showObjectBlock      = false;
@@ -348,7 +361,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         // Show object and hide others
         showObject: function()
         {
-            console.log('showObject');
+            log('showObject');
             $rootScope.showCategoriesBlock  = false;
             $rootScope.showCategoryBlock    = false;
             $rootScope.showObjectBlock      = true;
@@ -356,7 +369,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
         // Close all
         closeAll: function()
         {
-            console.log('closeAll');
+            log('closeAll');
             $rootScope.showHomeBanner.homeBanner = $rootScope.showCategoryBlock = $rootScope.showObjectBlock = $rootScope.showCategoriesBlock = false;
         }
     }
@@ -370,7 +383,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
      */
     $rootScope.showCategoryHover = function(categoryData){
 
-        console.log('showCategoryHover', categoryData)
+        log('showCategoryHover', categoryData)
 
         // Disable the home banner
         $rootScope.showHomeBanner.homeBanner = false;
@@ -421,15 +434,15 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
             // remove old data so the loader will show again
             $rootScope.sideCategories = false;
 
-            console.log('$rootScope.showCategoryList', categoryData);
+            log('$rootScope.showCategoryList', categoryData);
             var id = categoryData.id;
             if(sideCategoriesList[id])
             {
-                console.log(sideCategoriesList[id].length);
+                log(sideCategoriesList[id].length);
                 if(sideCategoriesList[id].length == 1)
                 {
                     var item = sideCategoriesList[id][0];
-                    //console.log('$rootScope.showCategoryList', item, sideCategoriesList[id]);
+                    //log('$rootScope.showCategoryList', item, sideCategoriesList[id]);
                     $rootScope.displayHandle.closeAll();
                     $location.path('/' + id + '-' + item.id + '/' + item.catName + '/' + item.name + '/');
                 }
@@ -492,7 +505,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
      * Get a random home banner and set it to the scope.
      */
     $rootScope.showHomePageBanner = function() {
-        console.log('showHomePageBanner');
+        log('showHomePageBanner');
         $http.get('/Jini3/data/home/banner.json')
             .then(function(response){
                 var items = response.data;
@@ -718,7 +731,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
 
                     $http.get(centerSearchUrl + currentSearch + '&offset=' + offset).then(function(resp){
                         $rootScope.center_search_result.data = $rootScope.center_search_result.data.concat(resp.data.data);
-                        //console.log($rootScope.center_search_result);
+                        //log($rootScope.center_search_result);
                         $rootScope.searchPageOffsetCount = resp.data.offset ? resp.data.offset : 0;
 
                         if(!$rootScope.$$phase) $rootScope.$digest();
@@ -732,7 +745,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
          */
         else if($state.current.name == 'searchInCategory')
         {
-            console.log('new searchInCategory');
+            log('new searchInCategory');
             if(typeof offset == 'undefined')
                 offset = 0;
 
@@ -803,7 +816,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
 
                     $http.get(centerSearchUrl + $rootScope.keywords.keywords + '&categoryid=' + $state.params.id + '&offset=' + offset).then(function(resp){
                         $rootScope.category_search_result = $rootScope.category_search_result.concat(resp.data.items);
-                        console.log($rootScope.category_search_result);
+                        log($rootScope.category_search_result);
                         $rootScope.offsetCount = resp.data.offset ? resp.data.offset : 0;
 
                         if(!$rootScope.$$phase) $rootScope.$digest();
@@ -935,7 +948,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
          */
         else if($state.current.name == 'searchInCategory')
         {
-            console.log('changeUrl -> searchInCategory',$state.params)
+            log('changeUrl -> searchInCategory',$state.params)
             if($rootScope.keywords.keywords.length >= 1)
             {
                 if($state.params.map)
@@ -966,7 +979,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
      * @returns {boolean}
      */
     $rootScope.showCategoriesSearchMap = function(){
-        console.log('clicked!showCategoriesSeacrhMap');
+        log('clicked!showCategoriesSeacrhMap');
         if(!$rootScope.showCategorySearchBlock)
             return false;
 
@@ -981,7 +994,7 @@ function MainController($state, $rootScope, pie, fixPie, $http, $location, $scop
      * @returns {boolean}
      */
     $rootScope.showCategoriesSearchList = function(){
-        console.log('clicked!showCategoriesList');
+        log('clicked!showCategoriesList');
         if(!$rootScope.showCategorySearchBlock)
             return false;
 

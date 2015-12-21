@@ -2,7 +2,7 @@ angular.module('JINI.controllers')
     .controller('SearchController', ['$scope', '$rootScope', '$stateParams', '$state', SearchController]);
 
 function SearchController($scope, $rootScope, $stateParams, $state) {
-    console.log('SearchControllerLoaded. ID:')
+    log('SearchControllerLoaded. ID:')
 
     // set back default image in the menu center
     $rootScope.imageOff();

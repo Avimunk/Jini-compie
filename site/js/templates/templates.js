@@ -607,9 +607,13 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                                ng-model=\"contact.reason\"\r" +
     "\n" +
-    "                                name=\"reason\">\r" +
+    "                                name=\"reason\"\r" +
     "\n" +
-    "                                <option ng-repeat=\"v in pageContent.form.reasons\" value=\"{{v.crm_id}}\">{{v.content}}</option>\r" +
+    "                                id=\"reason\"\r" +
+    "\n" +
+    "                                ng-options=\"v.crm_id as v.content for v in pageContent.form.reasons\">\r" +
+    "\n" +
+    "                                <option value=\"\">L'objet de votre message</option>\r" +
     "\n" +
     "                            </select>\r" +
     "\n" +
@@ -635,7 +639,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                        <input type=\"submit\" class=\"gold-btn\" ng-click=\"validate(contactForm)\" value=\"Envoyé\" />\r" +
     "\n" +
-    "                        <span class=\"error-txt\" ng-show=\"notValid\">There are some errors / empty fields in the form, please fix them.</span>\r" +
+    "                        <span class=\"error-txt\" ng-show=\"notValid\">Un champ du formulaire est vide ou incorrect.</span>\r" +
     "\n" +
     "\r" +
     "\n" +

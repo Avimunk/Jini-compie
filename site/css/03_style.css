@@ -69,7 +69,7 @@ html, body{
 	}
 	.black-btn{
 		display: block;
-		width: 168px;
+		width: 190px;
 		height: 50px;
 		background: #000;
 		border-radius: 0px;
@@ -103,16 +103,16 @@ html, body{
 	}
 	.inner-title{
 		font-family: 'bodoni';
-		font-size: 40px;
+		font-size: 28px;
 		line-height: 26.88px;
 		letter-spacing: -0.02em;
 		font-weight: 700;
 		text-align: left !important;
 	}
 	.inner-text{
-		font-size: 20px;
-		line-height:32.26px;
-		margin: 20px 0;
+		font-size: 15px;
+		line-height:26.26px;
+		margin: 0 0 20px 0;
 		font-family: 'Roboto', sans-serif;
 	}
 	td{
@@ -1229,6 +1229,13 @@ header{
 					border-top:none;
 					padding-top: 20px;
 				}
+
+		.img-top-titles{
+			text-align: left !important;
+		}
+		.img-top-titles{
+			direction: ltr;
+		}
 
 
 @media screen and (max-height: 730px){

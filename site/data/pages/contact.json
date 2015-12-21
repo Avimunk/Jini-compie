@@ -1,6 +1,6 @@
 {
   "title": "Contactez-nous",
-  "content": "une question, un souci, n‘hésitez pas à nous contacter au… <br><a href='files/Reglement.pdf' target='_blank'>Règlement</a>",
+  "content": "une question, un souci, n‘hésitez pas à nous contacter au…<br>",
   "form": {
     "errors" : {
       "title" : ""

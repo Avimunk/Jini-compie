@@ -3,6 +3,13 @@ if(window.innerWidth < 980)
     top.location.href = '/Jini3/mobile.html';
 }
 
+var isProduction = 0;
+function log()
+{
+    if(!isProduction)
+        console.log('Log: ', Array.prototype.slice.call(arguments));
+}
+
 angular.module('JINI', [
     'ui.router',
     'ngStorage',
@@ -24,7 +31,7 @@ angular.module('JINI', [
 Config.$inject = ['$stateProvider', '$urlRouterProvider', 'valdrProvider', 'valdrMessageProvider'];
 
 function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageProvider) {
-    console.log('Config Loaded');
+    log('Config Loaded');
 
     // if route not found
     $urlRouterProvider.otherwise('/');
@@ -38,11 +45,11 @@ function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageP
             templateUrl: 'templates/main/content.html',
             resolve: {
                 categories: ['CategoryService', '$stateParams', function(CategoryService, $stateParams){
-                    console.log('CALL: resolve.categories1')
+                    log('CALL: resolve.categories1')
                     return CategoryService.getCategories($stateParams);
                 }],
                 setScope: ['$rootScope', '$state', '$stateParams', 'categories', 'setScopeService', function($rootScope, $state, $stateParams, categories, setScopeService){
-                    console.log('CALL: resolve.setScope1')
+                    log('CALL: resolve.setScope1')
                     return setScopeService.init($rootScope, $state, $stateParams, categories);
                 }]
             }
@@ -54,17 +61,17 @@ function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageP
             templateUrl: 'templates/main/content.html',
             resolve: {
                 categories: ['CategoryService', '$stateParams', function(CategoryService, $stateParams){
-                    console.log('CALL: resolve.categories5')
+                    log('CALL: resolve.categories5')
                     return CategoryService.getCategories($stateParams);
                 }],
                 getSloganJson: ['SloganService', function(SloganService){
-                    console.log('CALL: resolve.getSloganJson5')
+                    log('CALL: resolve.getSloganJson5')
                     return SloganService.getSlogan();
                 }],
                 setScope: ['$rootScope', '$state', '$stateParams', 'categories', 'setScopeService', function($rootScope, $state, $stateParams, categories, setScopeService){
-                    console.log('CALL: resolve.setScope5')
+                    log('CALL: resolve.setScope5')
                     return setScopeService.init($rootScope, $state, $stateParams, categories);
-                }],
+                }]
             }
         })
         .state('category', {
@@ -74,15 +81,15 @@ function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageP
             templateUrl: 'templates/main/content.html',
             resolve: {
                 categories: ['CategoryService', '$stateParams', function(CategoryService, $stateParams){
-                    console.log('CALL: resolve.categories2')
+                    log('CALL: resolve.categories2')
                     return CategoryService.getCategories($stateParams);
                 }],
                 getSloganJson: ['SloganService', function(SloganService){
-                    console.log('CALL: resolve.getSloganJson2')
+                    log('CALL: resolve.getSloganJson2')
                     return SloganService.getSlogan();
                 }],
                 setScope: ['$rootScope', '$state', '$stateParams', 'categories', 'setScopeService', function($rootScope, $state, $stateParams, categories, setScopeService){
-                    console.log('CALL: resolve.setScope2')
+                    log('CALL: resolve.setScope2')
                     return setScopeService.init($rootScope, $state, $stateParams, categories);
                 }]
             }
@@ -94,11 +101,11 @@ function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageP
             templateUrl: 'templates/main/content.html',
             resolve: {
                 categories: ['CategoryService', '$stateParams', function(CategoryService, $stateParams){
-                    console.log('CALL: resolve.categories6')
+                    log('CALL: resolve.categories6')
                     return CategoryService.getCategories($stateParams);
                 }],
                 setScope: ['$rootScope', '$state', '$stateParams', 'categories', 'setScopeService', function($rootScope, $state, $stateParams, categories, setScopeService){
-                    console.log('CALL: resolve.setScope6')
+                    log('CALL: resolve.setScope6')
                     return setScopeService.init($rootScope, $state, $stateParams, categories);
                 }]
             }
@@ -110,15 +117,15 @@ function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageP
             templateUrl: 'templates/main/content.html',
             resolve: {
                 categories: ['CategoryService', '$stateParams', function(CategoryService, $stateParams){
-                    console.log('CALL: resolve.categories3')
+                    log('CALL: resolve.categories3')
                     return CategoryService.getCategories($stateParams);
                 }],
                 setScope: ['$rootScope', '$state', '$stateParams', 'categories', 'setScopeService', function($rootScope, $state, $stateParams, categories, setScopeService){
-                    console.log('CALL: resolve.setScope3')
+                    log('CALL: resolve.setScope3')
                     return setScopeService.init($rootScope, $state, $stateParams, categories);
                 }],
                 object: ['$stateParams', 'objectService' ,'setScope', '$rootScope' , function($stateParams, objectService, setScope, $rootScope){
-                    console.log('CALL: resolve.object3', setScope)
+                    log('CALL: resolve.object3', setScope)
                     $rootScope.currentItem = false;
                     return objectService.getObjectData($stateParams).then(function(item){
                         item.type = 'object';
@@ -135,11 +142,11 @@ function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageP
             templateUrl: 'templates/main/content.html',
             resolve: {
                 categories: ['CategoryService', '$stateParams', function(CategoryService, $stateParams){
-                    console.log('CALL: resolve.categories4')
+                    log('CALL: resolve.categories4')
                     return CategoryService.getCategories($stateParams);
                 }],
                 setScope: ['$rootScope', '$state', '$stateParams', 'categories', 'setScopeService', function($rootScope, $state, $stateParams, categories, setScopeService){
-                    console.log('CALL: resolve.setScope4')
+                    log('CALL: resolve.setScope4')
                     $rootScope.allBreadCrumbs = categories.breadcrumbs;
                     return setScopeService.init($rootScope, $state, $stateParams, categories);
                 }]
@@ -154,14 +161,14 @@ function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageP
             'name': {
                 'maxLength': {
                     'number': 40,
-                    'message': 'Name length cannot be more then 40 letters'
+                    'message': 'Votre nom ne peux contenir plus de 40 lettres.'
                 },
                 //'required': {
                 //    'message': 'Name is required.'
                 //},
                 'pattern' :{
                     'value' : /(\w+)\s((\w+)[\s]?)+/,
-                    'message': 'Name must have at least 2 words'
+                    'message': 'Insérez votre nom ainsi que votre prénom.'
                 }
             },
             'phone': {
@@ -172,12 +179,12 @@ function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageP
                 //},
                 'pattern' : {
                     'value' : /^([0-9]+){7,20}$/,
-                    'message': 'Phone number can contains only digits and must be between 7 and 20 digits.'
+                    'message': 'Votre numéro de téléphone ne peut contenir que des chiffres (De 7 chiffres minimum à 20 maximum).'
                 }
             },
             'email': {
                 "email": {
-                    "message": "Must be a valid E-Mail address."
+                    "message": "Votre email doit être valide."
                 },
                 //'required': {
                 //    'message': 'E-Mail address is required.'
@@ -189,7 +196,7 @@ function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageP
                 //},
                 'pattern' :{
                     'value' : /[1-5]/,
-                    'message': 'You must select a reason'
+                    'message': 'Sélectionnez une raison'
                 }
             }
         }

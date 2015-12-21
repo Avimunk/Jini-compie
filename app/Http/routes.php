@@ -1146,6 +1146,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth', 'namespace' => 'Admin
             die;
         }
 
+        return redirect('admin/slika/start?userid=' . $id);
+
         if(!$id || !$sum)
         {
             ?>

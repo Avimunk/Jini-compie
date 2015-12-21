@@ -4,6 +4,7 @@ angular.module('JINI.services', [])
     .factory('CategoryService', ['$http', '$state', '$rootScope', CategoryService])
     .factory('SloganService', ['$http', '$rootScope', SloganService])
     .factory('setScopeService', setScopeService)
+    .factory('sendToAnalytics', sendToAnalytics)
     .factory('objectService', ['$http', objectService])
 ;
 
@@ -24,7 +25,7 @@ function setScopeService(){
          * @returns {boolean}
          */
         init: function($rootScope, $state, $stateParams, categories){
-            console.log('CALL: setScopeService')
+            log('CALL: setScopeService')
 
             // Store the current state id or Null
             var id = $stateParams.id || 0;
@@ -42,13 +43,13 @@ function setScopeService(){
             // set the categories to the scope.
             $rootScope.currentCategories = getCategoriesByParentArray(categories.categories, currentParent.slice());
             $rootScope.currentCategoriesLength = Object.keys($rootScope.currentCategories).length;
-            console.log("$rootScope.currentCategories:", $rootScope.currentCategories);
+            log("$rootScope.currentCategories:", $rootScope.currentCategories);
 
             // set the current item and item type to the scope.
             $rootScope.currentItem = getCurrentCategoryByParentArray(categories.categories, currentParent.slice());
             if(id != 0)
                 $rootScope.currentItem.type = 'category';
-            console.log('$rootScope.currentItem',$rootScope.currentItem);
+            log('$rootScope.currentItem',$rootScope.currentItem);
 
 
             // Get the current parent data (for the back button)
@@ -92,10 +93,51 @@ function setScopeService(){
     }
 }
 
+/**
+ * Send info to google analytics.
+ * @returns {{init: Function}}
+ */
+function sendToAnalytics(){
+    return {
+        /**
+         * @param $state
+         * @param $stateParams
+         * @returns {boolean}
+         */
+        init: function($state, $stateParams){
+            log('CALL: sendToAnalytics', $state, $stateParams)
+
+            switch($state.name)
+            {
+                case 'home':
+                    ga('set', 'page', '/');
+                    break;
+                case 'searchInCategory':
+                    ga('set', 'page', '/' + $stateParams.id + '/' + $stateParams.title + '/search/' + ($stateParams.map != '' ? 'map/' : '') + $stateParams.search);
+                    break;
+                case 'category':
+                    ga('set', 'page', '/' + $stateParams.id + '/' + $stateParams.title + ($stateParams.fromSearch != '' ? '/fromSearch/' : ''));
+                    break;
+                case 'singlePage':
+                    ga('set', 'page', '/' + $stateParams.name);
+                    break;
+                case 'object':
+                    ga('set', 'page', '/' + $stateParams.id + '-' + $stateParams.id2 + '/' + ($stateParams.fromCategory != '' ? 'cat/' : '') + ($stateParams.map != '' ? 'map/' : '') + $stateParams.title + '/' + $stateParams.title2 + '/' + ($stateParams.fromSearch != '' ? '/fromSearch/' : ''));
+                    break;
+                case 'search':
+                    ga('set', 'page', '/search/' + $stateParams.search);
+                    break;
+            }
+            ga('send', 'pageview');
+            return true;
+        }
+    }
+}
+
 function SloganService($http, $rootScope) {
     var ss = {};
     ss.getSlogan = function(){
-        console.log('CALL: SloganService.getSlogan', ss)
+        log('CALL: SloganService.getSlogan', ss)
         if(ss.slogan)
         {
             $rootScope.selectedSlogan = ss.slogan[Math.floor(Math.random() * ss.slogan.length)];
@@ -517,7 +559,7 @@ function pie() {
  */
 function split2s(str, delim) {
     var split = str.trim().split(" ");
-    console.log(split);
+    log(split);
     if(split.length <= 1)
     {
         return [str];

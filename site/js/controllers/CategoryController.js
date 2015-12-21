@@ -2,8 +2,8 @@ angular.module('JINI.controllers')
     .controller('CategoryController', ['$rootScope', '$scope', '$stateParams', '$state', '$http', CategoryController]);
 
 function CategoryController($rootScope, $scope, $stateParams, $state, $http) {
-    console.log('CategoryControllerLoaded. ID:', $stateParams.id)
-    console.log('CategoryController', $state.current)
+    log('CategoryControllerLoaded. ID:', $stateParams.id)
+    log('CategoryController', $state.current)
     // set the current is to the scope.
     $scope.currentID = $stateParams.id;
     // clear the search.

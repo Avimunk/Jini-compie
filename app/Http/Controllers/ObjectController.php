@@ -151,8 +151,10 @@ class ObjectController extends Controller {
                 }
 
                 /* Get more info */
-                if($itemKey == '_field_occupation')
+                if($itemKey == '_field_occupation' && trim($itemVal) != '')
                 {
+
+//                        var_dump($itemVal);
                     if(isset($objectFinal['more']))
                     {
                         array_unshift($objectFinal['more'], array(
@@ -175,7 +177,7 @@ class ObjectController extends Controller {
                     continue;
                 }
 
-                if($itemKey == '_field_french_speakers')
+                if($itemKey == '_field_french_speakers' && (bool) $itemVal)
                 {
                     if(isset($objectFinal['more']))
                     {
@@ -216,6 +218,9 @@ class ObjectController extends Controller {
                             'map',
                         );
                         if(in_array($type, $ignoreTypes))
+                            continue;
+
+                        if(!(bool) $itemVal || !trim($itemVal))
                             continue;
 
                         if(isset($objectFinal['more']))

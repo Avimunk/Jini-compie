@@ -122,7 +122,7 @@ class SlikaController extends AdminController {
 
         if($userRows->count() == 0)
         {
-            return redirect(url('admin/slika/start'));
+            return redirect(url('admin/slika/start?userid=' . $id));
         }
 
         $userRows = $userRows->get();

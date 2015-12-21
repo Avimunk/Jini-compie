@@ -35,8 +35,10 @@
                         <div valdr-form-group>
                             <select
                                 ng-model="contact.reason"
-                                name="reason">
-                                <option ng-repeat="v in pageContent.form.reasons" value="{{v.crm_id}}">{{v.content}}</option>
+                                name="reason"
+                                id="reason"
+                                ng-options="v.crm_id as v.content for v in pageContent.form.reasons">
+                                <option value="">L'objet de votre message</option>
                             </select>
                         </div>
                         <div valdr-form-group>
@@ -49,7 +51,7 @@
                             {{error}}
                         </div>
                         <input type="submit" class="gold-btn" ng-click="validate(contactForm)" value="Envoyé" />
-                        <span class="error-txt" ng-show="notValid">There are some errors / empty fields in the form, please fix them.</span>
+                        <span class="error-txt" ng-show="notValid">Un champ du formulaire est vide ou incorrect.</span>
 
                     </form>
                 </div>

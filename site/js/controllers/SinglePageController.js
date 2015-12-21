@@ -2,7 +2,7 @@ angular.module('JINI.controllers')
     .controller('SinglePageController', ['$rootScope', '$scope', '$state', '$http', SinglePageController]);
 
 function SinglePageController($rootScope, $scope, $state, $http) {
-    console.log('SinglePageControllerLoaded', $state.params.name)
+    log('SinglePageControllerLoaded', $state.params.name)
 
     // set back default image in the menu center
     $rootScope.imageOff();
@@ -30,14 +30,14 @@ function SinglePageController($rootScope, $scope, $state, $http) {
     if(pages[pageName])
     {
         $scope.pageContent = pages[pageName];
-        console.log($scope.pageContent);
+        log($scope.pageContent);
     }
     else
     {
         $http.get('/Jini3/data/pages/' + pageName + '.json')
             .then(function(response){
                 $scope.pageContent = pages[pageName] = response.data;
-                console.log($scope.pageContent);
+                log($scope.pageContent);
             });
     }
 
@@ -95,13 +95,13 @@ function SinglePageController($rootScope, $scope, $state, $http) {
             $scope.response = {};
             $http.get(url).then(function(){ //Success!
                 $scope.success = true;
-                $scope.successText = 'The form was successfully submitted, we will contact you shortly';
+                $scope.successText = 'Le formulaire à été remplis correctement, nous vous contacterons rapidement.';
                 $scope.contact = {};
-                console.log('successfully submitted');
+                log('successfully submitted');
             },function(){ //Failed!
                 $scope.success = false;
-                $scope.error = 'There was an error while sending the form, please try again later.';
-                console.log('form failed');
+                $scope.error = 'Une erreur a été détecté, réessayer ultérieurement.';
+                log('form failed');
             });
 
         };

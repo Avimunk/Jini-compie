@@ -2,7 +2,7 @@ angular.module('JINI.controllers')
     .controller('HomeController', ['$scope', '$rootScope', 'pie', HomeController]);
 
 function HomeController($scope, $rootScope, pie) {
-    console.log('HomeController!')
+    log('HomeController!')
     // set back default image in the menu center
     $rootScope.imageOff();
 
