@@ -44,7 +44,7 @@ class ObjectController extends AdminController {
         }
 
 
-        $types = Object::getTypes()->select(array('id', DB::raw("REPLACE(name, '_object_type_', '') as name"), DB::raw("REPLACE(title, 'Object Type: ', '') as title"), 'created_at' ))->get();
+        $types = Object::getTypes()->select(array('id', DB::raw("REPLACE(name, '_object_type_', '') as name"), DB::raw("REPLACE(title, 'Object Type: ', '') as title"), 'created_at' ))->orderBy('title', 'ASC')->get();
 
         return view('admin.object.index', compact( 'objecttype', 'types' ) );
 	}
@@ -632,6 +632,7 @@ class ObjectController extends AdminController {
      */
     public function postDelete(DeleteRequest $request,$id)
     {
+//        dd('here');
         if ( $object = object::find($id) ) {
             $object->delete();
 

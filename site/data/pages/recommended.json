@@ -9,9 +9,21 @@
       "url"     : "#/145/m%C3%A9decin"
     },
     {
-      "img"     : false,
+      "img"     : "recommended-ZehaviAtzmon.jpg",
+      "title"   : "Zehavi Atzmon",
+      "content" : "JINI Privilèges et Zahavi-Atzmon vous font profiter de prix avantageux, de produits haut de gamme et de conseils avisés en francais.",
+      "url"     : "#/4941/d%C3%A9corateur-d'interieur"
+    },
+    {
+      "img"     : "recommended-Electromenager.jpg",
+      "title"   : "Electroménager",
+      "content" : "Pour profiter de nombreuses offres et de prix très avantageux, rejoignez le JINI Privilèges gratuitement ici. ",
+      "url"     : "#/2806/electrom%C3%A9nager"
+    },
+    {
+      "img"     : "recommended-Assurance.jpg",
       "title"   : "Assurance",
-      "content" : "Rejoignez le Club JINI pour obtenir les meilleurs prix concernant les assurances.",
+      "content" : "<b>Assurez-vous</b> en bénéficiant d'offres exceptionnelles octroyées aux membres de JINI Privilèges.",
       "url"     : "#/4909/assurance"
     }
   ]

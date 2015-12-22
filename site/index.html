@@ -96,7 +96,7 @@
             </div>
             <div class="right">
                 <div class="social">
-                    <a href="http://www.twitter.com" target="_blank"><img src="images/icons/twitter.png" /></a>
+                    <a href="https://twitter.com/JiniIsrael" target="_blank"><img src="images/icons/twitter.png" /></a>
                     <a href="https://www.facebook.com/jinisimplifiezvouslavie/" target="_blank"><img src="images/icons/facebook.png" /></a>
                     <a href="http://www.linkedin.com" target="_blank"><img src="images/icons/linkdin.png" /></a>
                 </div>
@@ -218,7 +218,7 @@
 
             <div ui-view></div>
 
-            <div class="banner" ng-class="showHomeBanner.homeBanner ? 'collapsed' : ''" ng-show="showHomeBanner.homeBanner">
+            <div class="banner" ng-if="0" ng-class="showHomeBanner.homeBanner ? 'collapsed' : ''" ng-show="showHomeBanner.homeBanner">
                 <a href="javascript:void(0)" ng-click="showHomeBanner.homeBanner = false" class="banner-close"><img src="images/icons/banner-close.png" /></a>
                 <span class="b-title" ng-bind-html="showHomeBanner.homeBanner.title | rawHtml"></span>
                 <p class="b-text" ng-bind-html="showHomeBanner.homeBanner.content | rawHtml"></p>

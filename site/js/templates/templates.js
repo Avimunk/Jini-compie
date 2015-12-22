@@ -904,14 +904,6 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "    </svg>\r" +
     "\n" +
-    "    <span class=\"itemsTooltip\">\r" +
-    "\n" +
-    "        For More Information Click here\r" +
-    "\n" +
-    "        <img src=\"../../images/arrow-left.png\" />\r" +
-    "\n" +
-    "    </span>\r" +
-    "\n" +
     "</div>\r" +
     "\n" +
     "<search-block></search-block>\r" +

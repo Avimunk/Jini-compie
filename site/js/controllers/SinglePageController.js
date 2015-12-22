@@ -4,6 +4,8 @@ angular.module('JINI.controllers')
 function SinglePageController($rootScope, $scope, $state, $http) {
     log('SinglePageControllerLoaded', $state.params.name)
 
+    var filesVersion = '1.0.0';
+
     // set back default image in the menu center
     $rootScope.imageOff();
 
@@ -34,7 +36,7 @@ function SinglePageController($rootScope, $scope, $state, $http) {
     }
     else
     {
-        $http.get('/Jini3/data/pages/' + pageName + '.json')
+        $http.get('/Jini3/data/pages/' + pageName + '.json?ver=' + filesVersion)
             .then(function(response){
                 $scope.pageContent = pages[pageName] = response.data;
                 log($scope.pageContent);

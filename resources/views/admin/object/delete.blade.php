@@ -25,7 +25,7 @@
 </ul>
 <!-- ./ tabs -->
 {{-- Delete Post Form --}}
-<form id="deleteForm" class="form-horizontal" method="post"
+<form id="deleteForm" class="form-horizontal noAjax" method="post"
 	action="@if (isset($object)){{ URL::to('admin/objects/' . $object->id . '/delete') }}@endif"
 	autocomplete="off">
 

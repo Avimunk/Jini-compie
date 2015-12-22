@@ -55,6 +55,9 @@
     $(function() {
         $('textarea').summernote({height: 250});
         $('form').submit(function(event) {
+            if($(this).hasClass('noAjax'))
+                return true;
+
             event.preventDefault();
             var form = $(this);
 

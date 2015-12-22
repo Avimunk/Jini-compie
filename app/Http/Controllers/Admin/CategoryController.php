@@ -13,6 +13,7 @@ use App\Http\Requests\Admin\DeleteRequest;
 use App\Http\Requests\Admin\ReorderRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Datatables;
 
@@ -100,16 +101,90 @@ class CategoryController extends AdminController {
         return view('admin.category.create_edit', compact('object', 'parent_id', 'categories', 'featuredImage', 'contentImage', 'toolTip'));
     }
 
+    private $items = [];
+    private function fetchCategories()
+    {
+        if(!$this->items)
+            $this->items = Object::where('objects.type', 'category')
+                ->leftJoin('objects as parent', 'parent.id', '=', 'objects.parent_id')
+                ->select(array('objects.id', 'objects.title', 'objects.parent_id', 'parent.parent_id as grandParentID'))
+                ->orderBy(DB::raw('objects.id = 4'), 'DESC')
+                ->orderBy('objects.id', 'ASC')
+                ->get();
+
+        return $this->items;
+    }
+
+    private $itemsParents;
+    private function itemArray() {
+        $result = collect();
+        foreach($this->items as $item) {
+            if ($item->parent_id == null) {
+                $a = [];
+                $items = $this->itemWithChildren($item, $a);
+                if(!$items->isEmpty())
+                {
+                    $item['items_count'] = $items->count();
+                    $item['items'] = $items;
+                }
+                $this->itemsParents[$item->id] = array_merge($a,[$item->id]);
+                $result->push($item);
+            }
+        }
+        return $result;
+    }
+    private function itemWithChildren($item, $a) {
+        $result = collect();
+        $children = $this->childrenOf($item);
+        $a[] = $item->id;
+        foreach ($children as $child) {
+            $items = $this->itemWithChildren($child, $a);
+            if(!$items->isEmpty())
+            {
+                $child['items_count'] = $items->count();
+                $child['items'] = $items;
+            }
+            $this->itemsParents[$child->id] = array_merge($a,[$child->id]);
+            $result->push($child);
+        }
+        return $result;
+    }
+    private function childrenOf($item) {
+        $result = collect();
+        foreach($this->items as $i) {
+            if ($i->parent_id == $item->id) {
+                $result->push($i);
+            }
+        }
+        return $result;
+    }
+
     public function getSearch() {
+        $this->fetchCategories();
+        $this->itemArray();
+
+        $categoriesOrig = $this->items->getDictionary();
+
         if ( $criteria = Input::get('query') ) {
             $categories = Object::where('type', 'category')
                 ->where(function( $query ) use ( $criteria ) {
                 $query->where('title', 'LIKE', '%' . $criteria . '%')
-                    ->orWhere('name', 'LIKE', '%' . $criteria . '%');
+                    ->orWhere('name', 'LIKE', '%' . $criteria . '%')
+                    ->orWhere('id', '=', $criteria);
                 })
                 ->select('id', 'title')
                 ->get();
 
+            foreach($categories as &$v)
+            {
+                $v->title = '';
+                if(isset($this->itemsParents[$v->id]))
+                    foreach($this->itemsParents[$v->id] as $id)
+                        if(isset($categoriesOrig[$id]))
+                            $v->title .= ($v->title ? ' \ ' : '') . $categoriesOrig[$id]->title;
+            }
+
+//            dd($this->itemsParents,$categories->toArray());
             return response( $categories );
         }
 

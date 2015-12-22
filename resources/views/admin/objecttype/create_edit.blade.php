@@ -213,8 +213,28 @@
         @if(isset($objecttype))
         <!-- Fields tab -->
         <div class="tab-pane" id="tab-categories">
-            <div id="prefetch">
-                <input id="arr" class="typeahead" type="text" placeholder="Categories">
+            <style>
+                .tt-dataset.tt-dataset-categories {
+                    background-color: white;
+                    width: 100%;
+                    padding: 3px 10px 3px 0;
+                }
+
+                .tt-suggestion.tt-selectable {
+                    padding: 0 2px;
+                    cursor:pointer;
+                }
+
+                .tt-suggestion.tt-selectable:hover {
+                    background-color: #ccc;
+                }
+                .tt-menu {
+                    width: auto;
+                    min-width: 500px;
+                }
+            </style>
+            <div id="prefetch" style="width: 500px;">
+                <input id="arr" style="width: 500px;" class="typeahead" type="text" placeholder="Categories">
             </div>
 
             <script>
@@ -300,7 +320,7 @@
                 var oTable;
                 $(document).ready(function () {
                     oTable = $('#table-categories').DataTable({
-                        "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
+                        "sDom": "<'row'<'col-md-6'><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
                         "sPaginationType": "bootstrap",
                         "processing": true,
                         "serverSide": true,

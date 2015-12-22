@@ -195,6 +195,12 @@ class ObjectTypesController extends AdminController {
     public function getCategories($id)
     {
         if ( $objectType = Object::find($id) ) {
+
+            $this->fetchCategories();
+            $this->itemArray();
+
+            $categoriesOrig = $this->items->getDictionary();
+
             $categories = ObjectMeta::where('object_id', $id)
                 ->where('meta_key', '_category_id')
                 ->select( array( 'id', 'meta_value' ))
@@ -209,6 +215,15 @@ class ObjectTypesController extends AdminController {
                 ->whereIn('id', $c)
                 ->select('id', 'title')
                 ->get();
+
+            foreach($categories as &$v)
+            {
+                $v->title = '';
+                if(isset($this->itemsParents[$v->id]))
+                    foreach($this->itemsParents[$v->id] as $item_id)
+                        if(isset($categoriesOrig[$item_id]))
+                            $v->title .= ($v->title ? ' \ ' : '') . $categoriesOrig[$item_id]->title;
+            }
 
             return Datatables::of($categories)
                 ->add_column('actions', '<a href="{{{ URL::to(\'admin/object-types/'.$id.'/deleteCategory/\' . $id ) }}}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-trash"></span> {{ trans("admin/modal.delete") }}</a>')
@@ -272,6 +287,65 @@ class ObjectTypesController extends AdminController {
             ->remove_column('id')
 
             ->make();
+    }
+
+
+    private $items = [];
+    private function fetchCategories()
+    {
+        if(!$this->items)
+            $this->items = Object::where('objects.type', 'category')
+                ->leftJoin('objects as parent', 'parent.id', '=', 'objects.parent_id')
+                ->select(array('objects.id', 'objects.title', 'objects.parent_id', 'parent.parent_id as grandParentID'))
+                ->orderBy(DB::raw('objects.id = 4'), 'DESC')
+                ->orderBy('objects.id', 'ASC')
+                ->get();
+
+        return $this->items;
+    }
+
+    private $itemsParents;
+    private function itemArray() {
+        $result = collect();
+        foreach($this->items as $item) {
+            if ($item->parent_id == null) {
+                $a = [];
+                $items = $this->itemWithChildren($item, $a);
+                if(!$items->isEmpty())
+                {
+                    $item['items_count'] = $items->count();
+                    $item['items'] = $items;
+                }
+                $this->itemsParents[$item->id] = array_merge($a,[$item->id]);
+                $result->push($item);
+            }
+        }
+        return $result;
+    }
+    private function itemWithChildren($item, $a) {
+        $result = collect();
+        $children = $this->childrenOf($item);
+        $a[] = $item->id;
+        foreach ($children as $child) {
+            $items = $this->itemWithChildren($child, $a);
+            if(!$items->isEmpty())
+            {
+                $child['items_count'] = $items->count();
+                $child['items'] = $items;
+            }
+            $this->itemsParents[$child->id] = array_merge($a,[$child->id]);
+            $result->push($child);
+        }
+        return $result;
+    }
+    private function childrenOf($item) {
+        $result = collect();
+        foreach($this->items as $i) {
+            if ($i->parent_id == $item->id) {
+                $result->push($i);
+            }
+        }
+        return $result;
     }
 
     public function getExport($id) {
