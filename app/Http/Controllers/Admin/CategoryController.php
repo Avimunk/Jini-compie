@@ -98,7 +98,9 @@ class CategoryController extends AdminController {
 
         $toolTip = $object->getValue('_tooltip');
 
-        return view('admin.category.create_edit', compact('object', 'parent_id', 'categories', 'featuredImage', 'contentImage', 'toolTip'));
+        $keywords = $object->keywords->implode('content', ', ');
+
+        return view('admin.category.create_edit', compact('object', 'parent_id', 'categories', 'featuredImage', 'contentImage', 'toolTip', 'keywords'));
     }
 
     private $items = [];
@@ -261,6 +263,28 @@ class CategoryController extends AdminController {
             $object->target = '_self';
 
         $object->save();
+
+        $keywords = $request->get('keywords', false);
+        $keywords = trim($keywords);
+        if($keywords)
+        {
+            $keywords = explode(',', $keywords);
+            $keywords = array_map('trim', $keywords);
+            $originalKeywords = $object->keywords;
+
+            foreach($originalKeywords as $item)
+            {
+                if(!in_array($item->content, $keywords))
+                    $item->delete();
+                else
+                    unset($keywords[array_search($item->content, $keywords)]);
+            }
+
+            foreach($keywords as $item)
+            {
+                $object->keywords()->create(['content' => $item]);
+            }
+        }
 
         $object->setValue('_tooltip', $request->toolTip);
 

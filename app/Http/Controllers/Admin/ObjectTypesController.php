@@ -75,7 +75,9 @@ class ObjectTypesController extends AdminController {
             $objecttype->title = str_replace('Object Type: ', '', $objecttype->title);
         }
 
-        return view('admin.objecttype.create_edit', compact('objecttype'));
+        $keywords = $objecttype->keywords->implode('content', ', ');
+
+        return view('admin.objecttype.create_edit', compact('objecttype', 'keywords'));
     }
 
     /**
@@ -91,6 +93,28 @@ class ObjectTypesController extends AdminController {
         //$objecttype -> display_name = $request->display_name;
         //$objecttype -> description = $request->description;
         $objecttype -> save();
+
+        $keywords = $request->get('keywords', false);
+        $keywords = trim($keywords);
+        if($keywords)
+        {
+            $keywords = explode(',', $keywords);
+            $keywords = array_map('trim', $keywords);
+            $originalKeywords = $objecttype->keywords;
+
+            foreach($originalKeywords as $item)
+            {
+                if(!in_array($item->content, $keywords))
+                    $item->delete();
+                else
+                    unset($keywords[array_search($item->content, $keywords)]);
+            }
+
+            foreach($keywords as $item)
+            {
+                $objecttype->keywords()->create(['content' => $item]);
+            }
+        }
 
         //print_r($request);
         $fieldLabel = $request->field_label;

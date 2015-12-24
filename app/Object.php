@@ -30,6 +30,16 @@ class Object extends Model
         return $this->belongsTo('App\User', 'author_id');
     }
 
+    /**
+     * Get the object keywords
+     *
+     * @return Keywords
+     */
+    public function keywords()
+    {
+        return $this->hasMany('App\Keyword', 'object_id', 'id');
+    }
+
     public function scopeParent($query) {
         return $query->whereNull('parent_id');
     }

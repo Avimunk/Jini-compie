@@ -46,6 +46,7 @@ return [
     'export' => 'Export',
     'import' => 'Import',
     'categories' => 'Categories',
+    'keywords' => 'Keywords',
     'score' => 'Scoring',
     'no_score' => 'None',
     'url' => 'Override category url. (leave blank for original)',

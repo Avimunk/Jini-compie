@@ -22,11 +22,16 @@
 <ul class="nav nav-tabs">
 	<li class="active"><a href="#tab-general" data-toggle="tab"> {{
 			trans("admin/modal.general") }}</a></li>
-    <li><a href="#tab-fields" data-toggle="tab"> {{
-            trans("admin/admin.fields") }}</a></li>
-    <li>
-        <a href="#tab-categories" data-toggle="tab"> {{ trans("admin/admin.categories") }}</a>
-    </li>
+    @if(isset($objecttype))
+        <li><a href="#tab-fields" data-toggle="tab"> {{
+                trans("admin/admin.fields") }}</a></li>
+        <li>
+            <a href="#tab-categories" data-toggle="tab"> {{ trans("admin/admin.categories") }}</a>
+        </li>
+        <li>
+            <a href="#tab-keywords" data-toggle="tab"> {{ trans("admin/admin.keywords") }}</a>
+        </li>
+    @endif
 </ul>
 <!-- ./ tabs -->
 {{-- Edit Blog Form --}}
@@ -373,7 +378,15 @@
             @stop
 
         </div>
-
+        <div class="tab-pane" id="tab-keywords">
+            <div class="form-group {{{ $errors->has('keywords') ? 'has-error' : '' }}}">
+                <div class="col-md-12">
+                    <label class="control-label" for="field_label"> {{ trans("admin/admin.keywords") }}</label>
+                    <input class="form-control" type="text" name="keywords" id="keywords" value="{{{ Input::old('keywords', isset($objecttype) && isset($keywords) ? $keywords : null) }}}" />
+                    {!!$errors->first('label', '<span class="help-block">:message </span>')!!}
+                </div>
+            </div>
+        </div>
         @endif
     </div>
 		<!-- Form Actions -->

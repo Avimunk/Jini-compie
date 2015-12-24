@@ -303,10 +303,15 @@ class ObjectController extends Controller {
             $objects = Object::whereNotIn('objects.type', ['object_type', 'image','category'])
                 ->where(function( $query ) use ( $search ) {
                     $query->where('objects.title', 'LIKE', '%' . $search . '%')
-                        ->orWhere('objects.content', 'LIKE', '%' . $search . '%');
+                        ->orWhere('objects.content', 'LIKE', '%' . $search . '%')
+                        ->orWhere('keywords.content', 'LIKE', '%' . $search . '%');
                 })
                 ->join('objects as obj', function ($join){
                     $join->on('obj.name', '=', DB::raw("concat( '_object_type_', objects.type )"));
+                })
+                ->leftJoin('keywords', function ($join){
+                    $join->on('obj.id', '=', 'object_id')
+                        ->orOn('objects.id', '=', 'object_id');
                 })
                 ->join('object_meta', function ($join){
                     $join->on('object_meta.object_id', '=', 'obj.id')
@@ -354,58 +359,25 @@ class ObjectController extends Controller {
                 'items' => $objects,
                 'offset' => count($objects) >= $limit ? $offset + $limit : 0,
             ];
-//            return $objects;
-            /*
-            // Category Image
-            $featuredImageUrl = '';
-            if ($categoryFeaturedImageId = ObjectMeta::getValue($categoryId, '_featured_image')) {
-                $featuredImageUrl = getImageSrc($categoryFeaturedImageId, 'thumbnail');
-            }
-
-            // Get objects where in category
-            $objects = Object::Where('type', 'object_type')
-                ->whereExists(function ( $query ) use ( $categoryId ) {
-                    $query->select(DB::raw(1))
-                    ->from('object_meta')
-                    ->whereRaw(DB::getTablePrefix() . 'object_meta.object_id = ' . DB::getTablePrefix() . 'objects.id')
-                    ->where('meta_key', '_category_id')
-                    ->where('meta_value', $categoryId);
-                })
-                ->select(DB::raw('substr(name, 14) as field_name'))
-                ->get()
-                ->toArray();
-
-            $types = array_map(function($v) {
-                return $v['field_name'];
-            }, $objects);
-
-            $objects = DB::table('objects')
-                ->whereIn('type', $types)
-                ->select( array( 'objects.id', DB::raw( '"'. $featuredImageUrl . '"' . ' as featured_image'), 'objects.name', 'objects.title', 'objects.excerpt', 'objects.content' ) );
-
-            $objects = DB::table('objects')
-                ->whereIn('type', $types)
-                ->select( array( 'objects.id', DB::raw( '"'. $featuredImageUrl . '"' . ' as featured_image'), 'objects.name', 'objects.title', 'objects.excerpt', 'objects.content' ) )
-                ->whereExists(function ( $query ) {
-                    $query->select(DB::raw(1))
-                        ->from('object_meta')
-                        ->whereRaw(DB::getTablePrefix() . 'object_meta.object_id = ' . DB::getTablePrefix() . 'objects.id')
-                        ->where('meta_key', '_field_promoted')
-                        ->where('meta_value', '1');
-                })->
-                union($objects);
-                */
         } else {
             if ( $search ) {
-                $objects = Object::whereNotIn('type', ['object_type', 'image'])
+                $objects = Object::whereNotIn('objects.type', ['object_type', 'image'])
                     ->where(function( $query ) use ( $search ) {
-                        $query->where('title', 'LIKE', '%' . $search . '%')
-                            ->orWhere('content', 'LIKE', '%' . $search . '%');
+                        $query->where('objects.title', 'LIKE', '%' . $search . '%')
+                            ->orWhere('objects.content', 'LIKE', '%' . $search . '%')
+                            ->orWhere('keywords.content', 'LIKE', '%' . $search . '%');
                     })
-                    ->select('id', 'parent_id', 'name', 'type', 'title', 'score')
+                    ->leftJoin('objects as obj', function ($join){
+                        $join->on('obj.name', '=', DB::raw("concat( '_object_type_', objects.type )"));
+                    })
+                    ->leftJoin('keywords', function ($join){
+                        $join->on('obj.id', '=', 'object_id')
+                              ->orOn('objects.id', '=', 'object_id');
+                    })
+                    ->select('objects.id', 'objects.parent_id', 'objects.name', 'objects.type', 'objects.title', 'objects.score')
                     ->orderBy(DB::raw("objects.type = 'category'"),'DESC')
-                    ->orderBy('score','DESC')
-                    ->orderBy('title','ASC')
+                    ->orderBy('objects.score','DESC')
+                    ->orderBy('objects.title','ASC')
                     ->take(50)
                     ->get();
 
@@ -475,10 +447,15 @@ class ObjectController extends Controller {
             $objects = Object::whereNotIn('objects.type', ['object_type', 'image','category'])
                     ->where(function( $query ) use ( $search ) {
                         $query->where('objects.title', 'LIKE', '%' . $search . '%')
-                            ->orWhere('objects.content', 'LIKE', '%' . $search . '%');
+                            ->orWhere('objects.content', 'LIKE', '%' . $search . '%')
+                            ->orWhere('keywords.content', 'LIKE', '%' . $search . '%');
                     })
                     ->join('objects as obj', function ($join){
                         $join->on('obj.name', '=', DB::raw("concat( '_object_type_', objects.type )"));
+                    })
+                    ->leftJoin('keywords', function ($join){
+                        $join->on('obj.id', '=', 'object_id')
+                            ->orOn('objects.id', '=', 'object_id');
                     })
                     ->join('object_meta', function ($join){
                         $join->on('object_meta.object_id', '=', 'obj.id')
@@ -590,10 +567,15 @@ class ObjectController extends Controller {
                 $objects = Object::whereNotIn('objects.type', ['object_type', 'image','category'])
                     ->where(function( $query ) use ( $search ) {
                         $query->where('objects.title', 'LIKE', '%' . $search . '%')
-                            ->orWhere('objects.content', 'LIKE', '%' . $search . '%');
+                            ->orWhere('objects.content', 'LIKE', '%' . $search . '%')
+                            ->orWhere('keywords.content', 'LIKE', '%' . $search . '%');
                     })
                     ->join('objects as obj', function ($join){
                         $join->on('obj.name', '=', DB::raw("concat( '_object_type_', objects.type )"));
+                    })
+                    ->leftJoin('keywords', function ($join){
+                        $join->on('obj.id', '=', 'object_id')
+                            ->orOn('objects.id', '=', 'object_id');
                     })
                     ->select('obj.id AS objID', 'obj.name AS objName', 'objects.id', 'objects.excerpt', 'objects.parent_id', 'objects.name', 'objects.type', 'objects.title')
                     ->orderBy('objects.score','DESC')
