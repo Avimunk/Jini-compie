@@ -23,7 +23,7 @@
 
 
     <input id="pac-input_{{{ $uniqueId }}}" class="controls pac-input" type="text"
-           placeholder="Enter a location">
+           placeholder="Enter a location" value="{{{ isset( $values['address'] ) ? $values['address'] : null }}} {{{ isset( $values['city'] ) ? $values['city'] : null }}} {{{ isset( $values['country'] ) ? ', ' . $values['country'] : null }}}">
     <div id="type-selector" class="controls">
         <input type="radio" name="type" id="changetype-all" checked="checked">
         <label for="changetype-all">All</label>
@@ -73,6 +73,11 @@
             var myLatLng = new google.maps.LatLng({{ $values['location-g'] }}, {{ $values['location-k'] }});
             map.setCenter(myLatLng);
             map.setZoom(17);
+
+            marker.setPosition(myLatLng);
+            marker.setVisible(true);
+            infowindow.setContent('<div><strong>{{{ isset( $values['address'] ) ? $values['address'] : null }}} {{{ isset( $values['city'] ) ? $values['city'] : null }}} {{{ isset( $values['country'] ) ? ', ' . $values['country'] : null }}}</strong>');
+            infowindow.open(map, marker);
         @endif
 
 
