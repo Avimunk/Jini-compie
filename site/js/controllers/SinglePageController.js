@@ -4,7 +4,7 @@ angular.module('JINI.controllers')
 function SinglePageController($rootScope, $scope, $state, $http) {
     log('SinglePageControllerLoaded', $state.params.name)
 
-    var filesVersion = '1.0.0';
+    var filesVersion = '1.0.03';
 
     // set back default image in the menu center
     $rootScope.imageOff();

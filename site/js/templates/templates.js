@@ -637,7 +637,7 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                        </div>\r" +
     "\n" +
-    "                        <input type=\"submit\" class=\"gold-btn\" ng-click=\"validate(contactForm)\" value=\"Envoyé\" />\r" +
+    "                        <input type=\"submit\" class=\"gold-btn\" ng-click=\"validate(contactForm)\" value=\"Envoyer\" />\r" +
     "\n" +
     "                        <span class=\"error-txt\" ng-show=\"notValid\">Un champ du formulaire est vide ou incorrect.</span>\r" +
     "\n" +
