@@ -280,11 +280,12 @@
                     templates: {
                         empty: [
                             '<div class="empty-message">',
-                            'unable to find any Best Picture winners that match the current query',
+                            'We found no category, Please re-search',
                             '</div>'
                         ].join('\n')
                     }
                 });
+                /*
                 $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
                     $.ajax({
                         url: 'categories',
@@ -305,6 +306,7 @@
                         }
                     });
                 });
+                */
             </script>
 
 
