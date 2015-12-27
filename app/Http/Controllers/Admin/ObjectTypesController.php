@@ -112,9 +112,17 @@ class ObjectTypesController extends AdminController {
 
             foreach($keywords as $item)
             {
+                if(trim($item) == '')
+                    continue;
+
                 $objecttype->keywords()->create(['content' => $item]);
             }
         }
+        else
+        {
+            $objecttype->keywords()->delete();
+        }
+
 
         //print_r($request);
         $fieldLabel = $request->field_label;

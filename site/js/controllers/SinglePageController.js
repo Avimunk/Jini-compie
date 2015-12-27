@@ -59,6 +59,11 @@ function SinglePageController($rootScope, $scope, $state, $http) {
             if(form.$valid)
             {
                 $scope.notValid = false;
+
+                // Send success to analytics
+                ga('set', 'page', '/contactSuccess');
+                ga('send', 'pageview');
+
                 $scope.save();
             }
             else

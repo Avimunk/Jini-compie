@@ -254,8 +254,7 @@ class CategoryController extends AdminController {
         if($request->get('score'))
             $object->score = $request->get('score');
 
-        if($request->get('url'))
-            $object->url = $request->get('url');
+        $object->url = $request->get('url', '');
 
         if($request->get('target'))
             $object->target = '_blank';
@@ -282,8 +281,15 @@ class CategoryController extends AdminController {
 
             foreach($keywords as $item)
             {
+                if(trim($item) == '')
+                    continue;
+
                 $object->keywords()->create(['content' => $item]);
             }
+        }
+        else
+        {
+            $object->keywords()->delete();
         }
 
         $object->setValue('_tooltip', $request->toolTip);

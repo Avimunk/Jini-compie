@@ -324,6 +324,7 @@ class ObjectController extends Controller {
                 ->select(DB::raw("'$featuredImageUrl' AS featured_image"),'cat.id AS catID', 'cat.title AS catTitle', 'cat.name AS catName','obj.id AS objID', 'obj.name AS objName', 'objects.id', 'objects.excerpt', 'objects.parent_id', 'objects.name', 'objects.type', 'objects.title', 'objects.score')
                 ->orderBy('objects.score','DESC')
                 ->orderBy('objects.title','ASC')
+                ->groupBy('objects.id')
                 ->take($limit)
                 ->skip($offset)
             ;
@@ -378,6 +379,7 @@ class ObjectController extends Controller {
                     ->orderBy(DB::raw("objects.type = 'category'"),'DESC')
                     ->orderBy('objects.score','DESC')
                     ->orderBy('objects.title','ASC')
+                    ->groupBy('objects.id')
                     ->take(50)
                     ->get();
 
@@ -466,6 +468,7 @@ class ObjectController extends Controller {
                     })
                     ->where('object_meta.meta_value', $categoryId)
                     ->select(DB::raw("'$featuredImageUrl' AS featured_image"),'cat.id AS catID', 'cat.title AS catTitle', 'cat.name AS catName','obj.id AS objID', 'obj.name AS objName', 'objects.id', 'objects.excerpt', 'objects.parent_id', 'objects.name', 'objects.type', 'objects.title', 'objects.score')
+                    ->groupBy('objects.id')
                     ->orderBy('objects.score','DESC')
                     ->orderBy('objects.title','ASC')
                 ;
@@ -580,6 +583,7 @@ class ObjectController extends Controller {
                     ->select('obj.id AS objID', 'obj.name AS objName', 'objects.id', 'objects.excerpt', 'objects.parent_id', 'objects.name', 'objects.type', 'objects.title')
                     ->orderBy('objects.score','DESC')
                     ->orderBy('objects.title','ASC')
+                    ->groupBy('objects.id')
 //                    ->take(10)
                     ->get();
 
