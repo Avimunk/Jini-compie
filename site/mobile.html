@@ -38,14 +38,61 @@
         img{
             width: 100%;
             height: auto;
-            position: absolute;
+            position: relative;
             right: 0;
             top: 0;
             margin: 0;
         }
+        .container{
+            width: 100%;
+            position: absolute;
+            top:0;
+            left: 0;
+            display: block;
+        }
+        .block {
+            width: 34.24%;
+            height: 1.754%;
+            display: block;
+            z-index: 9;
+            position: absolute;
+            border-radius: 4px;
+        }
+        .phone1 {
+            top: 39.5%;
+            left: 11%;
+        }
+        .email1 {
+            top: 39.5%;
+            left: 51.4%;
+        }
+        .phone2 {
+            top: 60.4%;
+            left: 11%;
+        }
+        .email2 {
+            top: 60.4%;
+            left: 51.4%;
+        }
+        .phone3 {
+            top: 86.65%;
+            left: 11%;
+        }
+        .email3 {
+            top: 86.65%;
+            left: 51.4%;
+        }
     </style>
 </head>
     <body>
-        <img src="images/mobile.jpg">
+    <div class="container">
+        <a href="tel:073-2792000" class="block phone1"></a>
+        <a href="mailto:info@jini.co.il" class="block email1"></a>
+        <a href="tel:073-2792000" class="block phone2"></a>
+        <a href="mailto:info@jini.co.il" class="block email2"></a>
+        <a href="tel:073-2792000" class="block phone3"></a>
+        <a href="mailto:info@jini.co.il" class="block email3"></a>
+        <img src="images/mobile.jpg?v=0.02" />
+    </div>
     </body>
 </html>

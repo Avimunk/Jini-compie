@@ -32,6 +32,7 @@
                                 ng-model="contact.email"
                                 name="email"/>
                         </div>
+
                         <div valdr-form-group>
                             <select
                                 ng-model="contact.reason"
@@ -52,6 +53,87 @@
                         </div>
                         <input type="submit" class="gold-btn" ng-click="validate(contactForm)" value="Envoyer" />
                         <span class="error-txt" ng-show="notValid">Un champ du formulaire est vide ou incorrect.</span>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div ng-switch-when="club" ng-class="pageBlock && currentPage == 'club' ? 'collapsed' : ''" class="clubPage contactUs">
+            <div scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 542px;">
+                <style ng-if="club.submitted">
+                    .contactUs form .error-txt{
+                        display: inline;
+                    }
+                </style>
+                <div class="inner">
+                    <a href="#/" class="back-btn black-b"></a>
+                    <span class="inner-title">{{pageContent.title}}</span>
+                    <p class="inner-text" ng-bind-html="pageContent.content | rawHtml"></p>
+                    <form name="clubForm" novalidate valdr-type="club">
+                        <div valdr-form-group>
+                            <input
+                                type="text"
+                                placeholder="Prénom et nom de famille"
+                                ng-model="club.name"
+                                name="name"/>
+                        </div>
+                        <div valdr-form-group>
+                            <input
+                                type="text"
+                                placeholder="N° d'identité ou passeport"
+                                ng-model="club.idnumber"
+                                name="idnumber"/>
+                        </div>
+                        <div valdr-form-group>
+                            <select
+                                ng-model="club.nationality"
+                                name="nationality"
+                                id="nationality"
+                                ng-options="v.id as v.content for v in pageContent.form.nationality track by v.id">
+                            <option value="">Nationalité:</option>
+                            </select>
+                        </div>
+                        <div valdr-form-group>
+                            <input
+                                    type="text"
+                                    placeholder="N° de téléphone"
+                                    ng-model="club.phone"
+                                    name="phone"/>
+                        </div>
+                        <div valdr-form-group>
+                            <input
+                                type="text"
+                                placeholder="E-mail"
+                                ng-model="club.email"
+                                name="email"/>
+                        </div>
+
+                        <a href="/files/disclaimer.pdf" target="_blank" class="takanon">
+                            Règlement
+                        </a>
+
+                        <div valdr-form-group class="checkbox">
+                            <label><input
+                                    type="checkbox"
+                                    ng-model="club.adv"
+                                    name="adv"/>
+
+                                J'ai lu et j'accepte les conditions générales d'utilisation
+                            </label>
+                        </div>
+                        <div valdr-form-group class="checkbox">
+                            <label><input
+                                type="checkbox"
+                                ng-model="club.takanon"
+                                name="takanon"/>
+                                Je souhaite recevoir les meilleures offres de JINI Privilèges
+                            </label>
+                        </div>
+                        <div class="error" ng-if="!success && error">
+                            {{error}}
+                        </div>
+                        <input type="submit" class="gold-btn" ng-click="validate(clubForm)" value="Je m'inscris" />
+                        <span class="error-txt final" ng-show="notValid">Un champ du formulaire est vide ou incorrect.</span>
 
                     </form>
                 </div>
@@ -88,6 +170,39 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-switch-when="clubThanks" ng-class="pageBlock && currentPage == 'clubThanks' ? 'collapsed' : ''" class="recommendedDiv imgNtext rd2">
+            <div scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 542px;height: 855px;">
+                <div>
+                    <a href="#/" class="back-btn"></a>
+                    <div class="top-no-img">
+                        <span class="inner-title">{{pageContent.title}}</span>
+                        <p class="inner-text" ng-bind-html="pageContent.content | rawHtml"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-switch-when="clubFailed" ng-class="pageBlock && currentPage == 'clubFailed' ? 'collapsed' : ''" class="recommendedDiv imgNtext rd2">
+            <div scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 542px;height: 855px;">
+                <div>
+                    <a href="#/" class="back-btn"></a>
+                    <div class="top-no-img">
+                        <span class="inner-title">{{pageContent.title}}</span>
+                        <p class="inner-text" ng-bind-html="pageContent.content | rawHtml"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-switch-when="partners" ng-class="pageBlock && currentPage == 'partners' ? 'collapsed' : ''" class=" partners recommendedDiv imgNtext rd2">
+            <div scrollbar="{autoUpdate: true,wheelSpeed : 20}" style="max-height: 100%;width: 542px;height: 855px;">
+                <div>
+                    <a href="#/" class="back-btn"></a>
+                    <div class="top-no-img">
+                        <span class="inner-title">{{pageContent.title}}</span>
+                        <p class="inner-text" ng-bind-html="pageContent.content | rawHtml"></p>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,24 @@
+{
+  "title": "JINI Privilèges",
+  "content" : "Pour devenir membre de JINI Privilèges et recevoir gratuitement nos offres, merci de remplir le formulaire ci-dessous:",
+  "form": {
+    "nationality" : [
+      {
+        "id" : "1",
+        "content" : "Israëlienne"
+      },
+      {
+        "id" : "2",
+        "content" : "Française"
+      },
+      {
+        "id" : "3",
+        "content" : "Belge"
+      },
+      {
+        "id" : "4",
+        "content" : "Autre"
+      }
+    ]
+  }
+}

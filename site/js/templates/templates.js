@@ -601,6 +601,8 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "\n" +
     "                        </div>\r" +
     "\n" +
+    "\r" +
+    "\n" +
     "                        <div valdr-form-group>\r" +
     "\n" +
     "                            <select\r" +
@@ -640,6 +642,168 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "                        <input type=\"submit\" class=\"gold-btn\" ng-click=\"validate(contactForm)\" value=\"Envoyer\" />\r" +
     "\n" +
     "                        <span class=\"error-txt\" ng-show=\"notValid\">Un champ du formulaire est vide ou incorrect.</span>\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "                    </form>\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
+    "            </div>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "        <div ng-switch-when=\"club\" ng-class=\"pageBlock && currentPage == 'club' ? 'collapsed' : ''\" class=\"clubPage contactUs\">\r" +
+    "\n" +
+    "            <div scrollbar=\"{autoUpdate: true,wheelSpeed : 20}\" style=\"max-height: 100%;width: 542px;\">\r" +
+    "\n" +
+    "                <style ng-if=\"club.submitted\">\r" +
+    "\n" +
+    "                    .contactUs form .error-txt{\r" +
+    "\n" +
+    "                        display: inline;\r" +
+    "\n" +
+    "                    }\r" +
+    "\n" +
+    "                </style>\r" +
+    "\n" +
+    "                <div class=\"inner\">\r" +
+    "\n" +
+    "                    <a href=\"#/\" class=\"back-btn black-b\"></a>\r" +
+    "\n" +
+    "                    <span class=\"inner-title\">{{pageContent.title}}</span>\r" +
+    "\n" +
+    "                    <p class=\"inner-text\" ng-bind-html=\"pageContent.content | rawHtml\"></p>\r" +
+    "\n" +
+    "                    <form name=\"clubForm\" novalidate valdr-type=\"club\">\r" +
+    "\n" +
+    "                        <div valdr-form-group>\r" +
+    "\n" +
+    "                            <input\r" +
+    "\n" +
+    "                                type=\"text\"\r" +
+    "\n" +
+    "                                placeholder=\"Prénom et nom de famille\"\r" +
+    "\n" +
+    "                                ng-model=\"club.name\"\r" +
+    "\n" +
+    "                                name=\"name\"/>\r" +
+    "\n" +
+    "                        </div>\r" +
+    "\n" +
+    "                        <div valdr-form-group>\r" +
+    "\n" +
+    "                            <input\r" +
+    "\n" +
+    "                                type=\"text\"\r" +
+    "\n" +
+    "                                placeholder=\"N° d'identité ou passeport\"\r" +
+    "\n" +
+    "                                ng-model=\"club.idnumber\"\r" +
+    "\n" +
+    "                                name=\"idnumber\"/>\r" +
+    "\n" +
+    "                        </div>\r" +
+    "\n" +
+    "                        <div valdr-form-group>\r" +
+    "\n" +
+    "                            <select\r" +
+    "\n" +
+    "                                ng-model=\"club.nationality\"\r" +
+    "\n" +
+    "                                name=\"nationality\"\r" +
+    "\n" +
+    "                                id=\"nationality\"\r" +
+    "\n" +
+    "                                ng-options=\"v.id as v.content for v in pageContent.form.nationality track by v.id\">\r" +
+    "\n" +
+    "                            <option value=\"\">Nationalité:</option>\r" +
+    "\n" +
+    "                            </select>\r" +
+    "\n" +
+    "                        </div>\r" +
+    "\n" +
+    "                        <div valdr-form-group>\r" +
+    "\n" +
+    "                            <input\r" +
+    "\n" +
+    "                                    type=\"text\"\r" +
+    "\n" +
+    "                                    placeholder=\"N° de téléphone\"\r" +
+    "\n" +
+    "                                    ng-model=\"club.phone\"\r" +
+    "\n" +
+    "                                    name=\"phone\"/>\r" +
+    "\n" +
+    "                        </div>\r" +
+    "\n" +
+    "                        <div valdr-form-group>\r" +
+    "\n" +
+    "                            <input\r" +
+    "\n" +
+    "                                type=\"text\"\r" +
+    "\n" +
+    "                                placeholder=\"E-mail\"\r" +
+    "\n" +
+    "                                ng-model=\"club.email\"\r" +
+    "\n" +
+    "                                name=\"email\"/>\r" +
+    "\n" +
+    "                        </div>\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "                        <a href=\"/files/disclaimer.pdf\" target=\"_blank\" class=\"takanon\">\r" +
+    "\n" +
+    "                            Règlement\r" +
+    "\n" +
+    "                        </a>\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "                        <div valdr-form-group class=\"checkbox\">\r" +
+    "\n" +
+    "                            <label><input\r" +
+    "\n" +
+    "                                    type=\"checkbox\"\r" +
+    "\n" +
+    "                                    ng-model=\"club.adv\"\r" +
+    "\n" +
+    "                                    name=\"adv\"/>\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "                                J'ai lu et j'accepte les conditions générales d'utilisation\r" +
+    "\n" +
+    "                            </label>\r" +
+    "\n" +
+    "                        </div>\r" +
+    "\n" +
+    "                        <div valdr-form-group class=\"checkbox\">\r" +
+    "\n" +
+    "                            <label><input\r" +
+    "\n" +
+    "                                type=\"checkbox\"\r" +
+    "\n" +
+    "                                ng-model=\"club.takanon\"\r" +
+    "\n" +
+    "                                name=\"takanon\"/>\r" +
+    "\n" +
+    "                                Je souhaite recevoir les meilleures offres de JINI Privilèges\r" +
+    "\n" +
+    "                            </label>\r" +
+    "\n" +
+    "                        </div>\r" +
+    "\n" +
+    "                        <div class=\"error\" ng-if=\"!success && error\">\r" +
+    "\n" +
+    "                            {{error}}\r" +
+    "\n" +
+    "                        </div>\r" +
+    "\n" +
+    "                        <input type=\"submit\" class=\"gold-btn\" ng-click=\"validate(clubForm)\" value=\"Je m'inscris\" />\r" +
+    "\n" +
+    "                        <span class=\"error-txt final\" ng-show=\"notValid\">Un champ du formulaire est vide ou incorrect.</span>\r" +
     "\n" +
     "\r" +
     "\n" +
@@ -712,6 +876,72 @@ angular.module('JINI.templates').run(['$templateCache', function($templateCache)
     "                            </div>\r" +
     "\n" +
     "                        </div>\r" +
+    "\n" +
+    "                    </div>\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
+    "            </div>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "        <div ng-switch-when=\"clubThanks\" ng-class=\"pageBlock && currentPage == 'clubThanks' ? 'collapsed' : ''\" class=\"recommendedDiv imgNtext rd2\">\r" +
+    "\n" +
+    "            <div scrollbar=\"{autoUpdate: true,wheelSpeed : 20}\" style=\"max-height: 100%;width: 542px;height: 855px;\">\r" +
+    "\n" +
+    "                <div>\r" +
+    "\n" +
+    "                    <a href=\"#/\" class=\"back-btn\"></a>\r" +
+    "\n" +
+    "                    <div class=\"top-no-img\">\r" +
+    "\n" +
+    "                        <span class=\"inner-title\">{{pageContent.title}}</span>\r" +
+    "\n" +
+    "                        <p class=\"inner-text\" ng-bind-html=\"pageContent.content | rawHtml\"></p>\r" +
+    "\n" +
+    "                    </div>\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
+    "            </div>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "        <div ng-switch-when=\"clubFailed\" ng-class=\"pageBlock && currentPage == 'clubFailed' ? 'collapsed' : ''\" class=\"recommendedDiv imgNtext rd2\">\r" +
+    "\n" +
+    "            <div scrollbar=\"{autoUpdate: true,wheelSpeed : 20}\" style=\"max-height: 100%;width: 542px;height: 855px;\">\r" +
+    "\n" +
+    "                <div>\r" +
+    "\n" +
+    "                    <a href=\"#/\" class=\"back-btn\"></a>\r" +
+    "\n" +
+    "                    <div class=\"top-no-img\">\r" +
+    "\n" +
+    "                        <span class=\"inner-title\">{{pageContent.title}}</span>\r" +
+    "\n" +
+    "                        <p class=\"inner-text\" ng-bind-html=\"pageContent.content | rawHtml\"></p>\r" +
+    "\n" +
+    "                    </div>\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
+    "            </div>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "        <div ng-switch-when=\"partners\" ng-class=\"pageBlock && currentPage == 'partners' ? 'collapsed' : ''\" class=\" partners recommendedDiv imgNtext rd2\">\r" +
+    "\n" +
+    "            <div scrollbar=\"{autoUpdate: true,wheelSpeed : 20}\" style=\"max-height: 100%;width: 542px;height: 855px;\">\r" +
+    "\n" +
+    "                <div>\r" +
+    "\n" +
+    "                    <a href=\"#/\" class=\"back-btn\"></a>\r" +
+    "\n" +
+    "                    <div class=\"top-no-img\">\r" +
+    "\n" +
+    "                        <span class=\"inner-title\">{{pageContent.title}}</span>\r" +
+    "\n" +
+    "                        <p class=\"inner-text\" ng-bind-html=\"pageContent.content | rawHtml\"></p>\r" +
     "\n" +
     "                    </div>\r" +
     "\n" +

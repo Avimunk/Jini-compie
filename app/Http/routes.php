@@ -554,6 +554,45 @@ Route::get('/contactToCRM', function(\Illuminate\Http\Request $request){
     return response('');
 });
 
+Route::get('/contactToCRMclub', function(\Illuminate\Http\Request $request){
+    $options = array(
+        'accountname',
+        'systemfield60',
+        'idnumber',
+        'telephone1',
+        'emailaddress1',
+        'systemfield86',
+        'systemfield88',
+        'accounttypecode',
+        'systemfield12',
+    );
+    $requestData = array();
+    foreach($request->all() AS $k => $v)
+        if(in_array($k, $options))
+            $requestData[$k] = urldecode($v);
+
+    if(count($requestData) != count($options))
+        return response('',403);
+
+    $JiniClubMemmber = $request->get('JiniClubMemmber', false);
+    if($JiniClubMemmber)
+        $requestData['JiniClubMemmber'] = $JiniClubMemmber;
+
+    $url = 'https://secure.powerlink.co.il/web/webtoaccount.aspx';
+    $requestData['uid'] = '06675580-1b05-4d10-aae9-dabb626a1e75';
+
+    $ch=curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, 1) ;
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $requestData);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    $result = curl_exec($ch);
+    curl_close($ch);
+
+    return response('');
+});
+
 Route::get('/', function(){
     return redirect('admin/dashboard');
 });

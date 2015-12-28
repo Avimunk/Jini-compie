@@ -96,7 +96,7 @@ function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageP
         })
         .state('singlePage', {
             cache: false,
-            url: '/{name:(?:vision|recommended|info|contact|24news|disclaimer)}',
+            url: '/{name:(?:vision|recommended|info|contact|24news|disclaimer|club|clubThanks|clubFailed|partners)}',
             controller: 'SinglePageController',
             templateUrl: 'templates/main/content.html',
             resolve: {
@@ -191,13 +191,60 @@ function Config($stateProvider, $urlRouterProvider, valdrProvider, valdrMessageP
                 //}
             },
             'reason': {
-                //'required': {
-                //    'message': 'You must select a reason'
-                //},
                 'pattern' :{
                     'value' : /[1-5]/,
                     'message': 'Sélectionnez une raison'
                 }
+            }
+        },
+        'club': {
+            'name': {
+                'required': {
+                    'message': 'Veuillez remplir votre prénom et nom de famille'
+                },
+                'maxLength': {
+                    'number': 40,
+                    'message': 'Votre nom ne peux contenir plus de 40 lettres.'
+                },
+                'pattern' :{
+                    'value' : /(\w+)\s((\w+)[\s]?)+/,
+                    'message': 'Veuillez remplir votre prénom et nom de famille'
+                }
+            },
+            'idnumber': {
+                'required': {
+                    'message': 'Veuillez remplir votre N° d\'identité ou passeport'
+                },
+                'pattern' :{
+                    'value' : /[0-9a-zA-Z]+/,
+                    'message': 'Veuillez remplir votre N° d\'identité ou passeport'
+                }
+            },
+            'phone': {
+                'required': {
+                    'message': 'Veuillez remplir votre N° de téléphone'
+                },
+                'pattern' : {
+                    'value' : /^([0-9+-]+){7,20}$/,
+                    'message': 'Veuillez remplir votre N° de téléphone (De 7 chiffres minimum à 20 maximum).'
+                }
+            },
+            'email': {
+                'required': {
+                    "message": "Veuillez remplir votre E-Mail"
+                },
+                "email": {
+                    "message": "Veuillez remplir votre E-Mail"
+                }
+            },
+            'nationality': {
+                'required': {
+                    'message': 'Veuillez remplir votre nationalité'
+                },
+                //'pattern' :{
+                //    'value' : /[1-4]/,
+                //    'message': 'Veuillez remplir votre nationalité'
+                //}
             }
         }
     });
